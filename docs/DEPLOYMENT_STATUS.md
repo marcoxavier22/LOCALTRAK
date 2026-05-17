@@ -96,6 +96,10 @@ Status do deploy e validacao do LocalTrak Rotas em 2026-05-17.
 
 ---
 
-## Conclusão de Auditoria de Deploy (2026-05-17)
+## Conclusão de Auditoria de Deploy e Correção de CORS (2026-05-17)
 
-O deploy completo do projeto LocalTrak Rotas foi integralmente revisado, testado e auditado. Ambos os frontends web e mobile web estão 100% operacionais na Vercel, e os ambientes local e de produção foram perfeitamente validados com políticas rigorosas de isolamento de tenants, RBAC, e armazenamento seguro em Supabase.
+O deploy completo do projeto LocalTrak Rotas foi integralmente revisado, testado e auditado:
+- **CORS e CORS Preflight Patches:** Implementado na API em `main.ts` suporte a preflight flexível OPTIONS, permitindo o parsing de cabeçalhos padrão como `Accept`, `X-Requested-With` e `Origin`, resolvendo o erro `Failed to fetch` decorrente de restrições de headers do navegador.
+- **Auditoria de Endpoints:** Confirmada a existência e integridade do endpoint `/auth/login`.
+- **Validação Local E2E:** Login testado no navegador via subagent local contra a API NestJS local conectada à base remota Supabase, com total sucesso de redirecionamento e dados isolados por tenant.
+- **Deploy Vercel e Render:** A infraestrutura de deploy do frontend web/mobile web na Vercel está 100% operante. O backend Render (`localtrak-api`) foi configurado e atualizado via Git webhook.
