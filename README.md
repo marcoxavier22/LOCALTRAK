@@ -824,6 +824,21 @@ URLs publicas atuais:
   esta validado; o login em Vercel depende de publicar uma API NestJS saudavel
   e atualizar `NEXT_PUBLIC_API_URL`/`EXPO_PUBLIC_API_URL`.
 
+Para corrigir o erro de CORS/login no Vercel, o servico `localtrak-api` precisa
+ser redeployado no Render usando o `render.yaml` da raiz. O arquivo define o
+build/start corretos do monorepo e health check em `/health`. Depois do deploy,
+valide:
+
+```bash
+curl https://localtrak-api.onrender.com/health
+```
+
+O retorno esperado e:
+
+```json
+{"status":"ok","database":"connected"}
+```
+
 O backend esta preparado para usar Supabase PostgreSQL via `DATABASE_URL` com `sslmode=require`, Prisma migrations com `pnpm prisma:migrate:deploy` e seed inicial com `pnpm prisma:seed`. No checkpoint Supabase, o projeto `LocalTrak` recebeu as migrations, seed do `MASTER_ADMIN` e RLS habilitado nas tabelas expostas. A checklist minima de seguranca esta em [docs/SECURITY_CHECKLIST.md](docs/SECURITY_CHECKLIST.md).
 
 Projeto Supabase usado no prototipo:

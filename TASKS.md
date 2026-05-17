@@ -390,6 +390,8 @@ Legenda:
 - [x] Confirmar usuarios de teste no Supabase via tabela `users`.
 - [x] Criar `docs/LOGIN_AUTH_CHECKLIST.md` com diagnostico de login local e producao.
 - [~] Validar login no deploy Vercel. Web/mobile carregam, mas a API publica configurada retorna 404 em `/health` e `/auth/login`.
+- [x] Adicionar `render.yaml` para publicar `localtrak-api` no Render com build/start corretos do monorepo.
+- [x] Endurecer CORS da API para sempre incluir dominios Vercel de web e mobile.
 - [x] Validar fluxo HTTP de rota do `EMPLOYEE` contra Supabase.
 - [x] Validar `pnpm dev:web` e rotas HTML principais em localhost.
 - [x] Preencher `DATABASE_URL` com senha real do banco Supabase para teste da API local.

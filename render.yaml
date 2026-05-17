@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: localtrak-api
+    runtime: node
+    plan: free
+    branch: main
+    autoDeployTrigger: commit
+    healthCheckPath: /health
+    buildCommand: corepack enable && corepack prepare pnpm@9.15.4 --activate && pnpm install --frozen-lockfile && pnpm prisma:generate && pnpm build:api
+    preDeployCommand: pnpm prisma:migrate:deploy
+    startCommand: pnpm start:api
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_ACCESS_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: CORS_ORIGINS
+        value: https://localtrak-web.vercel.app,https://localtrak-mobile.vercel.app
+      - key: MASTER_ADMIN_EMAIL
+        value: admin@localtrak.test
+      - key: SUPABASE_STORAGE_BUCKET
+        value: order-odometer
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: MASTER_ADMIN_PASSWORD
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false

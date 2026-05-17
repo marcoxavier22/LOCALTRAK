@@ -54,6 +54,28 @@ Use somente em ambiente de teste:
 - Portanto, o login em localhost esta funcional, mas o login no deploy Vercel
   fica bloqueado ate a API publica ser publicada corretamente.
 
+## Causa raiz do erro CORS no Vercel
+
+O navegador mostra erro de CORS porque o preflight `OPTIONS /auth/login`
+na API publica recebe `404` sem `Access-Control-Allow-Origin`. Isso indica que
+o servico publicado em `https://localtrak-api.onrender.com` nao esta servindo
+o NestJS nesta URL, ou foi publicado com comando/root directory incorreto.
+
+Se o NestJS estivesse rodando, `GET /health` responderia `200` e o CORS seria
+aplicado por `apps/api/src/main.ts`.
+
+## Correcao aplicada no repositorio
+
+- `apps/api/src/main.ts` sempre inclui `https://localtrak-web.vercel.app` e
+  `https://localtrak-mobile.vercel.app` nas origens permitidas, mesmo quando
+  `CORS_ORIGINS` estiver incompleto no host.
+- `render.yaml` foi adicionado na raiz para o Render subir `localtrak-api`
+  com build/start corretos do monorepo:
+  - build: `pnpm install`, `pnpm prisma:generate`, `pnpm build:api`
+  - pre-deploy: `pnpm prisma:migrate:deploy`
+  - start: `pnpm start:api`
+  - health check: `/health`
+
 ## Comandos para repetir o teste local
 
 ```powershell
@@ -77,15 +99,22 @@ Invoke-RestMethod "$api/auth/login" -Method Post -ContentType "application/json"
 
 ## Checklist para liberar login em producao
 
-- [ ] Publicar a API NestJS em Render/Railway/VPS ou outro host Node persistente.
-- [ ] Confirmar que a URL publica da API responde `GET /health`.
-- [ ] Confirmar que `POST /auth/login` responde no host publico.
-- [ ] Configurar `CORS_ORIGINS` da API com:
+- [ ] Redeployar o servico `localtrak-api` no Render a partir do commit mais recente.
+- [ ] Conferir as variaveis secretas no Render:
+  - `DATABASE_URL`
+  - `JWT_ACCESS_SECRET`
+  - `JWT_REFRESH_SECRET`
+  - `MASTER_ADMIN_PASSWORD`
+  - `SUPABASE_URL`
+  - `SUPABASE_SERVICE_ROLE_KEY`
+- [ ] Confirmar que `https://localtrak-api.onrender.com/health` responde `200`.
+- [ ] Confirmar que `POST https://localtrak-api.onrender.com/auth/login` responde.
+- [ ] Confirmar que `CORS_ORIGINS` da API contem:
   - `https://localtrak-web.vercel.app`
   - `https://localtrak-mobile.vercel.app`
-- [ ] Configurar no Vercel Web `NEXT_PUBLIC_API_URL` apontando para a API saudavel.
-- [ ] Configurar no Vercel Mobile `EXPO_PUBLIC_API_URL` e `NEXT_PUBLIC_API_URL`
-  apontando para a API saudavel.
+- [ ] Confirmar no Vercel Web `NEXT_PUBLIC_API_URL=https://localtrak-api.onrender.com`.
+- [ ] Confirmar no Vercel Mobile `EXPO_PUBLIC_API_URL=https://localtrak-api.onrender.com`
+  e `NEXT_PUBLIC_API_URL=https://localtrak-api.onrender.com`.
 - [ ] Redeploy web e mobile apos alterar variaveis publicas.
 - [ ] Testar login MASTER_ADMIN no Vercel web.
 - [ ] Testar login COMPANY_ADMIN no Vercel web.
