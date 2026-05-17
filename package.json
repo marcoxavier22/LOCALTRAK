@@ -11,6 +11,7 @@
     "dev:web": "pnpm --filter @localtrak/web dev",
     "build:web": "pnpm --filter @localtrak/web build",
     "dev:mobile": "pnpm --filter @localtrak/mobile start",
+    "build:mobile": "pnpm --filter @localtrak/mobile build:web",
     "typecheck:mobile": "pnpm --filter @localtrak/mobile typecheck",
     "prisma:generate": "pnpm --filter @localtrak/api prisma:generate",
     "prisma:migrate": "pnpm --filter @localtrak/api prisma:migrate",

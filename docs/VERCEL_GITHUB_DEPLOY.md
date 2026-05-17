@@ -163,9 +163,19 @@ Seguranca:
 
 ```powershell
 pnpm build:web
+pnpm build:mobile
 pnpm build:api
 pnpm typecheck:mobile
 ```
+
+Para o projeto `localtrak-mobile` na Vercel, use:
+
+- Root Directory: `apps/mobile`
+- Build Command: `pnpm build:web`
+- Output Directory: `dist`
+- Variaveis publicas: `EXPO_PUBLIC_API_URL`, `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+Nao configure `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `DATABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` ou `SUPABASE_SECRET_KEY` no projeto mobile/web da Vercel.
 
 ## 8. Criterio De Sucesso
 

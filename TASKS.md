@@ -358,6 +358,8 @@ Legenda:
 - [x] Garantir fallback `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`/`NEXT_PUBLIC_SUPABASE_KEY` no frontend.
 - [x] Adicionar fallback `NEXT_PUBLIC_SUPABASE_ANON_KEY` para compatibilidade com configuracao comum da Vercel.
 - [x] Criar `apps/web/vercel.json` para build do Next.js quando Root Directory for `apps/web`.
+- [x] Criar script `build:mobile` para export web do Expo.
+- [x] Criar `apps/mobile/.env.example` somente com variaveis publicas.
 - [x] Criar endpoint publico `GET /health`.
 - [x] Aplicar schema inicial no projeto Supabase `LocalTrak`.
 - [x] Criar seed remoto do `MASTER_ADMIN` no Supabase.
@@ -368,6 +370,7 @@ Legenda:
 - [x] Criar `docs/SECURITY_DEPLOY_CHECKLIST.md`.
 - [x] Criar `docs/PRODUCTION_DEPLOY_CHECKLIST.md` com roteiro passo a passo para backend, web, mobile, Supabase e testes finais.
 - [x] Criar `docs/VERCEL_GITHUB_DEPLOY.md` com roteiro especifico GitHub + Vercel.
+- [x] Criar `docs/DEPLOYMENT_STATUS.md` com URLs, validacoes executadas e pendencias finais.
 - [x] Atualizar `docs/WEB_TEST_CHECKLIST.md` para testes online com Supabase.
 - [x] Criar `docs/MOBILE_TEST_CHECKLIST.md` para testes manuais no app.
 - [x] Validar `pnpm prisma:generate` apos ajustes de Supabase.
