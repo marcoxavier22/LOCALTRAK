@@ -1,5 +1,6 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, Role, RouteShiftStatus, VehicleOwnershipType } from '@prisma/client';
+import { isPrismaKnownRequestError } from '../common/prisma-errors';
 import { TenantScopeService } from '../common/tenant/tenant-scope.service';
 import { AuthenticatedUser } from '../common/types/authenticated-user';
 import { PrismaService } from '../prisma/prisma.service';
@@ -50,8 +51,8 @@ export class RoutesService {
         },
         { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
       );
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2034') {
+    } catch (error: unknown) {
+      if (isPrismaKnownRequestError(error) && error.code === 'P2034') {
         throw new ConflictException('Funcionario ja possui uma rota em andamento.');
       }
 

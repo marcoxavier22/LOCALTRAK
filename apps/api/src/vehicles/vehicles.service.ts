@@ -1,16 +1,11 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Role, VehicleStatus } from '@prisma/client';
+import { isPrismaKnownRequestError } from '../common/prisma-errors';
 import { TenantScopeService } from '../common/tenant/tenant-scope.service';
 import { AuthenticatedUser } from '../common/types/authenticated-user';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
-
-type PrismaKnownRequestError = {
-  code: string;
-  clientVersion?: string;
-  meta?: unknown;
-};
 
 @Injectable()
 export class VehiclesService {
@@ -158,20 +153,11 @@ export class VehiclesService {
   }
 
   private handleUniquePlateError(error: unknown): never {
-    if (this.isPrismaKnownRequestError(error) && error.code === 'P2002') {
+    if (isPrismaKnownRequestError(error) && error.code === 'P2002') {
       throw new ConflictException('Ja existe um veiculo com esta placa nesta empresa.');
     }
 
     throw error;
-  }
-
-  private isPrismaKnownRequestError(error: unknown): error is PrismaKnownRequestError {
-    return (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      typeof (error as { code?: unknown }).code === 'string'
-    );
   }
 
   private vehicleInclude() {

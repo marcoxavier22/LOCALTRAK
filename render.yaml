@@ -6,7 +6,7 @@ services:
     branch: main
     autoDeployTrigger: commit
     healthCheckPath: /health
-    buildCommand: corepack enable && corepack prepare pnpm@9.15.4 --activate && pnpm install --frozen-lockfile && pnpm prisma:generate && pnpm build:api
+    buildCommand: pnpm install && pnpm build:api && pnpm build:web
     preDeployCommand: pnpm prisma:migrate:deploy
     startCommand: pnpm start:api
     envVars:

@@ -5,6 +5,7 @@
   "description": "SaaS multi-tenant para rastreamento de rotas, jornada, frota, combustível e manutenção preventiva.",
   "packageManager": "pnpm@9.15.4",
   "scripts": {
+    "postinstall": "pnpm prisma:generate",
     "dev:api": "pnpm --filter @localtrak/api dev",
     "build:api": "pnpm --filter @localtrak/api build",
     "start:api": "pnpm --filter @localtrak/api start:prod",

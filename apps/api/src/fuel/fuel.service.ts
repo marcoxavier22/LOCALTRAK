@@ -1,5 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { FuelType, Prisma, ReimbursementPaymentStatus, Role, RouteShiftStatus, VehicleOwnershipType } from '@prisma/client';
+import { isPrismaKnownRequestError } from '../common/prisma-errors';
 import { TenantScopeService } from '../common/tenant/tenant-scope.service';
 import { AuthenticatedUser } from '../common/types/authenticated-user';
 import { PrismaService } from '../prisma/prisma.service';
@@ -366,7 +367,7 @@ export class FuelService {
   }
 
   private handleUniqueFuelSettingError(error: unknown): never {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+    if (isPrismaKnownRequestError(error) && error.code === 'P2002') {
       throw new ConflictException('Ja existe configuracao para este combustivel nesta empresa.');
     }
 
