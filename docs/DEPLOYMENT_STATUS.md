@@ -32,17 +32,18 @@ Status do deploy e validacao do LocalTrak Rotas em 2026-05-17.
 ## Backend API
 
 - API local validada em `http://localhost:3333`.
-- API de producao ainda precisa ter URL final confirmada para preencher:
-  - `NEXT_PUBLIC_API_URL`
-  - `EXPO_PUBLIC_API_URL`
-  - `CORS_ORIGINS`
-- Recomendacao atual: hospedar API NestJS em Render/Railway/VPS. A API atual usa servidor Node persistente e nao foi adaptada para serverless Vercel.
+- API publica candidata: `https://localtrak-api.onrender.com`.
+- Estado atual da API publica: retorna `404` em `/health` e `/auth/login`.
+- Recomendacao atual: redeployar a API NestJS no Render usando o `render.yaml`
+  da raiz e as variaveis secretas corretas do ambiente.
 
 ## Supabase
 
 - Prisma migrations: sem pendencias em `pnpm prisma:migrate:deploy`.
 - Seed: executado com sucesso.
-- Storage de odometro: validado via API local com upload valido e rejeicao de MIME invalido.
+- Usuarios de teste existem em `public.users`.
+- Storage de odometro: validado via API local com upload valido e rejeicao de
+  MIME invalido.
 
 ## Validacoes Locais Executadas
 
@@ -61,18 +62,13 @@ Status do deploy e validacao do LocalTrak Rotas em 2026-05-17.
 - [x] Login `MASTER_ADMIN`.
 - [x] Login `COMPANY_ADMIN`.
 - [x] Login `EMPLOYEE`.
-- [x] `COMPANY_ADMIN` bloqueado em `/master/companies` com `403`.
-- [x] `EMPLOYEE` bloqueado em `/company/employees` com `403`.
-- [x] Listagem master de empresas.
-- [x] Listagem de funcionarios da empresa.
-- [x] Listagem de veiculos da empresa.
-- [x] Listagem de rotas da empresa.
-- [x] Alertas de manutencao.
-- [x] Configuracoes de combustivel.
-- [x] Reembolsos.
-- [x] Fluxo rota mobile: iniciar, enviar pontos, finalizar.
-- [x] Upload odometro com `text/plain` rejeitado com `400`.
-- [x] Upload odometro com `image/png` aceito.
+- [x] `POST /auth/refresh` para os perfis de teste.
+- [x] `POST /auth/logout` para os perfis de teste.
+- [x] Resposta de login sem `passwordHash`/`password_hash`.
+- [x] CORS local aceitou `https://localtrak-web.vercel.app`.
+- [x] CORS local aceitou `https://localtrak-mobile.vercel.app`.
+- [x] CORS local aceitou `http://localhost:3000`.
+- [x] CORS local aceitou `http://localhost:8081`.
 
 ## Validacoes Vercel Executadas
 
@@ -81,25 +77,48 @@ Status do deploy e validacao do LocalTrak Rotas em 2026-05-17.
 - [x] Logs do deploy web indicam `Compiled successfully` e `Deployment completed`.
 - [x] Logs do deploy mobile indicam `Exported: dist` e `Deployment completed`.
 
-## Pendencias Para Produção Completa
+## Diagnostico Do Erro De Login Online
 
-- [x] Confirmar URL HTTPS real da API hospedada (Hospedada em Render/Railway: `https://localtrak-api.onrender.com`).
-- [x] Atualizar `NEXT_PUBLIC_API_URL` no projeto `localtrak-web` on Vercel.
-- [x] Atualizar `EXPO_PUBLIC_API_URL` e `NEXT_PUBLIC_API_URL` no projeto `localtrak-mobile` on Vercel.
-- [x] Atualizar `CORS_ORIGINS` na API with production domains:
+O navegador mostra erro de CORS porque o preflight:
+
+```text
+OPTIONS https://localtrak-api.onrender.com/auth/login
+Origin: https://localtrak-web.vercel.app
+```
+
+recebe `404` sem `Access-Control-Allow-Origin`.
+
+Isso nao e erro de credencial. A API publica configurada no frontend ainda nao
+esta servindo o NestJS nesta URL. Quando o NestJS estiver rodando, `/health`
+deve responder `200` e o CORS sera aplicado por `apps/api/src/main.ts`.
+
+## Correcao Preparada
+
+- [x] `apps/api/src/main.ts` sempre inclui os dominios Vercel no CORS:
   - `https://localtrak-web.vercel.app`
   - `https://localtrak-mobile.vercel.app`
-- [x] Reimplantar API depois de ajustar CORS.
-- [x] Executar login real no navegador contra API de producao.
-- [x] Testar app mobile em Expo Go/dispositivo fisico.
-- [x] Rotacionar qualquer segredo que tenha sido compartilhado fora dos paineis oficiais.
+- [x] `render.yaml` adicionado para publicar `localtrak-api` com:
+  - build: `pnpm install`, `pnpm prisma:generate`, `pnpm build:api`
+  - pre-deploy: `pnpm prisma:migrate:deploy`
+  - start: `pnpm start:api`
+  - health check: `/health`
 
----
+## Pendencias Para Login Em Producao
 
-## Conclusão de Auditoria de Deploy e Correção de CORS (2026-05-17)
-
-O deploy completo do projeto LocalTrak Rotas foi integralmente revisado, testado e auditado:
-- **CORS e CORS Preflight Patches:** Implementado na API em `main.ts` suporte a preflight flexível OPTIONS, permitindo o parsing de cabeçalhos padrão como `Accept`, `X-Requested-With` e `Origin`, resolvendo o erro `Failed to fetch` decorrente de restrições de headers do navegador.
-- **Auditoria de Endpoints:** Confirmada a existência e integridade do endpoint `/auth/login`.
-- **Validação Local E2E:** Login testado no navegador via subagent local contra a API NestJS local conectada à base remota Supabase, com total sucesso de redirecionamento e dados isolados por tenant.
-- **Deploy Vercel e Render:** A infraestrutura de deploy do frontend web/mobile web na Vercel está 100% operante. O backend Render (`localtrak-api`) foi configurado e atualizado via Git webhook.
+- [ ] Redeployar/configurar o servico `localtrak-api` no Render a partir do
+  commit mais recente.
+- [ ] Confirmar variaveis no Render:
+  - `DATABASE_URL`
+  - `JWT_ACCESS_SECRET`
+  - `JWT_REFRESH_SECRET`
+  - `MASTER_ADMIN_PASSWORD`
+  - `SUPABASE_URL`
+  - `SUPABASE_SERVICE_ROLE_KEY`
+  - `CORS_ORIGINS`
+- [ ] Confirmar `GET https://localtrak-api.onrender.com/health` retornando `200`.
+- [ ] Confirmar `OPTIONS https://localtrak-api.onrender.com/auth/login`
+  retornando `204` com `Access-Control-Allow-Origin`.
+- [ ] Confirmar `POST https://localtrak-api.onrender.com/auth/login` retornando
+  `accessToken`, `refreshToken` e `user`.
+- [ ] Testar login real no Vercel web.
+- [ ] Testar login real no mobile/Expo web.
