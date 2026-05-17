@@ -12,8 +12,8 @@ Guia executavel para publicar o frontend Next.js do LocalTrak Rotas na Vercel us
 
 Bloqueios atuais para deploy automatico via GitHub:
 
-- [ ] A pasta local ainda precisa estar em um repositorio Git com remote GitHub.
-- [ ] O remote GitHub precisa existir e receber push na branch `main`.
+- [x] A pasta local ainda precisa estar em um repositorio Git com remote GitHub.
+- [x] O remote GitHub precisa existir e receber push na branch `main`.
 - [ ] A API de producao precisa estar online para preencher `NEXT_PUBLIC_API_URL`.
 - [ ] O dominio final da Vercel precisa ser adicionado em `CORS_ORIGINS` na API.
 

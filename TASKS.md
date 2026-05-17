@@ -389,7 +389,7 @@ Legenda:
 - [ ] Configurar dominio real do frontend em `CORS_ORIGINS`.
 - [ ] Configurar URL real da API em `NEXT_PUBLIC_API_URL`.
 - [ ] Fazer deploy efetivo da API em Render/Railway.
-- [ ] Fazer deploy efetivo da web em Vercel.
+- [~] Fazer deploy efetivo da web em Vercel.
 - [ ] Configurar logs.
 - [ ] Configurar Sentry.
 - [x] Avaliar Railway/Render para API.
