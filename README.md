@@ -837,6 +837,21 @@ Start Command: pnpm start:api
 Health Check Path: /health
 ```
 
+Variaveis obrigatorias no Render:
+
+```bash
+DATABASE_URL
+JWT_ACCESS_SECRET
+JWT_REFRESH_SECRET
+MASTER_ADMIN_PASSWORD
+SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+```
+
+O `render.yaml` gera `JWT_ACCESS_SECRET` e `JWT_REFRESH_SECRET` automaticamente
+quando o servico esta sincronizado por Blueprint. Se o deploy foi criado
+manualmente no painel, adicione essas duas variaveis manualmente em Environment.
+
 Se o log do deploy mostrar `Running 'yarn start'`, o Render esta usando o
 comando padrao do painel em vez do Start Command correto. Atualize o campo
 Start Command para `pnpm start:api` ou recrie/sincronize o servico pelo

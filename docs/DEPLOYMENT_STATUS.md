@@ -105,6 +105,10 @@ deve responder `200` e o CORS sera aplicado por `apps/api/src/main.ts`.
 - [x] Falha do deploy de 17/05/2026 analisada: o build passou, mas o runtime
   executou `yarn start`. O Start Command correto no Render e `pnpm start:api`.
   O `package.json` raiz tambem possui `start` como fallback para subir a API.
+- [x] Falha seguinte analisada: a API iniciou com `pnpm start:api`, mas o Nest
+  abortou porque `JWT_ACCESS_SECRET` nao existia no ambiente do Render.
+  `JWT_ACCESS_SECRET` e `JWT_REFRESH_SECRET` agora usam `generateValue: true` no
+  `render.yaml` para Blueprints.
 
 ## Pendencias Para Login Em Producao
 
@@ -116,8 +120,8 @@ deve responder `200` e o CORS sera aplicado por `apps/api/src/main.ts`.
   - Health Check Path: `/health`
 - [ ] Confirmar variaveis no Render:
   - `DATABASE_URL`
-  - `JWT_ACCESS_SECRET`
-  - `JWT_REFRESH_SECRET`
+  - `JWT_ACCESS_SECRET` gerado pelo Blueprint ou configurado manualmente
+  - `JWT_REFRESH_SECRET` gerado pelo Blueprint ou configurado manualmente
   - `MASTER_ADMIN_PASSWORD`
   - `SUPABASE_URL`
   - `SUPABASE_SERVICE_ROLE_KEY`

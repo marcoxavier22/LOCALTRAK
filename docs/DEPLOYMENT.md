@@ -75,6 +75,12 @@ Observacoes:
 
 `CORS_ORIGIN` ainda pode existir por compatibilidade local, mas em deploy use `CORS_ORIGINS`.
 
+No `render.yaml`, `JWT_ACCESS_SECRET` e `JWT_REFRESH_SECRET` usam
+`generateValue: true`. Em Blueprints, o Render gera um valor aleatorio seguro
+quando a variavel ainda nao existe. Se o servico nao estiver sincronizado por
+Blueprint, configure esses dois secrets manualmente no painel do Render antes do
+deploy.
+
 ## 3. Variaveis Do Frontend
 
 Configure na Vercel:
