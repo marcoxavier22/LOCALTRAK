@@ -1,6 +1,14 @@
 import { getToken, logout } from './auth';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3333';
+const LEGACY_RENDER_API_URL = 'https://localtrak-api.onrender.com';
+const CURRENT_RENDER_API_URL = 'https://localtrak.onrender.com';
+
+function resolveApiUrl() {
+  const configuredUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3333';
+  return configuredUrl === LEGACY_RENDER_API_URL ? CURRENT_RENDER_API_URL : configuredUrl;
+}
+
+const API_URL = resolveApiUrl();
 
 type ApiOptions = RequestInit & {
   skipAuth?: boolean;

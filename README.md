@@ -819,15 +819,13 @@ URLs publicas atuais:
 
 - Web: `https://localtrak-web.vercel.app`
 - Mobile Web/Expo Web: `https://localtrak-mobile.vercel.app`
-- API: o frontend publicado esta apontando para `https://localtrak-api.onrender.com`,
-  mas este host ainda retorna `404` em `/health` e `/auth/login`. O login local
-  esta validado; o login em Vercel depende de publicar uma API NestJS saudavel
-  e atualizar `NEXT_PUBLIC_API_URL`/`EXPO_PUBLIC_API_URL`.
+- API: `https://localtrak.onrender.com`. O endpoint `/health` esta respondendo
+  com banco conectado. Mantenha `NEXT_PUBLIC_API_URL` e `EXPO_PUBLIC_API_URL`
+  apontando para essa URL.
 
-Para corrigir o erro de CORS/login no Vercel, o servico `localtrak-api` precisa
-ser redeployado no Render usando o `render.yaml` da raiz. O arquivo define o
-build/start corretos do monorepo e health check em `/health`. Depois do deploy,
-valide:
+Para manter o login funcionando no Vercel, o servico Render ativo `LOCALTRAK`
+deve continuar usando o `render.yaml` da raiz. O arquivo define o build/start
+corretos do monorepo e health check em `/health`. Depois de cada deploy, valide:
 
 Configuracao esperada no Render:
 
@@ -858,7 +856,7 @@ Start Command para `pnpm start:api` ou recrie/sincronize o servico pelo
 `render.yaml` da raiz.
 
 ```bash
-curl https://localtrak-api.onrender.com/health
+curl https://localtrak.onrender.com/health
 ```
 
 O retorno esperado e:

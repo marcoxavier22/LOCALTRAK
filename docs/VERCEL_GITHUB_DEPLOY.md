@@ -202,8 +202,8 @@ O módulo mobile (`apps/mobile`) foi publicado na Vercel como uma aplicação es
 ### Variáveis de Ambiente Configuradas:
 - `NEXT_PUBLIC_SUPABASE_URL`: `https://bbcubwmvizcmjtwiiyxv.supabase.co`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: `sb_publishable_aBF5qe5_jmdqSqC-qCcFHQ_J1Tx2Hxv`
-- `NEXT_PUBLIC_API_URL`: `https://localtrak-api.onrender.com` (ou URL real da API NestJS)
-- `EXPO_PUBLIC_API_URL`: `https://localtrak-api.onrender.com` (ou URL real da API NestJS)
+- `NEXT_PUBLIC_API_URL`: `https://localtrak.onrender.com`
+- `EXPO_PUBLIC_API_URL`: `https://localtrak.onrender.com`
 
 ### Como Testar:
 1. Acesse: [https://localtrak-mobile.vercel.app](https://localtrak-mobile.vercel.app)

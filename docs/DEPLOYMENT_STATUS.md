@@ -32,10 +32,11 @@ Status do deploy e validacao do LocalTrak Rotas em 2026-05-17.
 ## Backend API
 
 - API local validada em `http://localhost:3333`.
-- API publica candidata: `https://localtrak-api.onrender.com`.
-- Estado atual da API publica: retorna `404` em `/health` e `/auth/login`.
-- Recomendacao atual: redeployar a API NestJS no Render usando o `render.yaml`
-  da raiz e as variaveis secretas corretas do ambiente.
+- API publica ativa: `https://localtrak.onrender.com`.
+- Estado atual da API publica: `GET /health` retorna `200` com banco conectado.
+- Recomendacao atual: manter o servico Render `LOCALTRAK` sincronizado com a
+  branch `main`, usando o `render.yaml` da raiz e as variaveis secretas corretas
+  do ambiente.
 
 ## Supabase
 
@@ -82,7 +83,7 @@ Status do deploy e validacao do LocalTrak Rotas em 2026-05-17.
 O navegador mostra erro de CORS porque o preflight:
 
 ```text
-OPTIONS https://localtrak-api.onrender.com/auth/login
+OPTIONS https://localtrak.onrender.com/auth/login
 Origin: https://localtrak-web.vercel.app
 ```
 
@@ -112,7 +113,7 @@ deve responder `200` e o CORS sera aplicado por `apps/api/src/main.ts`.
 
 ## Pendencias Para Login Em Producao
 
-- [ ] Redeployar/configurar o servico `localtrak-api` no Render a partir do
+- [x] Redeployar/configurar o servico `LOCALTRAK` no Render a partir do
   commit mais recente.
 - [ ] Confirmar no painel do Render:
   - Build Command: `pnpm install && pnpm build:api && pnpm build:web`
@@ -126,10 +127,10 @@ deve responder `200` e o CORS sera aplicado por `apps/api/src/main.ts`.
   - `SUPABASE_URL`
   - `SUPABASE_SERVICE_ROLE_KEY`
   - `CORS_ORIGINS`
-- [ ] Confirmar `GET https://localtrak-api.onrender.com/health` retornando `200`.
-- [ ] Confirmar `OPTIONS https://localtrak-api.onrender.com/auth/login`
+- [x] Confirmar `GET https://localtrak.onrender.com/health` retornando `200`.
+- [x] Confirmar `OPTIONS https://localtrak.onrender.com/auth/login`
   retornando `204` com `Access-Control-Allow-Origin`.
-- [ ] Confirmar `POST https://localtrak-api.onrender.com/auth/login` retornando
+- [x] Confirmar `POST https://localtrak.onrender.com/auth/login` retornando
   `accessToken`, `refreshToken` e `user`.
 - [ ] Testar login real no Vercel web.
 - [ ] Testar login real no mobile/Expo web.
