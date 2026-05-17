@@ -1,0 +1,93 @@
+@baseUrl = http://localhost:3333
+@employeeToken = cole_o_access_token_do_employee_aqui
+@companyAdminToken = cole_o_access_token_do_company_admin_aqui
+@routeId = cole_o_id_da_rota_aqui
+@vehicleId = cole_o_id_do_veiculo_aqui
+@employeeId = cole_o_id_do_funcionario_aqui
+
+### Iniciar rota usando veiculo vinculado automaticamente, se existir
+POST {{baseUrl}}/routes/start
+Authorization: Bearer {{employeeToken}}
+Content-Type: application/json
+
+{
+  "latitude": -23.55052,
+  "longitude": -46.633308
+}
+
+### Iniciar rota informando vehicleId explicitamente
+POST {{baseUrl}}/routes/start
+Authorization: Bearer {{employeeToken}}
+Content-Type: application/json
+
+{
+  "vehicleId": "{{vehicleId}}",
+  "latitude": -23.55052,
+  "longitude": -46.633308
+}
+
+### Enviar pontos da rota
+POST {{baseUrl}}/routes/{{routeId}}/points
+Authorization: Bearer {{employeeToken}}
+Content-Type: application/json
+
+{
+  "points": [
+    {
+      "latitude": -23.55052,
+      "longitude": -46.633308,
+      "accuracy": 12,
+      "speed": 8,
+      "altitude": 760,
+      "batteryLevel": 86,
+      "recordedAt": "2026-05-15T12:00:00.000Z"
+    },
+    {
+      "latitude": -23.5512,
+      "longitude": -46.635,
+      "accuracy": 14,
+      "speed": 10,
+      "altitude": 762,
+      "batteryLevel": 85,
+      "recordedAt": "2026-05-15T12:01:00.000Z"
+    }
+  ]
+}
+
+### Finalizar rota
+POST {{baseUrl}}/routes/{{routeId}}/finish
+Authorization: Bearer {{employeeToken}}
+Content-Type: application/json
+
+{
+  "latitude": -23.552,
+  "longitude": -46.636
+}
+
+### Historico do funcionario
+GET {{baseUrl}}/routes/my-history
+Authorization: Bearer {{employeeToken}}
+
+### Resumo da rota
+GET {{baseUrl}}/routes/{{routeId}}/summary
+Authorization: Bearer {{employeeToken}}
+
+### Detalhe da rota por id
+GET {{baseUrl}}/routes/{{routeId}}
+Authorization: Bearer {{employeeToken}}
+
+### Acompanhar rota ao vivo
+GET {{baseUrl}}/routes/{{routeId}}/live
+Authorization: Bearer {{companyAdminToken}}
+
+### Listar rotas da empresa
+GET {{baseUrl}}/company/routes
+Authorization: Bearer {{companyAdminToken}}
+
+### Filtrar rotas da empresa
+GET {{baseUrl}}/company/routes?status=FINISHED&employeeId={{employeeId}}&vehicleId={{vehicleId}}&startDate=2026-05-01T00:00:00.000Z&endDate=2026-05-31T23:59:59.999Z
+Authorization: Bearer {{companyAdminToken}}
+
+### Detalhar rota da empresa com pontos
+GET {{baseUrl}}/company/routes/{{routeId}}
+Authorization: Bearer {{companyAdminToken}}

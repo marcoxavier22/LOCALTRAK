@@ -1,0 +1,21 @@
+export enum Role {
+  MASTER_ADMIN = 'MASTER_ADMIN',
+  COMPANY_ADMIN = 'COMPANY_ADMIN',
+  EMPLOYEE = 'EMPLOYEE',
+}
+
+export enum CompanyStatus {
+  ACTIVE = 'ACTIVE',
+  TRIAL = 'TRIAL',
+  DELINQUENT = 'DELINQUENT',
+  BLOCKED = 'BLOCKED',
+  ARCHIVED = 'ARCHIVED',
+}
+
+export enum RouteShiftStatus {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  FINISHED = 'FINISHED',
+  SYNC_PENDING = 'SYNC_PENDING',
+  ERROR = 'ERROR',
+}

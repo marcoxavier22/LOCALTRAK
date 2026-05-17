@@ -1,0 +1,138 @@
+@baseUrl = http://localhost:3333
+@companyEmail = admin@empresateste.com
+@employeeEmail = funcionario@empresateste.com
+@password = Senha123!
+
+### Login COMPANY_ADMIN
+# @name companyLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{companyEmail}}",
+  "password": "{{password}}"
+}
+
+### Login EMPLOYEE
+# @name employeeLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{employeeEmail}}",
+  "password": "{{password}}"
+}
+
+### Listar funcionarios para atribuir OS
+GET {{baseUrl}}/company/employees
+Authorization: Bearer {{companyLogin.response.body.accessToken}}
+
+### Listar veiculos para atribuir OS
+GET {{baseUrl}}/company/vehicles
+Authorization: Bearer {{companyLogin.response.body.accessToken}}
+
+### Criar ordem de servico
+# Substitua employeeId e vehicleId por IDs reais da empresa.
+# @name createOrder
+POST {{baseUrl}}/orders
+Authorization: Bearer {{companyLogin.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Instalacao cliente Zona Norte",
+  "description": "Instalar roteador e validar sinal.",
+  "employeeId": "REPLACE_EMPLOYEE_ID",
+  "vehicleId": "REPLACE_VEHICLE_ID",
+  "scheduledDate": "2026-05-16T09:00:00.000Z",
+  "stops": [
+    {
+      "customerName": "Cliente Ana Silva",
+      "address": "Av. Paulista, 1000 - Sao Paulo, SP",
+      "latitude": -23.563099,
+      "longitude": -46.654312,
+      "visitOrder": 1
+    },
+    {
+      "customerName": "Cliente Marco Lima",
+      "address": "Rua Augusta, 900 - Sao Paulo, SP",
+      "latitude": -23.555236,
+      "longitude": -46.657261,
+      "visitOrder": 2
+    }
+  ]
+}
+
+### Listar OS da empresa com filtros opcionais
+GET {{baseUrl}}/orders?status=PENDING
+Authorization: Bearer {{companyLogin.response.body.accessToken}}
+
+### Detalhe da OS
+GET {{baseUrl}}/orders/{{createOrder.response.body.id}}
+Authorization: Bearer {{companyLogin.response.body.accessToken}}
+
+### Roteiro/endereco da OS
+GET {{baseUrl}}/orders/{{createOrder.response.body.id}}/route
+Authorization: Bearer {{companyLogin.response.body.accessToken}}
+
+### Fotos do odometro da OS
+GET {{baseUrl}}/orders/{{createOrder.response.body.id}}/odometer-photo
+Authorization: Bearer {{companyLogin.response.body.accessToken}}
+
+### Tracking GPS da OS
+GET {{baseUrl}}/orders/{{createOrder.response.body.id}}/tracking
+Authorization: Bearer {{companyLogin.response.body.accessToken}}
+
+### OS do funcionario no dia
+GET {{baseUrl}}/orders/my-today
+Authorization: Bearer {{employeeLogin.response.body.accessToken}}
+
+### Upload foto inicial de odometro
+# photoBase64 deve ser somente o conteudo base64, sem prefixo data:image.
+POST {{baseUrl}}/orders/{{createOrder.response.body.id}}/upload-odometer
+Authorization: Bearer {{employeeLogin.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "stage": "START",
+  "odometerKm": 18420,
+  "photoBase64": "REPLACE_BASE64_IMAGE",
+  "photoContentType": "image/jpeg"
+}
+
+### Iniciar OS depois do upload obrigatorio
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.id}}/start
+Authorization: Bearer {{employeeLogin.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "odometerKm": 18420,
+  "latitude": -23.563099,
+  "longitude": -46.654312
+}
+
+### Concluir parada da OS
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.id}}/stops/REPLACE_STOP_ID/complete
+Authorization: Bearer {{employeeLogin.response.body.accessToken}}
+
+### Upload foto final de odometro
+POST {{baseUrl}}/orders/{{createOrder.response.body.id}}/upload-odometer
+Authorization: Bearer {{employeeLogin.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "stage": "FINISH",
+  "odometerKm": 18480,
+  "photoBase64": "REPLACE_BASE64_IMAGE",
+  "photoContentType": "image/jpeg"
+}
+
+### Finalizar OS depois do upload obrigatorio
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.id}}/finish
+Authorization: Bearer {{employeeLogin.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "odometerKm": 18480,
+  "latitude": -23.555236,
+  "longitude": -46.657261
+}

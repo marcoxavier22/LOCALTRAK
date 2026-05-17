@@ -1,0 +1,88 @@
+@baseUrl = http://localhost:3333
+@companyAdminToken = cole_o_access_token_do_company_admin_aqui
+@vehicleId = cole_o_id_do_veiculo_aqui
+@employeeId = cole_o_id_do_funcionario_aqui
+
+### Listar veiculos da empresa
+GET {{baseUrl}}/company/vehicles
+Authorization: Bearer {{companyAdminToken}}
+
+### Criar veiculo da empresa
+POST {{baseUrl}}/company/vehicles
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "plate": "ABC1D23",
+  "brand": "Fiat",
+  "model": "Strada",
+  "year": 2022,
+  "type": "PICKUP",
+  "ownershipType": "COMPANY",
+  "currentKm": 49500,
+  "fuelType": "FLEX",
+  "averageConsumption": 10.5,
+  "costPerKm": 1.2,
+  "status": "ACTIVE"
+}
+
+### Criar veiculo vinculado a funcionario
+POST {{baseUrl}}/company/vehicles
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "plate": "MOTO123",
+  "brand": "Honda",
+  "model": "CG 160",
+  "year": 2021,
+  "type": "MOTORCYCLE",
+  "ownershipType": "EMPLOYEE",
+  "employeeId": "{{employeeId}}",
+  "currentKm": 18000,
+  "fuelType": "GASOLINE",
+  "averageConsumption": 32,
+  "costPerKm": 0.45
+}
+
+### Detalhar veiculo
+GET {{baseUrl}}/company/vehicles/{{vehicleId}}
+Authorization: Bearer {{companyAdminToken}}
+
+### Editar veiculo
+PATCH {{baseUrl}}/company/vehicles/{{vehicleId}}
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "currentKm": 50100,
+  "averageConsumption": 9.8,
+  "costPerKm": 1.28
+}
+
+### Vincular ou trocar funcionario
+PATCH {{baseUrl}}/company/vehicles/{{vehicleId}}
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}"
+}
+
+### Remover funcionario vinculado
+PATCH {{baseUrl}}/company/vehicles/{{vehicleId}}
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "employeeId": null
+}
+
+### Alterar status do veiculo
+PATCH {{baseUrl}}/company/vehicles/{{vehicleId}}/status
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "status": "MAINTENANCE"
+}

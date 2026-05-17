@@ -1,0 +1,23 @@
+{
+  "name": "localtrak-rotas",
+  "private": true,
+  "version": "0.1.0",
+  "description": "SaaS multi-tenant para rastreamento de rotas, jornada, frota, combustível e manutenção preventiva.",
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "dev:api": "pnpm --filter @localtrak/api dev",
+    "build:api": "pnpm --filter @localtrak/api build",
+    "start:api": "pnpm --filter @localtrak/api start:prod",
+    "dev:web": "pnpm --filter @localtrak/web dev",
+    "build:web": "pnpm --filter @localtrak/web build",
+    "dev:mobile": "pnpm --filter @localtrak/mobile start",
+    "typecheck:mobile": "pnpm --filter @localtrak/mobile typecheck",
+    "prisma:generate": "pnpm --filter @localtrak/api prisma:generate",
+    "prisma:migrate": "pnpm --filter @localtrak/api prisma:migrate",
+    "prisma:migrate:deploy": "pnpm --filter @localtrak/api prisma:migrate:deploy",
+    "prisma:seed": "pnpm --filter @localtrak/api prisma:seed"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

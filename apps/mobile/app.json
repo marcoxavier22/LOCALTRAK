@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "LocalTrak Rotas",
+    "slug": "localtrak-rotas",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "scheme": "localtrak",
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "O LocalTrak usa sua localizacao apenas durante o turno iniciado para registrar a rota de trabalho.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "O LocalTrak pode continuar registrando sua rota em segundo plano somente enquanto o turno estiver em andamento.",
+        "UIBackgroundModes": [
+          "location"
+        ]
+      }
+    },
+    "android": {
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION"
+      ]
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "apiUrl": "http://localhost:3333"
+    }
+  }
+}

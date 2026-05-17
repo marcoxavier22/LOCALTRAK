@@ -1,0 +1,86 @@
+@baseUrl = http://localhost:3333
+@companyAdminToken = cole_o_access_token_do_company_admin_aqui
+@fuelSettingId = cole_o_id_da_configuracao_aqui
+@employeeId = cole_o_id_do_funcionario_aqui
+@vehicleId = cole_o_id_do_veiculo_aqui
+
+### Listar configuracoes de combustivel
+GET {{baseUrl}}/company/fuel/settings
+Authorization: Bearer {{companyAdminToken}}
+
+### Criar configuracao por litro
+POST {{baseUrl}}/company/fuel/settings
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "fuelType": "GASOLINE",
+  "pricePerLiter": 5.89
+}
+
+### Criar configuracao por km
+POST {{baseUrl}}/company/fuel/settings
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "fuelType": "FLEX",
+  "defaultCostPerKm": 1.2
+}
+
+### Criar configuracao por litro e por km
+POST {{baseUrl}}/company/fuel/settings
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "fuelType": "DIESEL",
+  "pricePerLiter": 6.1,
+  "defaultCostPerKm": 1.6
+}
+
+### Atualizar configuracao
+PATCH {{baseUrl}}/company/fuel/settings/{{fuelSettingId}}
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "pricePerLiter": 5.99,
+  "defaultCostPerKm": 1.25
+}
+
+### Relatorio geral de combustivel e reembolso
+GET {{baseUrl}}/company/reimbursements
+Authorization: Bearer {{companyAdminToken}}
+
+### Relatorio geral por periodo
+GET {{baseUrl}}/company/reimbursements?startDate=2026-05-01T00:00:00.000Z&endDate=2026-05-31T23:59:59.000Z
+Authorization: Bearer {{companyAdminToken}}
+
+### Relatorio filtrado por funcionario e veiculo
+GET {{baseUrl}}/company/reimbursements?employeeId={{employeeId}}&vehicleId={{vehicleId}}&startDate=2026-05-01T00:00:00.000Z&endDate=2026-05-31T23:59:59.000Z
+Authorization: Bearer {{companyAdminToken}}
+
+### Relatorio por funcionario
+GET {{baseUrl}}/company/reimbursements/employee/{{employeeId}}?startDate=2026-05-01T00:00:00.000Z&endDate=2026-05-31T23:59:59.000Z
+Authorization: Bearer {{companyAdminToken}}
+
+### Listar pagamentos de reembolso
+GET {{baseUrl}}/company/reimbursements/payments?employeeId={{employeeId}}&vehicleId={{vehicleId}}&status=PAID&startDate=2026-05-01T00:00:00.000Z&endDate=2026-05-31T23:59:59.000Z
+Authorization: Bearer {{companyAdminToken}}
+
+### Registrar pagamento de reembolso
+POST {{baseUrl}}/company/reimbursements/payments
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "vehicleId": "{{vehicleId}}",
+  "distanceKm": 38.4,
+  "fuelCost": 22.61,
+  "amount": 27.65,
+  "paidAt": "2026-05-16T12:00:00.000Z",
+  "status": "PAID",
+  "description": "Reembolso de rota com veiculo particular"
+}

@@ -1,0 +1,84 @@
+@baseUrl = http://localhost:3333
+@companyAdminToken = cole_o_access_token_do_company_admin_aqui
+@ruleId = cole_o_id_da_regra_aqui
+@vehicleId = cole_o_id_do_veiculo_aqui
+@employeeId = cole_o_id_do_funcionario_aqui
+
+### Listar regras de manutencao
+GET {{baseUrl}}/company/maintenance/rules
+Authorization: Bearer {{companyAdminToken}}
+
+### Criar regra por km
+POST {{baseUrl}}/company/maintenance/rules
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "name": "Troca de oleo",
+  "type": "OIL_CHANGE",
+  "intervalKm": 5000,
+  "isActive": true
+}
+
+### Criar regra por data
+POST {{baseUrl}}/company/maintenance/rules
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "name": "Rodizio de pneus",
+  "type": "TIRES",
+  "intervalDays": 90,
+  "isActive": true
+}
+
+### Criar regra por data e km
+POST {{baseUrl}}/company/maintenance/rules
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "name": "Revisao preventiva",
+  "type": "PREVENTIVE_REVIEW",
+  "intervalKm": 10000,
+  "intervalDays": 180,
+  "isActive": true
+}
+
+### Atualizar regra
+PATCH {{baseUrl}}/company/maintenance/rules/{{ruleId}}
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "intervalKm": 6000,
+  "isActive": true
+}
+
+### Listar alertas de manutencao vencida
+GET {{baseUrl}}/company/maintenance/alerts
+Authorization: Bearer {{companyAdminToken}}
+
+### Listar manutencoes registradas com filtros
+GET {{baseUrl}}/company/maintenance/records?vehicleId={{vehicleId}}&employeeId={{employeeId}}&type=OIL_CHANGE&status=DONE&startDate=2026-05-01T00:00:00.000Z&endDate=2026-05-31T23:59:59.000Z
+Authorization: Bearer {{companyAdminToken}}
+
+### Registrar manutencao realizada
+POST {{baseUrl}}/company/maintenance/records
+Authorization: Bearer {{companyAdminToken}}
+Content-Type: application/json
+
+{
+  "vehicleId": "{{vehicleId}}",
+  "maintenanceRuleId": "{{ruleId}}",
+  "type": "OIL_CHANGE",
+  "description": "Troca de oleo e filtro",
+  "performedAt": "2026-05-15T12:00:00.000Z",
+  "performedKm": 50000,
+  "cost": 280,
+  "status": "DONE"
+}
+
+### Historico de manutencao por veiculo
+GET {{baseUrl}}/company/vehicles/{{vehicleId}}/maintenance
+Authorization: Bearer {{companyAdminToken}}
