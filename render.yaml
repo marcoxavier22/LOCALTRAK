@@ -10,6 +10,8 @@ services:
     preDeployCommand: pnpm prisma:migrate:deploy
     startCommand: pnpm start:api
     envVars:
+      - key: NODE_VERSION
+        value: 20.19.0
       - key: NODE_ENV
         value: production
       - key: JWT_ACCESS_EXPIRES_IN

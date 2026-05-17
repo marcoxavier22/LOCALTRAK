@@ -3,9 +3,12 @@
   "private": true,
   "version": "0.1.0",
   "description": "SaaS multi-tenant para rastreamento de rotas, jornada, frota, combustível e manutenção preventiva.",
-  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=18.18"
+  },
   "scripts": {
     "postinstall": "pnpm prisma:generate",
+    "start": "pnpm start:api",
     "dev:api": "pnpm --filter @localtrak/api dev",
     "build:api": "pnpm --filter @localtrak/api build",
     "start:api": "pnpm --filter @localtrak/api start:prod",
@@ -18,6 +21,15 @@
     "prisma:migrate": "pnpm --filter @localtrak/api prisma:migrate",
     "prisma:migrate:deploy": "pnpm --filter @localtrak/api prisma:migrate:deploy",
     "prisma:seed": "pnpm --filter @localtrak/api prisma:seed"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma"
+    ]
   },
   "devDependencies": {
     "typescript": "^5.6.3"

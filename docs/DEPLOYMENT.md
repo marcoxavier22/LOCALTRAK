@@ -110,7 +110,7 @@ localtrak-rotas
 Build command:
 
 ```bash
-pnpm install --frozen-lockfile && pnpm prisma:generate && pnpm build:api
+pnpm install && pnpm build:api && pnpm build:web
 ```
 
 Start command:
@@ -118,6 +118,12 @@ Start command:
 ```bash
 pnpm start:api
 ```
+
+> Importante: se o Render mostrar `Running 'yarn start'`, o servico nao esta
+> usando o Start Command correto do Blueprint ou do painel. Atualize o campo
+> Start Command para `pnpm start:api` e faca um novo deploy. O projeto tambem
+> possui um script raiz `start` como fallback, mas o comando recomendado para a
+> API em producao continua sendo `pnpm start:api`.
 
 Migration command para rodar antes do primeiro start ou como job separado:
 

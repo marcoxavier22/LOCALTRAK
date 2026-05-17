@@ -829,6 +829,19 @@ ser redeployado no Render usando o `render.yaml` da raiz. O arquivo define o
 build/start corretos do monorepo e health check em `/health`. Depois do deploy,
 valide:
 
+Configuracao esperada no Render:
+
+```bash
+Build Command: pnpm install && pnpm build:api && pnpm build:web
+Start Command: pnpm start:api
+Health Check Path: /health
+```
+
+Se o log do deploy mostrar `Running 'yarn start'`, o Render esta usando o
+comando padrao do painel em vez do Start Command correto. Atualize o campo
+Start Command para `pnpm start:api` ou recrie/sincronize o servico pelo
+`render.yaml` da raiz.
+
 ```bash
 curl https://localtrak-api.onrender.com/health
 ```

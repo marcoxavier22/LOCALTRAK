@@ -98,15 +98,22 @@ deve responder `200` e o CORS sera aplicado por `apps/api/src/main.ts`.
   - `https://localtrak-web.vercel.app`
   - `https://localtrak-mobile.vercel.app`
 - [x] `render.yaml` adicionado para publicar `localtrak-api` com:
-  - build: `pnpm install`, `pnpm prisma:generate`, `pnpm build:api`
+  - build: `pnpm install && pnpm build:api && pnpm build:web`
   - pre-deploy: `pnpm prisma:migrate:deploy`
   - start: `pnpm start:api`
   - health check: `/health`
+- [x] Falha do deploy de 17/05/2026 analisada: o build passou, mas o runtime
+  executou `yarn start`. O Start Command correto no Render e `pnpm start:api`.
+  O `package.json` raiz tambem possui `start` como fallback para subir a API.
 
 ## Pendencias Para Login Em Producao
 
 - [ ] Redeployar/configurar o servico `localtrak-api` no Render a partir do
   commit mais recente.
+- [ ] Confirmar no painel do Render:
+  - Build Command: `pnpm install && pnpm build:api && pnpm build:web`
+  - Start Command: `pnpm start:api`
+  - Health Check Path: `/health`
 - [ ] Confirmar variaveis no Render:
   - `DATABASE_URL`
   - `JWT_ACCESS_SECRET`
