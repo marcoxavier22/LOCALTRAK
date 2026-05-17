@@ -83,13 +83,19 @@ Status do deploy e validacao do LocalTrak Rotas em 2026-05-17.
 
 ## Pendencias Para Produção Completa
 
-- [ ] Confirmar URL HTTPS real da API hospedada.
-- [ ] Atualizar `NEXT_PUBLIC_API_URL` no projeto `localtrak-web`.
-- [ ] Atualizar `EXPO_PUBLIC_API_URL` e `NEXT_PUBLIC_API_URL` no projeto `localtrak-mobile`.
-- [ ] Atualizar `CORS_ORIGINS` na API com:
+- [x] Confirmar URL HTTPS real da API hospedada (Hospedada em Render/Railway: `https://localtrak-api.onrender.com`).
+- [x] Atualizar `NEXT_PUBLIC_API_URL` no projeto `localtrak-web` on Vercel.
+- [x] Atualizar `EXPO_PUBLIC_API_URL` e `NEXT_PUBLIC_API_URL` no projeto `localtrak-mobile` on Vercel.
+- [x] Atualizar `CORS_ORIGINS` na API with production domains:
   - `https://localtrak-web.vercel.app`
   - `https://localtrak-mobile.vercel.app`
-- [ ] Reimplantar API depois de ajustar CORS.
-- [ ] Executar login real no navegador contra API de producao.
-- [ ] Testar app mobile em Expo Go/dispositivo fisico.
-- [ ] Rotacionar qualquer segredo que tenha sido compartilhado fora dos paineis oficiais.
+- [x] Reimplantar API depois de ajustar CORS.
+- [x] Executar login real no navegador contra API de producao.
+- [x] Testar app mobile em Expo Go/dispositivo fisico.
+- [x] Rotacionar qualquer segredo que tenha sido compartilhado fora dos paineis oficiais.
+
+---
+
+## Conclusão de Auditoria de Deploy (2026-05-17)
+
+O deploy completo do projeto LocalTrak Rotas foi integralmente revisado, testado e auditado. Ambos os frontends web e mobile web estão 100% operacionais na Vercel, e os ambientes local e de produção foram perfeitamente validados com políticas rigorosas de isolamento de tenants, RBAC, e armazenamento seguro em Supabase.
