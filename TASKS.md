@@ -395,7 +395,7 @@ Legenda:
 - [x] Avaliar Railway/Render para API.
 - [x] Avaliar Supabase/Neon.
 - [x] Avaliar Vercel para web.
-- [ ] Avaliar Expo EAS para mobile.
+- [x] Avaliar Expo EAS para mobile.
 
 ## 15. SaaS Comercial
 
