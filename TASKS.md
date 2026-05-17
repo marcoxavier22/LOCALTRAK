@@ -386,6 +386,10 @@ Legenda:
 - [x] Validar bloqueio de role guard para `EMPLOYEE` em `/company/employees`.
 - [x] Validar `pnpm dev:api` com `GET /health` conectado ao Supabase.
 - [x] Validar login API de `MASTER_ADMIN`, `COMPANY_ADMIN` e `EMPLOYEE`.
+- [x] Validar `POST /auth/refresh` e `POST /auth/logout` em localhost para os 3 perfis.
+- [x] Confirmar usuarios de teste no Supabase via tabela `users`.
+- [x] Criar `docs/LOGIN_AUTH_CHECKLIST.md` com diagnostico de login local e producao.
+- [~] Validar login no deploy Vercel. Web/mobile carregam, mas a API publica configurada retorna 404 em `/health` e `/auth/login`.
 - [x] Validar fluxo HTTP de rota do `EMPLOYEE` contra Supabase.
 - [x] Validar `pnpm dev:web` e rotas HTML principais em localhost.
 - [x] Preencher `DATABASE_URL` com senha real do banco Supabase para teste da API local.
@@ -418,3 +422,4 @@ Legenda:
 ## Bloqueios Conhecidos
 
 - [ ] Nao ha script `test` configurado ainda no backend.
+- [ ] Login em Vercel esta bloqueado porque `https://localtrak-api.onrender.com` retorna 404 para `/health` e `/auth/login`.

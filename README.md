@@ -813,12 +813,16 @@ Checklists dos modulos:
 O guia completo esta em [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). A checklist de seguranca e deploy esta em [docs/SECURITY_DEPLOY_CHECKLIST.md](docs/SECURITY_DEPLOY_CHECKLIST.md), o checklist operacional completo para producao esta em [docs/PRODUCTION_DEPLOY_CHECKLIST.md](docs/PRODUCTION_DEPLOY_CHECKLIST.md), e o roteiro especifico de GitHub + Vercel esta em [docs/VERCEL_GITHUB_DEPLOY.md](docs/VERCEL_GITHUB_DEPLOY.md).
 
 Status atual do deploy: [docs/DEPLOYMENT_STATUS.md](docs/DEPLOYMENT_STATUS.md).
+Checkpoint de login e autenticacao: [docs/LOGIN_AUTH_CHECKLIST.md](docs/LOGIN_AUTH_CHECKLIST.md).
 
 URLs publicas atuais:
 
 - Web: `https://localtrak-web.vercel.app`
 - Mobile Web/Expo Web: `https://localtrak-mobile.vercel.app`
-- API: pendente de URL HTTPS final em Render/Railway/VPS.
+- API: o frontend publicado esta apontando para `https://localtrak-api.onrender.com`,
+  mas este host ainda retorna `404` em `/health` e `/auth/login`. O login local
+  esta validado; o login em Vercel depende de publicar uma API NestJS saudavel
+  e atualizar `NEXT_PUBLIC_API_URL`/`EXPO_PUBLIC_API_URL`.
 
 O backend esta preparado para usar Supabase PostgreSQL via `DATABASE_URL` com `sslmode=require`, Prisma migrations com `pnpm prisma:migrate:deploy` e seed inicial com `pnpm prisma:seed`. No checkpoint Supabase, o projeto `LocalTrak` recebeu as migrations, seed do `MASTER_ADMIN` e RLS habilitado nas tabelas expostas. A checklist minima de seguranca esta em [docs/SECURITY_CHECKLIST.md](docs/SECURITY_CHECKLIST.md).
 
