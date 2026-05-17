@@ -169,11 +169,34 @@ pnpm typecheck:mobile
 
 ## 8. Criterio De Sucesso
 
-- [ ] GitHub conectado a Vercel.
-- [ ] Deploy automatico em cada push.
-- [ ] Production Deployment verde.
-- [ ] Preview Deployments funcionando.
+- [x] GitHub conectado a Vercel.
+- [x] Deploy automatico em cada push.
+- [x] Production Deployment verde.
+- [x] Preview Deployments funcionando.
 - [ ] `NEXT_PUBLIC_API_URL` aponta para API online.
 - [ ] `CORS_ORIGINS` contem o dominio Vercel.
 - [ ] Login e dashboards funcionando online.
 - [ ] Mapas, OS, fotos, reembolsos, manutencao e combustivel funcionando online.
+
+## 9. Deploy do Módulo Mobile (React Native Web / Expo Web)
+
+O módulo mobile (`apps/mobile`) foi publicado na Vercel como uma aplicação estática React Native Web / Expo Web.
+
+### Configurações do Projeto na Vercel:
+- **Project Name:** `localtrak-mobile`
+- **Framework Preset:** `Other` (Customizado)
+- **Root Directory:** `apps/mobile`
+- **Build Command:** `npx expo export --platform web`
+- **Output Directory:** `dist`
+
+### Variáveis de Ambiente Configuradas:
+- `NEXT_PUBLIC_SUPABASE_URL`: `https://bbcubwmvizcmjtwiiyxv.supabase.co`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: `sb_publishable_aBF5qe5_jmdqSqC-qCcFHQ_J1Tx2Hxv`
+- `NEXT_PUBLIC_API_URL`: `https://localtrak-api.onrender.com` (ou URL real da API NestJS)
+- `EXPO_PUBLIC_API_URL`: `https://localtrak-api.onrender.com` (ou URL real da API NestJS)
+
+### Como Testar:
+1. Acesse: [https://localtrak-mobile.vercel.app](https://localtrak-mobile.vercel.app)
+2. Use o modo de emulação móvel do navegador (F12 > Responsive / iPhone).
+3. Teste o login com credenciais de funcionário (`EMPLOYEE`).
+4. Usuários com roles `MASTER_ADMIN` ou `COMPANY_ADMIN` serão rejeitados com aviso de exclusividade para funcionários.
