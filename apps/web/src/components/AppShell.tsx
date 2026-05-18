@@ -16,6 +16,8 @@ import {
   ShieldCheck,
   Users,
   Wrench,
+  Menu,
+  X,
 } from 'lucide-react';
 import { getToken, getUser, logout } from '@/lib/auth';
 import { ThemeToggle } from './ThemeToggle';
@@ -50,6 +52,7 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
   const [user, setUser] = useState<User | null>(null);
   const [message, setMessage] = useState('Validando sessao...');
   const [status, setStatus] = useState<'checking' | 'allowed' | 'denied' | 'redirecting' | 'error'>('checking');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const allowedRolesKey = allowedRoles.join('|');
 
   useEffect(() => {
@@ -163,13 +166,30 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
-        <div className="brand-block">
-          <img alt="TrakFlow" className="brand-logo" src="/trakflow-logo.svg" />
-          <div>
-            <strong>TrakFlow</strong>
-            <span>Gestão em Campo</span>
+      {isMobileMenuOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <div className="brand-block">
+            <img alt="TrakFlow" className="brand-logo" src="/trakflow-logo.svg" />
+            <div>
+              <strong>TrakFlow</strong>
+              <span>Gestão em Campo</span>
+            </div>
           </div>
+          <button
+            className="mobile-menu-close"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-label="Fechar menu"
+          >
+            <X size={20} />
+          </button>
         </div>
 
         <div className="sidebar-card">
@@ -186,6 +206,7 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
               className={pathname === link.href ? 'nav-link active' : 'nav-link'}
               href={link.href}
               key={link.href}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               <link.icon size={17} strokeWidth={2.4} aria-hidden="true" />
               {link.label}
@@ -196,13 +217,25 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
 
       <div className="content-area">
         <header className="topbar">
-          <div>
-            {eyebrow ? <span className="eyebrow">{eyebrow}</span> : null}
-            <h1>{title}</h1>
-            <p>
-              <BarChart3 size={15} strokeWidth={2.2} aria-hidden="true" />
-              Sua empresa no controle de cada rota, visita e operação em campo.
-            </p>
+          <div className="topbar-main">
+            <button
+              className="mobile-menu-toggle"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Abrir menu"
+            >
+              <Menu size={20} />
+            </button>
+            <div className="topbar-branding">
+              <img alt="TrakFlow" className="topbar-mini-logo" src="/trakflow-logo.svg" />
+            </div>
+            <div className="topbar-info">
+              {eyebrow ? <span className="eyebrow">{eyebrow}</span> : null}
+              <h1 className="topbar-title">{title}</h1>
+              <p className="topbar-subtitle">
+                <BarChart3 size={15} strokeWidth={2.2} aria-hidden="true" />
+                Sua empresa no controle de cada rota, visita e operação em campo.
+              </p>
+            </div>
           </div>
           <div className="user-menu">
             <ThemeToggle />
@@ -210,9 +243,9 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
               <span>{user?.name}</span>
               <small>{roleLabel}</small>
             </div>
-            <button className="button ghost icon-button" onClick={handleLogout} aria-label="Sair">
+            <button className="button ghost icon-button logout-button" onClick={handleLogout} aria-label="Sair">
               <LogOut size={17} strokeWidth={2.4} aria-hidden="true" />
-              Sair
+              <span className="logout-text">Sair</span>
             </button>
           </div>
         </header>
