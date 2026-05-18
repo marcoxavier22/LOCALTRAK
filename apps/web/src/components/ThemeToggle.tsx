@@ -5,11 +5,14 @@ import { useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
 
-const STORAGE_KEY = 'localtrak-theme';
+const STORAGE_KEY = 'routify-theme';
+const LEGACY_KEY = 'localtrak-theme';
 
 function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
   localStorage.setItem(STORAGE_KEY, theme);
+  // Remove legacy key on update
+  try { localStorage.removeItem(LEGACY_KEY); } catch {}
 }
 
 export function ThemeToggle() {

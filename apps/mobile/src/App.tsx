@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import * as TaskManager from 'expo-task-manager';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import Svg, { Path, Circle, Defs, LinearGradient, Stop, Text as SvgText } from 'react-native-svg';
 import {
   ActivityIndicator,
   Alert,
@@ -38,7 +39,31 @@ type Screen = 'home' | 'history' | 'orders';
 type Theme = 'light' | 'dark';
 
 const BACKGROUND_LOCATION_TASK = 'LOCALTRAK_ROUTE_BACKGROUND_LOCATION';
-const logo = require('../assets/localtrak-logo.png');
+
+function RoutifyLogo({ style }: { style?: any }) {
+  return (
+    <Svg viewBox="0 0 500 150" style={style}>
+      <Defs>
+        <LinearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <Stop offset="0%" stopColor="#7C3AED" />
+          <Stop offset="100%" stopColor="#150B4F" />
+        </LinearGradient>
+        <LinearGradient id="cyanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <Stop offset="0%" stopColor="#22D3EE" />
+          <Stop offset="100%" stopColor="#14B8A6" />
+        </LinearGradient>
+      </Defs>
+      <Path d="M 120 75 A 45 45 0 1 1 75 120" fill="none" stroke="url(#cyanGradient)" strokeWidth="6" strokeLinecap="round" />
+      <Path d="M 115 35 L 135 25 L 125 45 Z" fill="#A3E635" />
+      <Path d="M 75 25 C 50 25 35 45 35 65 C 35 95 75 130 75 130 C 75 130 115 95 115 65 C 115 45 100 25 75 25 Z" fill="url(#purpleGradient)" />
+      <Path d="M 75 125 C 65 100 85 80 75 65 C 65 50 75 45 75 45" fill="none" stroke="#FFFFFF" strokeWidth="4" strokeDasharray="4 4" />
+      <Circle cx="75" cy="55" r="12" fill="#22D3EE" />
+      <SvgText x="160" y="95" fontFamily="System" fontWeight="900" fontSize="56" letterSpacing="4" fill="#150B4F">ROUTIFY</SvgText>
+      <Path d="M 440 90 L 455 65 L 470 65 L 455 90 Z" fill="#A3E635" />
+    </Svg>
+  );
+}
+
 const NativeMaps = Platform.OS === 'web' ? null : require('react-native-maps');
 const NativeMapView = NativeMaps?.default;
 const NativeMarker = NativeMaps?.Marker;
@@ -46,22 +71,22 @@ const NativePolyline = NativeMaps?.Polyline;
 
 const themePalette = {
   light: {
-    background: '#f5f7fb',
+    background: '#F8FAFC',
     card: '#ffffff',
-    text: '#0b1f3f',
-    muted: '#5c6675',
-    border: '#dce3ee',
-    input: '#f8fafc',
-    accent: '#ff7a1a',
+    text: '#0F172A',
+    muted: '#64748B',
+    border: '#E2E8F0',
+    input: '#F1F5F9',
+    accent: '#6D28D9',
   },
   dark: {
-    background: '#081426',
-    card: '#0f2036',
-    text: '#edf5ff',
-    muted: '#9fb1c7',
-    border: '#28425f',
-    input: '#132a45',
-    accent: '#ff8a34',
+    background: '#080B1A',
+    card: '#0E1227',
+    text: '#F8FAFC',
+    muted: '#94A3B8',
+    border: '#1E293B',
+    input: '#151B36',
+    accent: '#22D3EE',
   },
 };
 
@@ -215,7 +240,7 @@ async function startBackgroundTrackingIfAvailable() {
       pausesUpdatesAutomatically: false,
       showsBackgroundLocationIndicator: true,
       foregroundService: {
-        notificationTitle: 'LocalTrak Rotas em andamento',
+        notificationTitle: 'Routify em andamento',
         notificationBody: 'Sua localizacao esta sendo registrada somente durante o turno ativo.',
       },
     });
@@ -841,7 +866,7 @@ export default function App() {
     return (
       <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]}>
         <ActivityIndicator color={colors.accent} />
-        <Text style={[styles.loadingText, { color: colors.muted }]}>Carregando LocalTrak Rotas...</Text>
+        <Text style={[styles.loadingText, { color: colors.muted }]}>Carregando Routify...</Text>
       </SafeAreaView>
     );
   }
@@ -866,9 +891,9 @@ export default function App() {
       <ScrollView contentContainerStyle={[styles.scrollContent, { backgroundColor: colors.background }]}>
         <View style={styles.header}>
           <View style={styles.headerBrand}>
-            <Image source={logo} style={styles.headerLogo} />
+            <RoutifyLogo style={styles.headerLogo} />
             <View style={styles.headerTextBlock}>
-              <Text style={[styles.kicker, { color: colors.accent }]}>LocalTrak Rotas</Text>
+              <Text style={[styles.kicker, { color: colors.accent }]}>Routify</Text>
             <Text style={styles.title}>Olá, {session.user.name}</Text>
               <Text style={[styles.subtitle, { color: colors.muted }]}>
                 Empresa: {session.user.companyId ?? 'Nao vinculada'}
@@ -1020,7 +1045,7 @@ function LoginScreen({
     >
       <View style={[styles.loginCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <View style={styles.mobileLogoWrap}>
-          <Image source={logo} style={styles.mobileLogo} />
+          <RoutifyLogo style={styles.mobileLogo} />
           <Pressable
             style={[styles.themeButton, { borderColor: colors.border, backgroundColor: colors.input }]}
             onPress={onToggleTheme}
@@ -1030,7 +1055,7 @@ function LoginScreen({
             </Text>
           </Pressable>
         </View>
-        <Text style={[styles.brand, { color: colors.accent }]}>LocalTrak Rotas</Text>
+        <Text style={[styles.brand, { color: colors.accent }]}>Routify</Text>
         <Text style={[styles.loginTitle, { color: colors.text }]}>Acesso do funcionario</Text>
         <Text style={[styles.loginSubtitle, { color: colors.muted }]}>
           Inicie e finalize sua rota de trabalho pelo app.

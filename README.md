@@ -1,8 +1,15 @@
-# LocalTrak Rotas
+# Routify
 
-LocalTrak Rotas e um SaaS multiempresa para controle de rotas, jornada, funcionarios externos, frota, quilometragem rodada, combustivel, manutencao preventiva e reembolso.
+> **Controle rotas, equipes externas e operações em campo em uma única plataforma.**
 
-O produto atende empresas com tecnicos de campo, instaladores, entregadores, equipes de manutencao, provedores de internet, frotas proprias e funcionarios que utilizam veiculo particular. Cada funcionario inicia e finaliza o turno pelo app mobile; somente durante esse periodo a localizacao deve ser registrada.
+Routify é um SaaS B2B multiempresa para gestão de equipes externas, rotas de trabalho, ordens de serviço, frota de veículos, quilometragem rodada, combustível, manutenção preventiva e reembolso.
+
+A plataforma atende empresas com técnicos de campo, instaladores, entregadores, equipes de manutenção, provedores de internet, frotas próprias e funcionários que utilizam veículo particular. Cada funcionário inicia e finaliza o turno pelo app mobile; somente durante esse período a localização é registrada.
+
+**Promessa:** Sua empresa no controle de cada rota, visita e operação em campo.
+
+> **Nota técnica:** O projeto ainda usa nomes internos `localtrak-*` em alguns arquivos de configuração, package names e URLs de deploy ativas. Esses identificadores técnicos são mantidos para compatibilidade enquanto a migração de domínio não for concluída. A marca visível ao usuário final já é **Routify**.
+
 
 ## Perfis De Acesso
 

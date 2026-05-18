@@ -1,6 +1,24 @@
 # TASKS.md
 
-Roadmap do projeto LocalTrak Rotas.
+Roadmap do projeto LocalTrak Rotas / Routify.
+
+## 16. Rebranding LocalTrak → Routify
+
+- [x] Auditar todos os textos visíveis de marca no frontend web e mobile.
+- [x] Atualizar `apps/web/src/app/layout.tsx` — title e description metadata.
+- [x] Atualizar `apps/web/src/app/login/page.tsx` — textos, tagline e aria-label.
+- [x] Atualizar `apps/web/src/components/AppShell.tsx` — marca na sidebar e topbar.
+- [x] Atualizar `apps/web/src/components/ThemeToggle.tsx` — chave localStorage `routify-theme` com fallback `localtrak-theme`.
+- [x] Atualizar `apps/mobile/app.json` — nome do app e permissoes iOS.
+- [x] Atualizar `apps/mobile/src/App.tsx` — textos visiveis (loading, login, kicker, brand OS).
+- [x] Generalizar `.env.example` — remover URL especifica do banco, adicionar variaveis mobile.
+- [x] Otimizar `render.yaml` — remover `pnpm build:web` desnecessario, tornar MASTER_ADMIN secreto.
+- [x] Registrar decisao de rebranding em `DECISIONS.md`.
+- [x] Atualizar `README.md` com marca Routify e documentacao completa.
+- [ ] Criar logo Routify (SVG/PNG) para substituir localtrak-logo.png.
+- [ ] Atualizar URLs de deploy para dominio Routify quando disponivel.
+- [ ] Migrar slug Expo de `localtrak-rotas` para `routify` apos confirmacao de novo bundle ID.
+
 
 Legenda:
 

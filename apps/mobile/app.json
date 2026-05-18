@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "LocalTrak Rotas",
+    "name": "Routify",
     "slug": "localtrak-rotas",
     "version": "0.1.0",
     "orientation": "portrait",
@@ -10,8 +10,8 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "O LocalTrak usa sua localizacao apenas durante o turno iniciado para registrar a rota de trabalho.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "O LocalTrak pode continuar registrando sua rota em segundo plano somente enquanto o turno estiver em andamento.",
+        "NSLocationWhenInUseUsageDescription": "O Routify usa sua localizacao apenas durante o turno iniciado para registrar a rota de trabalho.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "O Routify pode continuar registrando sua rota em segundo plano somente enquanto o turno estiver em andamento.",
         "UIBackgroundModes": [
           "location"
         ]

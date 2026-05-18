@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
   const corsOrigins = config.get<string>('CORS_ORIGINS') ?? config.get<string>('CORS_ORIGIN');
+  const isProduction = config.get<string>('NODE_ENV') === 'production';
 
   const productionOrigins = [
     'https://localtrak-web.vercel.app',
@@ -22,17 +23,19 @@ async function bootstrap() {
     'http://127.0.0.1:8081',
   ];
 
-  let originOption: boolean | string[] = true;
+  let originOption: string[] = productionOrigins;
   if (corsOrigins) {
     const allowed = corsOrigins
       .split(',')
       .map((origin) => origin.trim())
       .filter(Boolean);
-    originOption = [...new Set([...allowed, ...productionOrigins, ...devOrigins])];
-  } else {
+    originOption = [...new Set([...allowed, ...productionOrigins, ...(isProduction ? [] : devOrigins)])];
+  } else if (!isProduction) {
     originOption = [...productionOrigins, ...devOrigins];
   }
 
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
   app.use(helmet());
   app.enableCors({
     origin: originOption,

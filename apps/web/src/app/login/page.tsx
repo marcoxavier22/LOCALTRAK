@@ -10,8 +10,8 @@ import type { AuthResponse } from '@/types';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('admin@localtrak.test');
-  const [password, setPassword] = useState('ChangeMe123!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -53,15 +53,14 @@ export default function LoginPage() {
       <div className="login-theme-action">
         <ThemeToggle />
       </div>
-      <section className="login-intro" aria-label="LocalTrak Rotas">
+      <section className="login-intro" aria-label="Routify">
         <div className="login-logo">
-          <img alt="LocalTrak" className="login-logo-image" src="/localtrak-logo.png" />
-          <strong>LocalTrak Rotas</strong>
+          <img alt="Routify" className="login-logo-image" src="/routify-logo.svg" />
+          <strong>Routify</strong>
         </div>
-        <h2>Controle de rotas, jornada e frota para equipes em campo.</h2>
+        <h2>Controle rotas, equipes externas e operações em campo em uma única plataforma.</h2>
         <p>
-          Um painel multiempresa para acompanhar funcionarios externos, quilometragem, combustivel,
-          manutencao preventiva e reembolsos com isolamento por cliente.
+          A Routify ajuda empresas a acompanhar veículos, organizar rotas, registrar visitas e medir a produtividade das equipes externas.
         </p>
         <div className="login-stats">
           <div>
@@ -80,11 +79,11 @@ export default function LoginPage() {
       </section>
 
       <section className="auth-panel">
-        <span className="eyebrow">LocalTrak Rotas</span>
+        <span className="eyebrow">Routify</span>
         <h1>Acessar painel</h1>
-        <p>Entre com seu usuario administrativo para gerenciar empresas, equipe e operacao.</p>
+        <p>Entre com seu usuário administrativo para gerenciar empresas, equipe e operação em campo.</p>
 
-        <form className="form-stack" onSubmit={handleSubmit}>
+        <form autoComplete="off" className="form-stack" onSubmit={handleSubmit}>
           <label>
             E-mail
             <input

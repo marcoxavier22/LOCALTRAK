@@ -1,8 +1,69 @@
 # DECISIONS.md
 
-Registro de decisoes tecnicas do projeto LocalTrak Rotas.
+Registro de decisoes tecnicas do projeto LocalTrak Rotas / Routify.
 
 ## Decisoes Tomadas
+
+### Rebranding: LocalTrak Rotas → Routify
+
+Data: 2026-05-18
+
+Decisao: a plataforma evoluira comercialmente com a marca **Routify**.
+
+Justificativa: o produto e um SaaS B2B vendavel e a marca Routify comunica melhor o posicionamento comercial focado em rotas, equipes externas e operacoes em campo.
+
+Estrategia de transicao:
+
+- Textos **visiveis** ao usuario final foram migrados para Routify imediatamente (interface web e mobile).
+- Nomes **tecnicos internos** (`@localtrak/api`, `@localtrak/web`, package names, slugs Expo, URLs de deploy ja ativas) sao mantidos temporariamente para compatibilidade com producao.
+- URLs de producao (`localtrak-web.vercel.app`, `localtrak.onrender.com`) serao migradas em etapa futura apos confirmacao de novo dominio.
+- Chave localStorage migrada de `localtrak-theme` para `routify-theme` com fallback backward-compatible.
+
+Arquivos alterados:
+
+- `apps/web/src/app/layout.tsx` — metadata Routify
+- `apps/web/src/app/login/page.tsx` — textos e tagline
+- `apps/web/src/components/AppShell.tsx` — marca na sidebar
+- `apps/web/src/components/ThemeToggle.tsx` — chave localStorage
+- `apps/mobile/app.json` — nome do app e permissoes iOS
+- `apps/mobile/src/App.tsx` — textos visiveis
+- `.env.example` — variaveis generalizadas
+- `render.yaml` — build command otimizado
+- `README.md` — documentacao atualizada
+
+### Deploy API
+
+Data: 2026-05-17
+
+Decisao: hospedar API no **Render** com servico `localtrak-api`.
+
+Justificativa: Render suporta deploy de Node.js a partir de repositorio Git com suporte a pre-deploy commands (migrations), health check, variaveis de ambiente e plano gratuito para prototipo.
+
+Build Command: `pnpm install && pnpm build:api`  
+Pre-deploy: `pnpm prisma:migrate:deploy`  
+Start Command: `pnpm start:api`
+
+Nota: `pnpm build:web` foi removido do buildCommand do Render pois o frontend esta no Vercel.
+
+### Deploy Web
+
+Data: 2026-05-17
+
+Decisao: hospedar frontend web no **Vercel**.
+
+Justificativa: Vercel oferece deploy automatico via GitHub, suporte nativo a Next.js, CDN global e plano gratuito.
+
+Root Directory: `apps/web`  
+Build Command: `pnpm build`
+
+### Banco de Dados
+
+Data: 2026-05-17
+
+Decisao: usar **Supabase PostgreSQL** como banco gerenciado.
+
+Justificativa: Supabase oferece PostgreSQL gerenciado, Storage para arquivos, autenticacao opcional e painel administrativo de banco. O projeto usa apenas o banco e Storage (Auth e RLS sao opcionais).
+
 
 ### Produto SaaS Multiempresa
 

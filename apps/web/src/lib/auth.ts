@@ -4,12 +4,19 @@ const TOKEN_KEY = 'localtrak.accessToken';
 const REFRESH_TOKEN_KEY = 'localtrak.refreshToken';
 const USER_KEY = 'localtrak.user';
 
+function clearLegacyPersistentSession() {
+  window.localStorage.removeItem(TOKEN_KEY);
+  window.localStorage.removeItem(REFRESH_TOKEN_KEY);
+  window.localStorage.removeItem(USER_KEY);
+}
+
 export function getToken() {
   if (typeof window === 'undefined') {
     return null;
   }
 
-  return window.localStorage.getItem(TOKEN_KEY);
+  clearLegacyPersistentSession();
+  return window.sessionStorage.getItem(TOKEN_KEY);
 }
 
 export function getUser(): User | null {
@@ -17,7 +24,8 @@ export function getUser(): User | null {
     return null;
   }
 
-  const rawUser = window.localStorage.getItem(USER_KEY);
+  clearLegacyPersistentSession();
+  const rawUser = window.sessionStorage.getItem(USER_KEY);
 
   if (!rawUser) {
     return null;
@@ -32,12 +40,9 @@ export function getUser(): User | null {
 }
 
 export function saveSession(session: AuthResponse) {
-  window.localStorage.setItem(TOKEN_KEY, session.accessToken);
-  window.localStorage.setItem(USER_KEY, JSON.stringify(session.user));
-
-  if (session.refreshToken) {
-    window.localStorage.setItem(REFRESH_TOKEN_KEY, session.refreshToken);
-  }
+  clearLegacyPersistentSession();
+  window.sessionStorage.setItem(TOKEN_KEY, session.accessToken);
+  window.sessionStorage.setItem(USER_KEY, JSON.stringify(session.user));
 }
 
 export function logout() {
@@ -45,7 +50,7 @@ export function logout() {
     return;
   }
 
-  window.localStorage.removeItem(TOKEN_KEY);
-  window.localStorage.removeItem(REFRESH_TOKEN_KEY);
-  window.localStorage.removeItem(USER_KEY);
+  clearLegacyPersistentSession();
+  window.sessionStorage.removeItem(TOKEN_KEY);
+  window.sessionStorage.removeItem(USER_KEY);
 }

@@ -165,10 +165,10 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand-block">
-          <img alt="LocalTrak" className="brand-logo" src="/localtrak-logo.png" />
+          <img alt="Routify" className="brand-logo" src="/routify-logo.svg" />
           <div>
-            <strong>LocalTrak</strong>
-            <span>Rotas</span>
+            <strong>Routify</strong>
+            <span>Gestão em Campo</span>
           </div>
         </div>
 
@@ -201,7 +201,7 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
             <h1>{title}</h1>
             <p>
               <BarChart3 size={15} strokeWidth={2.2} aria-hidden="true" />
-              Operacao, frota e campo em uma unica visao.
+              Sua empresa no controle de cada rota, visita e operação em campo.
             </p>
           </div>
           <div className="user-menu">
