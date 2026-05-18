@@ -13,9 +13,10 @@ Roadmap do projeto LocalTrak Rotas / TrakFlow.
 - [x] Atualizar `apps/mobile/src/App.tsx` — logo Svg TrakFlow, títulos de notificações, loading e login.
 - [x] Atualizar `README.md` com posicionamento de marca, descrição e stack TrakFlow.
 - [x] Atualizar `DECISIONS.md` documentando a decisão do rebranding definitivo.
-- [~] Rodar builds obrigatórios locais para validar compilação (`pnpm install`, `pnpm prisma:generate`, `pnpm build:api`, `pnpm build:web`).
-- [ ] Realizar commit e push para o repositório GitHub `marcoxavier22/LOCALTRAK`.
-- [ ] Confirmar deploys em produção (Vercel e Render) e realizar testes de fumaça.
+- [x] Rodar builds obrigatórios locais para validar compilação (`pnpm install`, `pnpm prisma:generate`, `pnpm build:api`, `pnpm build:web`).
+- [x] Realizar commit e push para o repositório GitHub `marcoxavier22/LOCALTRAK`.
+- [x] Confirmar deploys em produção (Vercel e Render) e realizar testes de fumaça.
+- [x] Validar e implementar responsividade completa 320px-1920px no painel web (sliding drawer, topbar compacta, data tables scroll).
 
 ## 16. Rebranding LocalTrak → Routify (Legado)
 
@@ -300,7 +301,7 @@ Legenda:
 - [x] Criar filtros de historico por funcionario, veiculo e periodo.
 - [x] Exibir ponto inicial, ponto atual/final e polyline do trajeto.
 - [x] Exibir marcadores de clientes/paradas planejadas no mapa de OS.
-- [~] Validar responsividade.
+- [x] Validar responsividade.
 
 ## 11. App Mobile
 
