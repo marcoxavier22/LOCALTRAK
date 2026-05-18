@@ -1,4 +1,4 @@
-# DEPLOYMENT_STATUS.md
+﻿# DEPLOYMENT_STATUS.md
 
 Status do deploy e validacao do LocalTrak Rotas em 2026-05-17.
 
@@ -134,3 +134,4 @@ deve responder `200` e o CORS sera aplicado por `apps/api/src/main.ts`.
   `accessToken`, `refreshToken` e `user`.
 - [ ] Testar login real no Vercel web.
 - [ ] Testar login real no mobile/Expo web.
+

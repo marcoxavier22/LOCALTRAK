@@ -18,6 +18,7 @@ import {
   Wrench,
   Menu,
   X,
+  Settings,
 } from 'lucide-react';
 import { getToken, getUser, logout } from '@/lib/auth';
 import { ThemeToggle } from './ThemeToggle';
@@ -38,12 +39,14 @@ const masterLinks = [
 const companyLinks = [
   { href: '/empresa/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/empresa/funcionarios', label: 'Funcionarios', icon: Users },
+  { href: '/empresa/clientes', label: 'Clientes', icon: Building2 },
   { href: '/empresa/veiculos', label: 'Veiculos', icon: Car },
   { href: '/empresa/rotas', label: 'Rotas', icon: Route },
   { href: '/empresa/ordens', label: 'Ordens de Servico', icon: ClipboardList },
   { href: '/empresa/manutencao', label: 'Manutencao', icon: Wrench },
   { href: '/empresa/combustivel', label: 'Combustivel', icon: Fuel },
   { href: '/empresa/reembolsos', label: 'Reembolsos', icon: Receipt },
+  { href: '/empresa/configuracoes', label: 'Configurações', icon: Settings },
 ];
 
 export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellProps) {

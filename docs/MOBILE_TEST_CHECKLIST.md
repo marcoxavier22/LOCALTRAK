@@ -1,4 +1,4 @@
-# MOBILE_TEST_CHECKLIST.md
+﻿# MOBILE_TEST_CHECKLIST.md
 
 Checklist manual do app mobile LocalTrak Rotas em React Native/Expo.
 
@@ -15,8 +15,8 @@ Checklist manual do app mobile LocalTrak Rotas em React Native/Expo.
 ```
 
 - Usuario `EMPLOYEE` de teste disponivel:
-  - Email: `funcionario@empresateste.com`
-  - Senha: `Senha123!`
+  - Email: `<SEED_EMPLOYEE_EMAIL>`
+  - Senha: `<SEED_DEMO_PASSWORD>`
 - Rodar o app com:
 
 ```bash
@@ -64,7 +64,7 @@ pnpm --filter @localtrak/mobile exec expo export --platform web
 - [ ] Confirmar mensagem: `Este acesso e exclusivo para funcionarios.`
 - [ ] Tentar login com `COMPANY_ADMIN`.
 - [ ] Confirmar mensagem: `Este acesso e exclusivo para funcionarios.`
-- [ ] Entrar com `funcionario@empresateste.com` e `Senha123!`.
+- [ ] Entrar com `<SEED_EMPLOYEE_EMAIL>` e `<SEED_DEMO_PASSWORD>`.
 - [ ] Confirmar entrada na tela inicial do funcionario.
 
 ## 2. Tela Inicial
@@ -129,3 +129,4 @@ Com token de `EMPLOYEE`, os endpoints devem funcionar:
 - [ ] `GET /routes/active`
 
 No Sprint 0, o fluxo HTTP desses endpoints foi validado com Supabase e criou rota finalizada com pontos persistidos.
+

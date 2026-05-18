@@ -1,4 +1,4 @@
-# Checklist Web - OS E Rastreabilidade
+﻿# Checklist Web - OS E Rastreabilidade
 
 ## Preparacao
 
@@ -10,7 +10,7 @@
 
 ## Fluxo COMPANY_ADMIN
 
-- [ ] Login em `http://localhost:3000/login` com `admin@empresateste.com` / `Senha123!`.
+- [ ] Login em `http://localhost:3000/login` com `<SEED_COMPANY_ADMIN_EMAIL>` / `<SEED_DEMO_PASSWORD>`.
 - [ ] Acessar `/empresa/ordens`.
 - [ ] Confirmar cards de OS pendentes, em andamento e finalizadas.
 - [ ] Criar OS com funcionario, veiculo, data e enderecos.
@@ -47,3 +47,4 @@
 - [ ] Confirmar que `EMPLOYEE` nao acessa painel web.
 - [ ] Confirmar que `COMPANY_ADMIN` ve apenas OS da propria empresa.
 - [ ] Confirmar que URLs de fotos sao assinadas e expiram.
+

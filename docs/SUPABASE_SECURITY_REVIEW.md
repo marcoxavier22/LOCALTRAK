@@ -1,4 +1,4 @@
-# SUPABASE_SECURITY_REVIEW.md
+﻿# SUPABASE_SECURITY_REVIEW.md
 
 Revisao do checkpoint Supabase do LocalTrak Rotas.
 
@@ -66,3 +66,4 @@ Performance:
 ## Observacao Importante
 
 As API keys do Supabase nao substituem a `DATABASE_URL` do PostgreSQL. O backend NestJS usa Prisma, entao precisa da connection string do banco para rodar localmente ou em Render/Railway.
+

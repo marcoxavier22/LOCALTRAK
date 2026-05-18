@@ -193,6 +193,31 @@ Justificativa: acelera desenvolvimento Android/iOS, oferece APIs para localizaca
 
 Restricao: nao avancar para mobile antes de login, empresas, usuarios, veiculos e rotas estarem funcionando.
 
+### Geolocalização e Integração de Mapas Híbridos (Web e Mobile)
+
+Data: 2026-05-18
+
+Decisão: Adotar uma arquitetura de mapas híbrida e controlada na TrakFlow:
+- **Geocoding Centralizado e Seguro**: O backend NestJS é o único responsável por realizar geocodificação de endereços textuais em coordenadas usando a chave privada do Google Maps encapsulada de forma segura no `GeocodingService`.
+- **Criação de OS baseada em Endereço/CEP**: O formulário de Ordens de Serviço no painel web permite autocompletar endereços dinamicamente via integração client-side com ViaCEP, vinculando clientes e eliminando a necessidade de inserção de coordenadas manuais pelo usuário.
+- **Visualização Reutilizável**: Leaflet e OpenStreetMap são usados no frontend Web para listagens e dashboards operacionais (reduzindo custo da API do Google), enquanto o mobile/Expo e páginas de detalhes específicas usam Google Maps nativo para máxima fidelidade e precisão.
+
+### Inicialização de Armazenamento Self-Healing no Supabase Storage
+
+Data: 2026-05-18
+
+Decisão: Implementar inicialização de buckets de armazenamento programática e resiliente (Self-Healing) no backend NestJS.
+
+Justificativa: Evita erros comuns de configuração em que administradores de infraestrutura esquecem de criar fisicamente os buckets (como `order-odometer`) no Supabase, ou configuram incorretamente as políticas e limites. No primeiro upload de foto de odômetro, o `OrdersStorageService` verifica a existência do bucket e o cria de forma autônoma com restrição de visibilidade privada (`public: false`), limites de tamanho (5MB) e formatos permitidos (`image/png`, `image/jpeg`, `image/webp`).
+
+### Verificação de MIME Type por Assinatura de Magic Bytes (Base64)
+
+Data: 2026-05-18
+
+Decisão: Validar o formato das imagens de odômetro enviadas em Base64 utilizando análise de Magic Bytes (assinaturas de cabeçalho base64) ao invés de confiar cegamente no cabeçalho `data:image/...` enviado pelo cliente.
+
+Justificativa: Aumenta a segurança e a resiliência contra ataques de upload de arquivos maliciosos ou formatação incorreta do app mobile. O backend analisa os primeiros caracteres da string base64 limpa buscando assinaturas conhecidas (`iVBORw0KGgo` para PNG, `UklGR` para WebP) antes de decodificar o buffer físico.
+
 ## Decisoes Pendentes
 
 - Definir estrategia final de migrations para ambientes dev/staging/producao.

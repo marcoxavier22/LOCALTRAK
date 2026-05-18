@@ -1,4 +1,4 @@
-# SECURITY_DEPLOY_CHECKLIST.md
+﻿# SECURITY_DEPLOY_CHECKLIST.md
 
 Checklist de seguranca, integridade e deploy do prototipo LocalTrak Rotas (Auditado em 2026-05-17).
 
@@ -10,7 +10,7 @@ Checklist de seguranca, integridade e deploy do prototipo LocalTrak Rotas (Audit
 - [x] Configurar no Vercel apenas `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 - [x] Gerar `JWT_ACCESS_SECRET` e `JWT_REFRESH_SECRET` fortes e diferentes por ambiente.
 - [x] Trocar `MASTER_ADMIN_PASSWORD` antes de expor o prototipo online.
-- [x] Confirmar que `.env`, `.env.local` e `.env.production` estao no `.gitignore` (Segurança robusta contra vazamentos).
+- [x] Confirmar que `.env`, `.env.local` e `.env.production` estao no `.gitignore` (SeguranÃ§a robusta contra vazamentos).
 
 ## Backend API
 
@@ -37,7 +37,7 @@ Checklist de seguranca, integridade e deploy do prototipo LocalTrak Rotas (Audit
 
 ## Frontend Web Vercel
 
-- [x] Build web passa com `pnpm build:web` (Compilação limpa).
+- [x] Build web passa com `pnpm build:web` (CompilaÃ§Ã£o limpa).
 - [x] Helpers Supabase aceitam `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` e `NEXT_PUBLIC_SUPABASE_KEY`.
 - [x] `NEXT_PUBLIC_API_URL` aponta para API HTTPS.
 - [x] `CORS_ORIGINS` da API contem exatamente o dominio Vercel de producao.
@@ -45,7 +45,7 @@ Checklist de seguranca, integridade e deploy do prototipo LocalTrak Rotas (Audit
 
 ## Mobile
 
-- [x] Typecheck mobile passa com `pnpm typecheck:mobile` (Compilação limpa).
+- [x] Typecheck mobile passa com `pnpm typecheck:mobile` (CompilaÃ§Ã£o limpa).
 - [x] Login e chamadas API usam JWT Bearer.
 - [x] Permissoes de localizacao sao solicitadas antes de rastrear.
 - [x] Testar Expo Go em dispositivo real apontando para API HTTPS.
@@ -64,3 +64,4 @@ Checklist de seguranca, integridade e deploy do prototipo LocalTrak Rotas (Audit
 - [x] `COMPANY_ADMIN` visualiza rotas/OS e fotos assinadas no painel.
 - [x] `EMPLOYEE` nao acessa painel web.
 - [x] `COMPANY_ADMIN` nao acessa endpoints `/master/*`.
+

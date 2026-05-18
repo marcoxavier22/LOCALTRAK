@@ -1,4 +1,4 @@
-# Checklist Web - Ordens de Servico
+﻿# Checklist Web - Ordens de Servico
 
 Checklist complementar e mais atual: `docs/OS_WEB_CHECKLIST.md`.
 
@@ -14,7 +14,7 @@ Checklist complementar e mais atual: `docs/OS_WEB_CHECKLIST.md`.
 ## Login E Navegacao
 
 - [ ] Acessar `http://localhost:3000/login`.
-- [ ] Entrar como `COMPANY_ADMIN` com `admin@empresateste.com` / `Senha123!`.
+- [ ] Entrar como `COMPANY_ADMIN` com `<SEED_COMPANY_ADMIN_EMAIL>` / `<SEED_DEMO_PASSWORD>`.
 - [ ] Confirmar redirecionamento para `/empresa/dashboard`.
 - [ ] Abrir o menu `Ordens de Servico`.
 
@@ -48,3 +48,4 @@ Checklist complementar e mais atual: `docs/OS_WEB_CHECKLIST.md`.
 - [ ] Tentar acessar `/empresa/ordens` como `EMPLOYEE` no painel web e confirmar bloqueio.
 - [ ] Tentar listar OS sem token e confirmar erro 401.
 - [ ] Confirmar que uma empresa nao visualiza OS de outra empresa.
+

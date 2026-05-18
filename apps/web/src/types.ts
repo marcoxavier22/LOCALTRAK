@@ -24,6 +24,10 @@ export type Company = {
   planId?: string | null;
   maxEmployees: number;
   maxVehicles: number;
+  requireOdometerStartPhoto?: boolean;
+  requireOdometerFinishPhoto?: boolean;
+  requireOdometerStartKm?: boolean;
+  requireOdometerFinishKm?: boolean;
   createdAt: string;
   updatedAt: string;
   _count?: {
@@ -324,10 +328,24 @@ export type ServiceOrderStop = {
   id: string;
   companyId: string;
   orderId: string;
+  customerId?: string | null;
   customerName?: string | null;
+  customerEmail?: string | null;
+  customerPhone?: string | null;
   address: string;
+  cep?: string | null;
+  street?: string | null;
+  number?: string | null;
+  complement?: string | null;
+  neighborhood?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+  addressReference?: string | null;
   latitude?: number | string | null;
   longitude?: number | string | null;
+  geocodingStatus?: GeocodingStatus;
+  geocodingUpdatedAt?: string | null;
   visitOrder: number;
   status: ServiceOrderStopStatus;
   completedAt?: string | null;
@@ -385,4 +403,42 @@ export type ServiceOrderTracking = {
   liveDurationMinutes?: number;
   trackingStatus?: RouteShiftStatus | ServiceOrderStatus;
   lastPointAt?: string | null;
+};
+
+export type GeocodingStatus = 'PENDING' | 'RESOLVED' | 'FAILED' | 'MANUAL';
+
+export type Customer = {
+  id: string;
+  companyId: string;
+  name: string;
+  document?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  address: string;
+  cep?: string | null;
+  street?: string | null;
+  number?: string | null;
+  complement?: string | null;
+  neighborhood?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+  notes?: string | null;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
+  geocodingStatus: GeocodingStatus;
+  geocodingUpdatedAt?: string | null;
+  status?: 'ACTIVE' | 'INACTIVE';
+  deletedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CompanySettings = {
+  id: string;
+  name: string;
+  requireOdometerStartPhoto: boolean;
+  requireOdometerFinishPhoto: boolean;
+  requireOdometerStartKm: boolean;
+  requireOdometerFinishKm: boolean;
 };

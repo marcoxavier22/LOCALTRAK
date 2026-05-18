@@ -1,4 +1,4 @@
-# MAPS_WEB_CHECKLIST.md
+﻿# MAPS_WEB_CHECKLIST.md
 
 Checklist para validar mapas, trajetos e UX responsiva no painel web do LocalTrak Rotas.
 
@@ -8,7 +8,7 @@ Checklist para validar mapas, trajetos e UX responsiva no painel web do LocalTra
 - [ ] Confirmar `GET http://localhost:3333/health` retornando `{"status":"ok","database":"connected"}`.
 - [ ] Rodar web com `pnpm dev:web`.
 - [ ] Confirmar `apps/web/.env.local` com `NEXT_PUBLIC_API_URL=http://localhost:3333`.
-- [ ] Fazer login como `COMPANY_ADMIN` usando `admin@empresateste.com` / `Senha123!`.
+- [ ] Fazer login como `COMPANY_ADMIN` usando `<SEED_COMPANY_ADMIN_EMAIL>` / `<SEED_DEMO_PASSWORD>`.
 
 ## Dashboard Da Empresa
 
@@ -49,9 +49,10 @@ Checklist para validar mapas, trajetos e UX responsiva no painel web do LocalTra
 - [ ] Alternar tema claro/escuro e confirmar contraste adequado no mapa e paineis.
 - [ ] Confirmar que loading, erro e estados vazios aparecem com mensagens visiveis.
 
-## Segurança
+## SeguranÃ§a
 
 - [ ] Confirmar que `EMPLOYEE` nao acessa o painel web.
 - [ ] Confirmar que `COMPANY_ADMIN` so enxerga rotas e OS da propria empresa.
 - [ ] Confirmar que todas as chamadas usam `Authorization: Bearer <token>`.
 - [ ] Confirmar que respostas nao exibem `passwordHash` ou `password_hash`.
+

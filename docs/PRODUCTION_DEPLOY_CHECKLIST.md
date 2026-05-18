@@ -1,4 +1,4 @@
-# PRODUCTION_DEPLOY_CHECKLIST.md
+﻿# PRODUCTION_DEPLOY_CHECKLIST.md
 
 Checklist passo a passo para preparar, publicar e validar o prototipo LocalTrak Rotas em ambiente online.
 
@@ -569,3 +569,4 @@ O deploy so deve ser considerado pronto quando:
 - [ ] Mapas e dashboards exibem dados reais.
 - [ ] Dark mode e responsividade foram testados.
 - [ ] Checklist de seguranca sem pendencias criticas.
+

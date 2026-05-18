@@ -1,4 +1,4 @@
-# Login e autenticacao - checkpoint
+﻿# Login e autenticacao - checkpoint
 
 Data do checkpoint: 2026-05-17.
 
@@ -13,9 +13,9 @@ Use somente em ambiente de teste:
 
 | Perfil | E-mail | Senha | Acesso esperado |
 | --- | --- | --- | --- |
-| MASTER_ADMIN | `admin@localtrak.test` | `ChangeMe123!` | Painel master web |
-| COMPANY_ADMIN | `admin@empresateste.com` | `Senha123!` | Painel da empresa web |
-| EMPLOYEE | `funcionario@empresateste.com` | `Senha123!` | App mobile |
+| MASTER_ADMIN | `admin@localtrak.test` | `<MASTER_ADMIN_PASSWORD>` | Painel master web |
+| COMPANY_ADMIN | `<SEED_COMPANY_ADMIN_EMAIL>` | `<SEED_DEMO_PASSWORD>` | Painel da empresa web |
+| EMPLOYEE | `<SEED_EMPLOYEE_EMAIL>` | `<SEED_DEMO_PASSWORD>` | App mobile |
 
 ## Endpoints validados
 
@@ -88,7 +88,7 @@ Em outro terminal:
 $api = "http://localhost:3333"
 Invoke-RestMethod "$api/health"
 
-$body = @{ email = "admin@localtrak.test"; password = "ChangeMe123!" } | ConvertTo-Json
+$body = @{ email = "admin@localtrak.test"; password = "<MASTER_ADMIN_PASSWORD>" } | ConvertTo-Json
 Invoke-RestMethod "$api/auth/login" -Method Post -ContentType "application/json" -Body $body
 ```
 
@@ -124,3 +124,4 @@ Invoke-RestMethod "$api/auth/login" -Method Post -ContentType "application/json"
   avaliar migracao futura para cookie seguro HTTP-only.
 - A tela de login web ainda vem com credenciais de teste preenchidas. Remover
   antes de divulgar o prototipo publicamente.
+

@@ -15,6 +15,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RoutesModule } from './routes/routes.module';
 import { UsersModule } from './users/users.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { VehiclesModule } from './vehicles/vehicles.module';
     FuelModule,
     OrdersModule,
     HealthModule,
+    CustomersModule,
   ],
   providers: [
     {

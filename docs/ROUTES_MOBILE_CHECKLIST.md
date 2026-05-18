@@ -1,4 +1,4 @@
-# ROUTES_MOBILE_CHECKLIST.md
+﻿# ROUTES_MOBILE_CHECKLIST.md
 
 Checklist manual para validar envio de rotas pelo app mobile LocalTrak Rotas.
 
@@ -13,8 +13,8 @@ pnpm --filter @localtrak/mobile exec expo start --clear
 ```
 
 - Usuario `EMPLOYEE` disponivel:
-  - Email: `funcionario@empresateste.com`
-  - Senha: `Senha123!`
+  - Email: `<SEED_EMPLOYEE_EMAIL>`
+  - Senha: `<SEED_DEMO_PASSWORD>`
 
 ## 1. Login
 
@@ -32,7 +32,7 @@ pnpm --filter @localtrak/mobile exec expo start --clear
 - [ ] Confirmar primeiro ponto enviado para `POST /routes/:id/points`.
 - [ ] Confirmar status `Em rota`.
 
-## 3. Envio Contínuo De Pontos
+## 3. Envio ContÃ­nuo De Pontos
 
 - [ ] Manter app aberto e confirmar aumento de `Pontos enviados`.
 - [ ] Colocar app em segundo plano e movimentar o aparelho.
@@ -64,3 +64,4 @@ pnpm --filter @localtrak/mobile exec expo start --clear
 - [ ] Negar localizacao background e confirmar que o app avisa sobre limitacao.
 - [ ] No iPhone, confirmar permissao `Sempre` nas configuracoes para teste de segundo plano.
 - [ ] Confirmar que o app nao envia pontos depois de finalizar turno.
+

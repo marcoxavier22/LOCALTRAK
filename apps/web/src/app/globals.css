@@ -1253,6 +1253,35 @@ td span {
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+.google-map-preview,
+.google-map-fallback {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-glass);
+}
+
+.google-map-preview iframe {
+  display: block;
+  width: 100%;
+  min-height: 320px;
+  border: 0;
+}
+
+.google-map-preview a,
+.google-map-fallback a {
+  margin: 12px;
+}
+
+.google-map-fallback {
+  min-height: 180px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
 .metric-status {
   font-size: 16px;
 }

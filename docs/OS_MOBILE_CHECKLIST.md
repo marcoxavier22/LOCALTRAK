@@ -1,4 +1,4 @@
-# Checklist Mobile - OS, Foto E Rota
+﻿# Checklist Mobile - OS, Foto E Rota
 
 ## Preparacao
 
@@ -10,7 +10,7 @@
 
 ## Login
 
-- [ ] Login com `funcionario@empresateste.com` / `Senha123!`.
+- [ ] Login com `<SEED_EMPLOYEE_EMAIL>` / `<SEED_DEMO_PASSWORD>`.
 - [ ] Confirmar que `MASTER_ADMIN` e `COMPANY_ADMIN` sao bloqueados no app.
 - [ ] Abrir aba `OS`.
 
@@ -51,3 +51,4 @@
 - [ ] Tentar finalizar com KM menor que inicial e confirmar erro amigavel.
 - [ ] Remover permissao de camera e confirmar feedback visual.
 - [ ] Remover permissao de localizacao e confirmar feedback visual.
+

@@ -1,14 +1,14 @@
-# TrakFlow
+﻿# TrakFlow
 
-> **Controle rotas, equipes externas e operações em campo em uma única plataforma.**
+> **Controle rotas, equipes externas e operaÃ§Ãµes em campo em uma Ãºnica plataforma.**
 
-TrakFlow é um SaaS B2B multiempresa para gestão de equipes externas, rotas de trabalho, ordens de serviço, frota de veículos, quilometragem rodada, combustível, manutenção preventiva e reembolso.
+TrakFlow Ã© um SaaS B2B multiempresa para gestÃ£o de equipes externas, rotas de trabalho, ordens de serviÃ§o, frota de veÃ­culos, quilometragem rodada, combustÃ­vel, manutenÃ§Ã£o preventiva e reembolso.
 
-A plataforma atende empresas com técnicos de campo, instaladores, entregadores, equipes de manutenção, provedores de internet, frotas próprias e funcionários que utilizam veículo particular. Cada funcionário inicia e finaliza o turno pelo app mobile; somente durante esse período a localização é registrada.
+A plataforma atende empresas com tÃ©cnicos de campo, instaladores, entregadores, equipes de manutenÃ§Ã£o, provedores de internet, frotas prÃ³prias e funcionÃ¡rios que utilizam veÃ­culo particular. Cada funcionÃ¡rio inicia e finaliza o turno pelo app mobile; somente durante esse perÃ­odo a localizaÃ§Ã£o Ã© registrada.
 
-**Promessa:** Sua empresa no controle de cada rota, visita e operação em campo.
+**Promessa:** Sua empresa no controle de cada rota, visita e operaÃ§Ã£o em campo.
 
-> **Nota técnica:** O projeto ainda usa nomes internos `localtrak-*` ou `routify-*` em alguns arquivos de configuração, package names e URLs de deploy ativas. Esses identificadores técnicos são mantidos temporariamente para compatibilidade e estabilidade enquanto a migração completa de infraestrutura não for realizada. A marca visível ao usuário final é **TrakFlow**.
+> **Nota tÃ©cnica:** O projeto ainda usa nomes internos `localtrak-*` ou `routify-*` em alguns arquivos de configuraÃ§Ã£o, package names e URLs de deploy ativas. Esses identificadores tÃ©cnicos sÃ£o mantidos temporariamente para compatibilidade e estabilidade enquanto a migraÃ§Ã£o completa de infraestrutura nÃ£o for realizada. A marca visÃ­vel ao usuÃ¡rio final Ã© **TrakFlow**.
 
 
 ## Perfis De Acesso
@@ -96,7 +96,7 @@ CORS_ORIGINS="http://localhost:3000,http://localhost:8081"
 CORS_ORIGIN="http://localhost:3000"
 MASTER_ADMIN_NAME="Admin Master"
 MASTER_ADMIN_EMAIL="admin@localtrak.test"
-MASTER_ADMIN_PASSWORD="ChangeMe123!"
+MASTER_ADMIN_PASSWORD="<MASTER_ADMIN_PASSWORD>"
 SUPABASE_URL="https://REPLACE_WITH_PROJECT_REF.supabase.co"
 SUPABASE_SERVICE_ROLE_KEY="REPLACE_WITH_SERVER_ONLY_SERVICE_ROLE_KEY"
 SUPABASE_SECRET_KEY=""
@@ -109,6 +109,29 @@ Para o frontend web, configure `apps/web/.env.local` ou as variaveis do provedor
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3333
+```
+
+### Mapas, Clientes, OS E Odometro
+
+O fluxo atual usa uma arquitetura controlada:
+
+- Mobile: renderiza mapa nativo quando a chave `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` estiver configurada; se ausente, mostra endereco/rota e abre o Google Maps externo.
+- Web: usa `GoogleMapPreview` somente em detalhes de OS/rotas; listagens ficam leves e sempre exibem fallback com endereco e botao "Abrir no Google Maps".
+- Backend: recebe CEP/endereco estruturado, tenta geocoding com `GOOGLE_MAPS_API_KEY` privada e salva `latitude`, `longitude`, `geocodingStatus` e `geocodingUpdatedAt`.
+- Clientes: podem ser cadastrados manualmente ou importados via CSV com colunas `name,email,phone,document,cep,street,number,complement,neighborhood,city,state,country,notes`.
+- Odometro: fotos sao salvas em bucket privado do Supabase Storage, com nomes unicos e URLs assinadas. A obrigatoriedade de foto/KM fica nas configuracoes operacionais da empresa.
+
+Variaveis adicionais:
+
+```env
+JSON_BODY_LIMIT="8mb"
+GOOGLE_MAPS_API_KEY=""
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=""
+EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=""
+ENABLE_DEMO_SEED="false"
+SEED_DEMO_PASSWORD=""
+SEED_COMPANY_ADMIN_EMAIL=""
+SEED_EMPLOYEE_EMAIL=""
 ```
 
 ## PostgreSQL Com Docker
@@ -264,14 +287,14 @@ Dependencias mobile/web alinhadas com Expo SDK 55:
 O seed cria um usuario `MASTER_ADMIN`:
 
 - E-mail: `admin@localtrak.test`
-- Senha: `ChangeMe123!`
+- Senha: `<MASTER_ADMIN_PASSWORD>`
 
-Credenciais de teste para `COMPANY_ADMIN` e `EMPLOYEE` sao criadas durante o fluxo manual. Use a senha definida no formulario, por exemplo `Senha123!`.
+Credenciais de teste para `COMPANY_ADMIN` e `EMPLOYEE` sao criadas durante o fluxo manual. Use a senha definida no formulario, por exemplo `<SEED_DEMO_PASSWORD>`.
 
 O seed tambem garante estes usuarios de teste quando eles nao existirem ou estiverem inativos:
 
-- `COMPANY_ADMIN`: `admin@empresateste.com` / `Senha123!`
-- `EMPLOYEE`: `funcionario@empresateste.com` / `Senha123!`
+- `COMPANY_ADMIN`: `<SEED_COMPANY_ADMIN_EMAIL>` / `<SEED_DEMO_PASSWORD>`
+- `EMPLOYEE`: `<SEED_EMPLOYEE_EMAIL>` / `<SEED_DEMO_PASSWORD>`
 
 ## Endpoints Principais Ja Criados
 
@@ -473,7 +496,7 @@ Checklists especificos:
 
 Teste rapido do botao de finalizar rota:
 
-1. Entrar no app mobile como `funcionario@empresateste.com`.
+1. Entrar no app mobile como `<SEED_EMPLOYEE_EMAIL>`.
 2. Tocar em `Iniciar turno` e permitir localizacao.
 3. Aguardar pelo menos um ponto enviado.
 4. Tocar em `Finalizar turno`.
@@ -556,13 +579,13 @@ pnpm build:web
 
 ## Credenciais de Teste
 
-Para facilitar os testes locais e remotos, o banco de dados é populado (`pnpm prisma:seed`) com as seguintes credenciais padronizadas:
+Para facilitar os testes locais e remotos, o banco de dados Ã© populado (`pnpm prisma:seed`) com as seguintes credenciais padronizadas:
 
 | Perfil | Email | Senha |
 |---|---|---|
-| MASTER_ADMIN | `admin@localtrak.test` | `ChangeMe123!` |
-| COMPANY_ADMIN | `admin@empresateste.com` | `Senha123!` |
-| EMPLOYEE | `funcionario@empresateste.com` | `Senha123!` |
+| MASTER_ADMIN | `admin@localtrak.test` | `<MASTER_ADMIN_PASSWORD>` |
+| COMPANY_ADMIN | `<SEED_COMPANY_ADMIN_EMAIL>` | `<SEED_DEMO_PASSWORD>` |
+| EMPLOYEE | `<SEED_EMPLOYEE_EMAIL>` | `<SEED_DEMO_PASSWORD>` |
 
 ## Fluxo De Teste Manual
 
@@ -600,9 +623,9 @@ Fluxo complementar:
 29. Confirmar que o veiculo aparece na lista.
 30. Abrir `/empresa/veiculos/<vehicleId>`.
 31. Editar dados e alterar status para ativo, manutencao ou inativo.
-32. Iniciar o app mobile em um terminal separado com `pnpm dev:mobile` (configure a API com o seu IP local via `EXPO_PUBLIC_API_URL` se testar no aparelho físico).
-33. Fazer login no app mobile com as credenciais do funcionário criado (`EMPLOYEE`).
-34. Iniciar um turno no app mobile, aprovar as permissões de localização, simular envio de pontos e depois finalizar a rota.
+32. Iniciar o app mobile em um terminal separado com `pnpm dev:mobile` (configure a API com o seu IP local via `EXPO_PUBLIC_API_URL` se testar no aparelho fÃ­sico).
+33. Fazer login no app mobile com as credenciais do funcionÃ¡rio criado (`EMPLOYEE`).
+34. Iniciar um turno no app mobile, aprovar as permissÃµes de localizaÃ§Ã£o, simular envio de pontos e depois finalizar a rota.
 33. Acessar `/empresa/rotas`.
 34. Filtrar rotas por status.
 35. Abrir `/empresa/rotas/<routeId>` e conferir resumo, funcionario, veiculo, periodo e pontos.
@@ -643,7 +666,7 @@ Content-Type: application/json
     "name": "Dono da Frota",
     "email": "dono@fibranorte.com",
     "phone": "11988887777",
-    "password": "Senha123!"
+    "password": "<SEED_DEMO_PASSWORD>"
   }
 }
 ```
@@ -876,15 +899,15 @@ O backend esta preparado para usar Supabase PostgreSQL via `DATABASE_URL` com `s
 
 Projeto Supabase usado no prototipo:
 
-- URL: `https://bbcubwmvizcmjtwiiyxv.supabase.co`
-- Host PostgreSQL: `db.bbcubwmvizcmjtwiiyxv.supabase.co`
+- URL: `https://REPLACE_WITH_PROJECT_REF.supabase.co`
+- Host PostgreSQL: `db.REPLACE_WITH_PROJECT_REF.supabase.co`
 - Database: `postgres`
 - SSL: obrigatorio via `sslmode=require`
 
 Para rodar a API contra o Supabase, preencha `apps/api/.env` ou as variaveis do provedor com a senha real do banco:
 
 ```env
-DATABASE_URL="postgresql://postgres:REPLACE_WITH_SUPABASE_DB_PASSWORD@db.bbcubwmvizcmjtwiiyxv.supabase.co:5432/postgres?sslmode=require"
+DATABASE_URL="postgresql://postgres:REPLACE_WITH_SUPABASE_DB_PASSWORD@db.REPLACE_WITH_PROJECT_REF.supabase.co:5432/postgres?sslmode=require"
 ```
 
 Para o frontend online, configure:
@@ -957,3 +980,4 @@ Validacoes de seguranca realizadas neste checkpoint:
 8. Adicionar testes automatizados para endpoints live e filtros de rotas.
 9. Incluir alertas de manutencao no dashboard da empresa.
 10. Adicionar testes automatizados para combustivel e reembolso.
+

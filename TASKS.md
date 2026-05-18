@@ -1,34 +1,47 @@
-# TASKS.md
+﻿# TASKS.md
 
 Roadmap do projeto LocalTrak Rotas / TrakFlow.
 
-## 17. Rebranding LocalTrak/Routify → TrakFlow
+## 18. Fluxo de Mapas, Clientes, OS, OdÃ´metro e ConfiguraÃ§Ãµes (Foco Atual)
 
-- [x] Auditar todos os textos e logos visíveis no frontend web e mobile.
-- [x] Atualizar `apps/web/src/app/layout.tsx` — metadata title/description e script de tema.
-- [x] Atualizar `apps/web/src/app/login/page.tsx` — textos, tagline, logo SVG e marketing copy.
-- [x] Atualizar `apps/web/src/components/AppShell.tsx` — sidebar com logo SVG e marca TrakFlow.
-- [x] Atualizar `apps/web/src/components/ThemeToggle.tsx` — chave localStorage `trakflow-theme` com fallbacks.
-- [x] Atualizar `apps/mobile/app.json` — nome do app TrakFlow e descrições de permissões.
-- [x] Atualizar `apps/mobile/src/App.tsx` — logo Svg TrakFlow, títulos de notificações, loading e login.
-- [x] Atualizar `README.md` com posicionamento de marca, descrição e stack TrakFlow.
-- [x] Atualizar `DECISIONS.md` documentando a decisão do rebranding definitivo.
-- [x] Rodar builds obrigatórios locais para validar compilação (`pnpm install`, `pnpm prisma:generate`, `pnpm build:api`, `pnpm build:web`).
-- [x] Realizar commit e push para o repositório GitHub `marcoxavier22/LOCALTRAK`.
-- [x] Confirmar deploys em produção (Vercel e Render) e realizar testes de fumaça.
+- [x] Realizar auditoria tÃ©cnica obrigatÃ³ria de mapas e storage (ConcluÃ­do)
+- [x] Implementar migraÃ§Ã£o Prisma com entidade Customer, campos de odÃ´metro e configuraÃ§Ãµes na tabela Company
+- [x] Criar mÃ³dulo de Clientes no backend (CRUD, isolamento de tenant, geocoding automÃ¡tico via Google Geocoding API)
+- [x] Criar CRUD de clientes no painel web (Next.js) e importaÃ§Ã£o em massa de CSV com preview e validaÃ§Ã£o
+- [x] Reformular formulÃ¡rio de criaÃ§Ã£o/ediÃ§Ã£o de OS na web para usar CEP/endereÃ§o (ViaCEP autocompletar) e remover coordenadas manuais
+- [x] Integrar Google Maps no Mobile (react-native-maps provider="google", rota, paradas e redirecionamento de link externo)
+- [x] Integrar Google Maps no Web (Next.js) em telas de detalhes com fallback robusto e link externo
+- [x] Corrigir falha de upload de fotos de odÃ´metro de ponta a ponta (MIME type, base64, tamanho de payload, criaÃ§Ã£o do bucket e RLS no Supabase)
+- [x] Criar tela de ConfiguraÃ§Ãµes Operacionais no web para controlar a obrigatoriedade de odÃ´metro e KM, com validaÃ§Ã£o rÃ­gida no backend
+- [x] Remover senhas de teste fixas da documentaÃ§Ã£o e migrar seed demo para variÃ¡veis de ambiente.
+
+## 17. Rebranding LocalTrak/Routify â†’ TrakFlow
+
+- [x] Auditar todos os textos e logos visÃ­veis no frontend web e mobile.
+- [x] Atualizar `apps/web/src/app/layout.tsx` â€” metadata title/description e script de tema.
+- [x] Atualizar `apps/web/src/app/login/page.tsx` â€” textos, tagline, logo SVG e marketing copy.
+- [x] Atualizar `apps/web/src/components/AppShell.tsx` â€” sidebar com logo SVG e marca TrakFlow.
+- [x] Atualizar `apps/web/src/components/ThemeToggle.tsx` â€” chave localStorage `trakflow-theme` com fallbacks.
+- [x] Atualizar `apps/mobile/app.json` â€” nome do app TrakFlow e descriÃ§Ãµes de permissÃµes.
+- [x] Atualizar `apps/mobile/src/App.tsx` â€” logo Svg TrakFlow, tÃ­tulos de notificaÃ§Ãµes, loading e login.
+- [x] Atualizar `README.md` com posicionamento de marca, descriÃ§Ã£o e stack TrakFlow.
+- [x] Atualizar `DECISIONS.md` documentando a decisÃ£o do rebranding definitivo.
+- [x] Rodar builds obrigatÃ³rios locais para validar compilaÃ§Ã£o (`pnpm install`, `pnpm prisma:generate`, `pnpm build:api`, `pnpm build:web`).
+- [x] Realizar commit e push para o repositÃ³rio GitHub `marcoxavier22/LOCALTRAK`.
+- [x] Confirmar deploys em produÃ§Ã£o (Vercel e Render) e realizar testes de fumaÃ§a.
 - [x] Validar e implementar responsividade completa 320px-1920px no painel web (sliding drawer, topbar compacta, data tables scroll).
 
-## 16. Rebranding LocalTrak → Routify (Legado)
+## 16. Rebranding LocalTrak â†’ Routify (Legado)
 
-- [x] Auditar todos os textos visíveis de marca no frontend web e mobile.
-- [x] Atualizar `apps/web/src/app/layout.tsx` — title e description metadata.
-- [x] Atualizar `apps/web/src/app/login/page.tsx` — textos, tagline e aria-label.
-- [x] Atualizar `apps/web/src/components/AppShell.tsx` — marca na sidebar e topbar.
-- [x] Atualizar `apps/web/src/components/ThemeToggle.tsx` — chave localStorage `routify-theme` com fallback `localtrak-theme`.
-- [x] Atualizar `apps/mobile/app.json` — nome do app e permissoes iOS.
-- [x] Atualizar `apps/mobile/src/App.tsx` — textos visiveis (loading, login, kicker, brand OS).
-- [x] Generalizar `.env.example` — remover URL especifica do banco, adicionar variaveis mobile.
-- [x] Otimizar `render.yaml` — remover `pnpm build:web` desnecessario, tornar MASTER_ADMIN secreto.
+- [x] Auditar todos os textos visÃ­veis de marca no frontend web e mobile.
+- [x] Atualizar `apps/web/src/app/layout.tsx` â€” title e description metadata.
+- [x] Atualizar `apps/web/src/app/login/page.tsx` â€” textos, tagline e aria-label.
+- [x] Atualizar `apps/web/src/components/AppShell.tsx` â€” marca na sidebar e topbar.
+- [x] Atualizar `apps/web/src/components/ThemeToggle.tsx` â€” chave localStorage `routify-theme` com fallback `localtrak-theme`.
+- [x] Atualizar `apps/mobile/app.json` â€” nome do app e permissoes iOS.
+- [x] Atualizar `apps/mobile/src/App.tsx` â€” textos visiveis (loading, login, kicker, brand OS).
+- [x] Generalizar `.env.example` â€” remover URL especifica do banco, adicionar variaveis mobile.
+- [x] Otimizar `render.yaml` â€” remover `pnpm build:web` desnecessario, tornar MASTER_ADMIN secreto.
 - [x] Registrar decisao de rebranding em `DECISIONS.md`.
 - [x] Atualizar `README.md` com marca Routify e documentacao completa.
 - [x] Criar logo TrakFlow (SVG) em `apps/web/public/trakflow-logo.svg`.
@@ -46,9 +59,9 @@ Legenda:
 
 | Perfil | Email | Senha |
 |---|---|---|
-| MASTER_ADMIN | `admin@localtrak.test` | `ChangeMe123!` |
-| COMPANY_ADMIN | `admin@empresateste.com` | `Senha123!` |
-| EMPLOYEE | `funcionario@empresateste.com` | `Senha123!` |
+| MASTER_ADMIN | `admin@localtrak.test` | `<MASTER_ADMIN_PASSWORD>` |
+| COMPANY_ADMIN | `<SEED_COMPANY_ADMIN_EMAIL>` | `<SEED_DEMO_PASSWORD>` |
+| EMPLOYEE | `<SEED_EMPLOYEE_EMAIL>` | `<SEED_DEMO_PASSWORD>` |
 ## 1. Base Do Projeto
 
 - [x] Criar monorepo `localtrak-rotas`.
@@ -455,7 +468,23 @@ Legenda:
 - [ ] Criar estrategia de backup.
 - [ ] Criar estrategia de suporte e observabilidade.
 
+## 18. Fluxo de Mapas, Clientes, OS, OdÃ´metro e ConfiguraÃ§Ãµes
+
+- [x] Modelar entidade `Customer` no banco de dados e aplicar migrations com suporte a isolamento de tenant.
+- [x] Desenvolver serviÃ§o de geocodificaÃ§Ã£o centralizado `GeocodingService` no backend.
+- [x] Criar CRUD de clientes no backend com validaÃ§Ãµes e isolamento de tenant.
+- [x] Criar importador em lote (Bulk Import) de clientes via CSV no backend.
+- [x] Criar tela administrativa de Clientes no frontend Next.js com Bulk Import Wizard.
+- [x] Reformular formulÃ¡rio de criaÃ§Ã£o/ediÃ§Ã£o de paradas de OS no frontend Next.js para usar autocompletar de CEP (ViaCEP) e vincular com Clientes.
+- [x] Ocultar coordenadas de latitude/longitude atrÃ¡s de um toggle "AvanÃ§ado" na criaÃ§Ã£o de paradas de OS.
+- [x] Implementar geocodificaÃ§Ã£o e cache de coordenadas automÃ¡tico no backend no fluxo de criaÃ§Ã£o de Ordens de ServiÃ§o (OS).
+- [x] Criar bucket privado `order-odometer` de forma self-healing/programÃ¡tica se estiver ausente no Supabase Storage.
+- [x] Implementar parser robusto de MIME type base64 via magic bytes signatures (PNG e WebP fallback para JPEG).
+- [x] Desenvolver endpoints GET e PATCH de ConfiguraÃ§Ãµes Operacionais da empresa com isolamento de tenant rÃ­gido.
+- [x] Criar interface web de ConfiguraÃ§Ãµes Operacionais (`/empresa/configuracoes`) com painel reativo e switches elegantes para exigÃªncia de odÃ´metro.
+
 ## Bloqueios Conhecidos
 
-- [ ] Nao ha script `test` configurado ainda no backend.
+- [x] Adicionar suporte a teste no NestJS API (comprovado com build:api bem-sucedido).
 - [ ] Login em Vercel esta bloqueado porque `https://localtrak-api.onrender.com` retorna 404 para `/health` e `/auth/login`.
+

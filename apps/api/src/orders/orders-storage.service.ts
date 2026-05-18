@@ -6,6 +6,8 @@ import { randomUUID } from 'node:crypto';
 type UploadedPhoto = {
   path: string;
   signedUrl: string | null;
+  contentType: string;
+  sizeBytes: number;
 };
 
 @Injectable()
@@ -41,7 +43,18 @@ export class OrdersStorageService {
       );
     }
 
-    const contentType = this.normalizeContentType(params.contentType ?? this.detectContentType(params.base64));
+    // Cria/garante o bucket de forma resiliente e autônoma
+    try {
+      await this.client.storage.createBucket(this.bucket, {
+        public: false,
+        allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp'],
+        fileSizeLimit: 5 * 1024 * 1024,
+      });
+    } catch {
+      // Ignora erro se o bucket já existe ou há restrição de permissão simples
+    }
+
+    const contentType = this.normalizeContentType(this.detectContentType(params.base64) ?? params.contentType ?? '');
     const extension = this.extensionFromContentType(contentType);
     const path = this.buildPhotoPath(params, extension);
     const buffer = Buffer.from(this.cleanBase64(params.base64), 'base64');
@@ -70,6 +83,8 @@ export class OrdersStorageService {
     return {
       path,
       signedUrl: await this.createSignedUrl(path),
+      contentType,
+      sizeBytes: buffer.length,
     };
   }
 
@@ -87,15 +102,22 @@ export class OrdersStorageService {
   }
 
   private detectContentType(value: string) {
-    if (value.startsWith('data:image/png')) {
+    const cleaned = this.cleanBase64(value);
+    const header = cleaned.substring(0, 16);
+
+    if (header.startsWith('/9j/')) {
+      return 'image/jpeg';
+    }
+
+    if (header.startsWith('iVBORw0KGgo')) {
       return 'image/png';
     }
 
-    if (value.startsWith('data:image/webp')) {
+    if (header.startsWith('UklGR')) {
       return 'image/webp';
     }
 
-    return 'image/jpeg';
+    return null;
   }
 
   private normalizeContentType(value: string) {
@@ -119,6 +141,6 @@ export class OrdersStorageService {
     extension: string,
   ) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    return `${params.companyId}/${params.orderId}/${params.userId}/${params.stage}-${timestamp}-${randomUUID()}.${extension}`;
+    return `odometer/${params.companyId}/${params.userId}/${params.orderId}/${params.stage}-${timestamp}-${randomUUID()}.${extension}`;
   }
 }

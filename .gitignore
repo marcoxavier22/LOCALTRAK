@@ -4,6 +4,7 @@ dist
 .next
 .expo
 .turbo
+.vs
 .agents
 skills-lock.json
 .env

@@ -1,4 +1,4 @@
-# ROUTES_WEB_CHECKLIST.md
+﻿# ROUTES_WEB_CHECKLIST.md
 
 Checklist manual para validar visualizacao de rotas no painel web do LocalTrak Rotas.
 
@@ -8,8 +8,8 @@ Checklist manual para validar visualizacao de rotas no painel web do LocalTrak R
 - Web rodando em `http://localhost:3000`.
 - Mobile ou requisicoes HTTP criando rotas reais no backend.
 - Usuario `COMPANY_ADMIN` disponivel:
-  - Email: `admin@empresateste.com`
-  - Senha: `Senha123!`
+  - Email: `<SEED_COMPANY_ADMIN_EMAIL>`
+  - Senha: `<SEED_DEMO_PASSWORD>`
 
 ## 1. Login E Acesso
 
@@ -67,3 +67,4 @@ Checklist manual para validar visualizacao de rotas no painel web do LocalTrak R
 - [ ] `EMPLOYEE` nao acessa `/empresa/rotas`.
 - [ ] `COMPANY_ADMIN` ve apenas rotas da propria empresa.
 - [ ] Testar preflight CORS quando web/mobile web roda em origem local diferente.
+

@@ -1,4 +1,4 @@
-# DEPLOYMENT.md
+﻿# DEPLOYMENT.md
 
 Guia para publicar o primeiro prototipo online do LocalTrak Rotas usando:
 
@@ -18,7 +18,7 @@ Guia para publicar o primeiro prototipo online do LocalTrak Rotas usando:
 Exemplo do projeto `LocalTrak`:
 
 ```env
-DATABASE_URL="postgresql://postgres:REPLACE_WITH_SUPABASE_DB_PASSWORD@db.bbcubwmvizcmjtwiiyxv.supabase.co:5432/postgres?sslmode=require"
+DATABASE_URL="postgresql://postgres:REPLACE_WITH_SUPABASE_DB_PASSWORD@db.REPLACE_WITH_PROJECT_REF.supabase.co:5432/postgres?sslmode=require"
 ```
 
 Para migrations Prisma, prefira a conexao direta/session pooler em porta `5432`. Em ambientes serverless, o transaction pooler pode usar porta `6543` e parametros especificos, mas para Render/Railway com API Node persistente a porta `5432` e a escolha mais simples para este prototipo.
@@ -34,10 +34,10 @@ datasource db {
 
 Projeto Supabase usado neste checkpoint:
 
-- Nome: `LocalTrak`
-- Project ref: `bbcubwmvizcmjtwiiyxv`
-- URL: `https://bbcubwmvizcmjtwiiyxv.supabase.co`
-- Status validado via conector: `ACTIVE_HEALTHY`
+- Nome: configure no painel Supabase da conta.
+- Project ref: use o valor real apenas em variaveis de ambiente.
+- URL: `https://REPLACE_WITH_PROJECT_REF.supabase.co`
+- Status esperado: `ACTIVE_HEALTHY`.
 
 As migrations locais foram aplicadas ao banco Supabase e registradas em `_prisma_migrations`.
 
@@ -46,12 +46,13 @@ As migrations locais foram aplicadas ao banco Supabase e registradas em `_prisma
 Configure estas variaveis no provedor da API:
 
 ```env
-DATABASE_URL="postgresql://postgres:REPLACE_WITH_SUPABASE_DB_PASSWORD@db.bbcubwmvizcmjtwiiyxv.supabase.co:5432/postgres?sslmode=require"
+DATABASE_URL="postgresql://postgres:REPLACE_WITH_SUPABASE_DB_PASSWORD@db.REPLACE_WITH_PROJECT_REF.supabase.co:5432/postgres?sslmode=require"
 JWT_ACCESS_SECRET="troque-por-um-secret-longo-e-aleatorio"
 JWT_REFRESH_SECRET="troque-por-outro-secret-longo-e-aleatorio"
 JWT_ACCESS_EXPIRES_IN="15m"
 JWT_REFRESH_EXPIRES_IN="7d"
 PORT=3333
+JSON_BODY_LIMIT="8mb"
 CORS_ORIGINS="https://REPLACE_WITH_FRONTEND_URL"
 MASTER_ADMIN_NAME="Admin Master"
 MASTER_ADMIN_EMAIL="admin@localtrak.test"
@@ -60,6 +61,11 @@ SUPABASE_URL="https://REPLACE_WITH_PROJECT_REF.supabase.co"
 SUPABASE_SERVICE_ROLE_KEY="REPLACE_WITH_SERVER_ONLY_KEY"
 SUPABASE_SECRET_KEY=""
 SUPABASE_STORAGE_BUCKET="order-odometer"
+GOOGLE_MAPS_API_KEY=""
+ENABLE_DEMO_SEED="false"
+SEED_DEMO_PASSWORD=""
+SEED_COMPANY_ADMIN_EMAIL=""
+SEED_EMPLOYEE_EMAIL=""
 ```
 
 Observacoes:
@@ -72,6 +78,9 @@ Observacoes:
 - `SUPABASE_URL`: URL publica do projeto Supabase, usada pela API para Storage.
 - `SUPABASE_SERVICE_ROLE_KEY` ou `SUPABASE_SECRET_KEY`: chave server-side para Storage privado. Nunca configure no web/mobile.
 - `SUPABASE_STORAGE_BUCKET`: bucket privado das fotos de odometro.
+- `GOOGLE_MAPS_API_KEY`: chave privada do backend para Geocoding API. Nao expor em `NEXT_PUBLIC_*` ou `EXPO_PUBLIC_*`.
+- `JSON_BODY_LIMIT`: limite para payloads JSON, usado pelo upload de foto base64 no app mobile.
+- `ENABLE_DEMO_SEED`: cria usuarios e dados demo somente quando explicitamente `true`.
 
 `CORS_ORIGIN` ainda pode existir por compatibilidade local, mas em deploy use `CORS_ORIGINS`.
 
@@ -91,6 +100,7 @@ NEXT_PUBLIC_SUPABASE_URL="https://REPLACE_WITH_PROJECT_REF.supabase.co"
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_REPLACE_ME"
 # Alias tambem aceito pelo projeto:
 NEXT_PUBLIC_SUPABASE_KEY="sb_publishable_REPLACE_ME"
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="REPLACE_WITH_BROWSER_RESTRICTED_KEY"
 ```
 
 Em desenvolvimento local:
@@ -99,9 +109,11 @@ Em desenvolvimento local:
 NEXT_PUBLIC_API_URL="http://localhost:3333"
 NEXT_PUBLIC_SUPABASE_URL="https://REPLACE_WITH_PROJECT_REF.supabase.co"
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_REPLACE_ME"
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="REPLACE_WITH_BROWSER_RESTRICTED_KEY"
 ```
 
 Somente chaves publicaveis devem usar prefixo `NEXT_PUBLIC_`. Chaves `sb_secret_*`, service role, JWT secrets e `DATABASE_URL` ficam exclusivamente no backend.
+`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` deve ser restrita por dominio no Google Cloud.
 
 ## 4. Deploy Da API
 
@@ -257,7 +269,7 @@ Depois de rodar migrations e seed:
 ```powershell
 $body = @{
   email = "admin@localtrak.test"
-  password = "ChangeMe123!"
+  password = "<MASTER_ADMIN_PASSWORD>"
 } | ConvertTo-Json
 
 Invoke-RestMethod `
@@ -335,3 +347,4 @@ Checklist detalhado: [SECURITY_CHECKLIST.md](SECURITY_CHECKLIST.md) e [SECURITY_
 - Configurar e-mails transacionais.
 - Implementar auditoria completa em acoes criticas.
 - Revisar LGPD, termos de uso e politica de privacidade.
+

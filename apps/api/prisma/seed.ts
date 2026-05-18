@@ -16,8 +16,20 @@ import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
+function getRequiredSeedSecret(name: string, developmentFallback?: string) {
+  const value = process.env[name] ?? developmentFallback;
+  if (!value) {
+    throw new Error(`Environment variable ${name} is required to run the seed safely.`);
+  }
+  return value;
+}
+
 async function main() {
-  const password = process.env.MASTER_ADMIN_PASSWORD ?? 'ChangeMe123!';
+  const isProduction = process.env.NODE_ENV === 'production';
+  const password = getRequiredSeedSecret(
+    'MASTER_ADMIN_PASSWORD',
+    isProduction ? undefined : 'LocalDevMaster123!',
+  );
   const email = process.env.MASTER_ADMIN_EMAIL ?? 'admin@localtrak.test';
   const name = process.env.MASTER_ADMIN_NAME ?? 'Admin Master';
 
@@ -52,10 +64,19 @@ async function main() {
     },
   });
 
-  const companyAdminEmail = 'admin@empresateste.com';
-  const companyAdminPassword = await bcrypt.hash('Senha123!', 12);
-  const employeeEmail = 'funcionario@empresateste.com';
-  const employeePassword = await bcrypt.hash('Senha123!', 12);
+  const enableDemoSeed = process.env.ENABLE_DEMO_SEED === 'true';
+  if (!enableDemoSeed) {
+    return;
+  }
+
+  const demoPassword = getRequiredSeedSecret(
+    'SEED_DEMO_PASSWORD',
+    isProduction ? undefined : 'LocalDev123!',
+  );
+  const companyAdminEmail = process.env.SEED_COMPANY_ADMIN_EMAIL ?? 'admin@empresateste.local';
+  const companyAdminPassword = await bcrypt.hash(demoPassword, 12);
+  const employeeEmail = process.env.SEED_EMPLOYEE_EMAIL ?? 'funcionario@empresateste.local';
+  const employeePassword = await bcrypt.hash(demoPassword, 12);
   const resetTestData = process.env.RESET_TEST_DATA === 'true';
 
   const testCompany = await prisma.company.upsert({

@@ -1,4 +1,4 @@
-# MAPS_MOBILE_CHECKLIST.md
+﻿# MAPS_MOBILE_CHECKLIST.md
 
 Checklist para validar mapas, trajetos e geolocalizacao no app mobile Expo do LocalTrak Rotas.
 
@@ -19,7 +19,7 @@ pnpm --filter @localtrak/mobile exec expo start --clear
 pnpm --filter @localtrak/mobile exec expo start --web --clear --port 8081
 ```
 
-- [ ] Fazer login como `EMPLOYEE` usando `funcionario@empresateste.com` / `Senha123!`.
+- [ ] Fazer login como `EMPLOYEE` usando `<SEED_EMPLOYEE_EMAIL>` / `<SEED_DEMO_PASSWORD>`.
 
 ## Mapas No App
 
@@ -78,3 +78,4 @@ pnpm --filter @localtrak/mobile exec expo start --web --clear --port 8081
 - [ ] Em dispositivo fisico, `localhost` nao aponta para a API do computador. Use o IP local da maquina.
 - [ ] Para Storage de odometro, a API precisa de `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` e `SUPABASE_STORAGE_BUCKET`.
 - [ ] Em builds finais iOS/Android, validar permissoes de localizacao background em build EAS/development build.
+

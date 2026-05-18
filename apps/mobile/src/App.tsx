@@ -22,7 +22,7 @@ import {
   View,
 } from 'react-native';
 import { ApiError, apiFetch, toJsonBody } from './lib/api';
-import { API_URL } from './lib/config';
+import { API_URL, GOOGLE_MAPS_API_KEY } from './lib/config';
 import {
   clearActiveRoute,
   clearSession,
@@ -33,7 +33,7 @@ import {
   saveSession,
   saveTheme,
 } from './lib/storage';
-import { ActiveRoute, AuthResponse, RoutePointPayload, RouteSummary, ServiceOrder, Session } from './types';
+import { ActiveRoute, AuthResponse, CompanySettings, RoutePointPayload, RouteSummary, ServiceOrder, Session } from './types';
 
 type Screen = 'home' | 'history' | 'orders';
 type Theme = 'light' | 'dark';
@@ -68,6 +68,7 @@ const NativeMaps = Platform.OS === 'web' ? null : require('react-native-maps');
 const NativeMapView = NativeMaps?.default;
 const NativeMarker = NativeMaps?.Marker;
 const NativePolyline = NativeMaps?.Polyline;
+const NativeProviderGoogle = NativeMaps?.PROVIDER_GOOGLE;
 
 const themePalette = {
   light: {
@@ -105,6 +106,15 @@ const orderStatusLabels: Record<string, string> = {
   IN_PROGRESS: 'Em andamento',
   FINISHED: 'Finalizada',
   CANCELED: 'Cancelada',
+};
+
+const defaultCompanySettings: CompanySettings = {
+  id: '',
+  name: '',
+  requireOdometerStartPhoto: true,
+  requireOdometerFinishPhoto: true,
+  requireOdometerStartKm: true,
+  requireOdometerFinishKm: true,
 };
 
 function toMessage(error: unknown) {
@@ -273,6 +283,7 @@ export default function App() {
   const [historyLoading, setHistoryLoading] = useState(false);
   const [orders, setOrders] = useState<ServiceOrder[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
+  const [companySettings, setCompanySettings] = useState<CompanySettings>(defaultCompanySettings);
   const [orderKmInputs, setOrderKmInputs] = useState<Record<string, { start: string; finish: string }>>({});
   const [orderBusyId, setOrderBusyId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -402,6 +413,21 @@ export default function App() {
     }
   }, [session?.accessToken]);
 
+  const loadCompanySettings = useCallback(async () => {
+    if (!session?.accessToken) {
+      return;
+    }
+
+    try {
+      const settings = await apiFetch<CompanySettings>('/company/settings', {
+        token: session.accessToken,
+      });
+      setCompanySettings(settings);
+    } catch {
+      setCompanySettings(defaultCompanySettings);
+    }
+  }, [session?.accessToken]);
+
   const syncActiveRouteFromServer = useCallback(
     async (tokenOverride?: string) => {
       const token = tokenOverride ?? session?.accessToken;
@@ -430,9 +456,10 @@ export default function App() {
     if (session?.accessToken) {
       void loadHistory();
       void loadOrders();
+      void loadCompanySettings();
       void syncActiveRouteFromServer().catch((syncError) => setError(toMessage(syncError)));
     }
-  }, [loadHistory, loadOrders, session?.accessToken, syncActiveRouteFromServer]);
+  }, [loadCompanySettings, loadHistory, loadOrders, session?.accessToken, syncActiveRouteFromServer]);
 
   const routeStatus = useMemo(() => {
     if (activeRoute) {
@@ -680,13 +707,17 @@ export default function App() {
       return;
     }
 
-    const odometerKm = Number(orderKmInputs[order.id]?.start || order.initialOdometerKm);
-    if (!Number.isFinite(odometerKm) || odometerKm < 0) {
+    const rawStartKm = orderKmInputs[order.id]?.start || String(order.initialOdometerKm ?? '');
+    const odometerKm = rawStartKm ? Number(rawStartKm) : undefined;
+    if (
+      companySettings.requireOdometerStartKm &&
+      (typeof odometerKm !== 'number' || !Number.isFinite(odometerKm) || odometerKm < 0)
+    ) {
       setError('Informe o KM inicial antes de iniciar a OS.');
       return;
     }
 
-    if (!order.initialOdometerPhotoPath) {
+    if (companySettings.requireOdometerStartPhoto && !order.initialOdometerPhotoPath) {
       setError('Envie a foto do odometro inicial antes de iniciar a OS.');
       return;
     }
@@ -763,13 +794,17 @@ export default function App() {
       return;
     }
 
-    const odometerKm = Number(orderKmInputs[order.id]?.finish || order.finalOdometerKm);
-    if (!Number.isFinite(odometerKm) || odometerKm < 0) {
+    const rawFinishKm = orderKmInputs[order.id]?.finish || String(order.finalOdometerKm ?? '');
+    const odometerKm = rawFinishKm ? Number(rawFinishKm) : undefined;
+    if (
+      companySettings.requireOdometerFinishKm &&
+      (typeof odometerKm !== 'number' || !Number.isFinite(odometerKm) || odometerKm < 0)
+    ) {
       setError('Informe o KM final antes de finalizar a OS.');
       return;
     }
 
-    if (!order.finalOdometerPhotoPath) {
+    if (companySettings.requireOdometerFinishPhoto && !order.finalOdometerPhotoPath) {
       setError('Envie a foto do odometro final antes de finalizar a OS.');
       return;
     }
@@ -813,8 +848,11 @@ export default function App() {
     }
 
     const inputKey = stage === 'START' ? 'start' : 'finish';
-    const odometerKm = Number(orderKmInputs[order.id]?.[inputKey]);
-    if (!Number.isFinite(odometerKm) || odometerKm < 0) {
+    const rawKm = orderKmInputs[order.id]?.[inputKey];
+    const odometerKm = rawKm ? Number(rawKm) : undefined;
+    const kmRequired =
+      stage === 'START' ? companySettings.requireOdometerStartKm : companySettings.requireOdometerFinishKm;
+    if (kmRequired && (typeof odometerKm !== 'number' || !Number.isFinite(odometerKm) || odometerKm < 0)) {
       setError(stage === 'START' ? 'Informe o KM inicial antes da foto.' : 'Informe o KM final antes da foto.');
       return;
     }
@@ -978,6 +1016,7 @@ export default function App() {
           <OrdersList
             busyOrderId={orderBusyId}
             colors={colors}
+            companySettings={companySettings}
             currentRouteId={activeRoute?.id ?? null}
             inputs={orderKmInputs}
             lastLocation={lastLocation}
@@ -1224,6 +1263,7 @@ function HistoryList({
 function OrdersList({
   busyOrderId,
   colors,
+  companySettings,
   currentRouteId,
   inputs,
   lastLocation,
@@ -1238,6 +1278,7 @@ function OrdersList({
 }: {
   busyOrderId: string | null;
   colors: ThemeColors;
+  companySettings: CompanySettings;
   currentRouteId: string | null;
   inputs: Record<string, { start: string; finish: string }>;
   lastLocation: RoutePointPayload | null;
@@ -1327,7 +1368,9 @@ function OrdersList({
 
             {order.status === 'PENDING' ? (
               <View style={styles.orderActionArea}>
-                <Text style={[styles.inputLabel, { color: colors.text }]}>KM inicial</Text>
+                <Text style={[styles.inputLabel, { color: colors.text }]}>
+                  KM inicial {companySettings.requireOdometerStartKm ? '(obrigatorio)' : '(opcional)'}
+                </Text>
                 <TextInput
                   keyboardType="numeric"
                   onChangeText={(value) => onUpdateKm(order.id, 'start', value)}
@@ -1342,13 +1385,19 @@ function OrdersList({
                   style={[styles.secondaryButton, busy && styles.disabledButton]}
                 >
                   <Text style={styles.secondaryButtonText}>
-                    {order.initialOdometerPhotoPath ? 'Foto inicial enviada' : 'Enviar foto inicial'}
+                    {order.initialOdometerPhotoPath
+                      ? 'Foto inicial enviada'
+                      : `Enviar foto inicial ${companySettings.requireOdometerStartPhoto ? '(obrigatoria)' : '(opcional)'}`}
                   </Text>
                 </Pressable>
                 <Pressable
-                  disabled={busy || !order.initialOdometerPhotoPath}
+                  disabled={busy || (companySettings.requireOdometerStartPhoto && !order.initialOdometerPhotoPath)}
                   onPress={() => void onStartOrder(order)}
-                  style={[styles.primaryButton, (busy || !order.initialOdometerPhotoPath) && styles.disabledButton]}
+                  style={[
+                    styles.primaryButton,
+                    (busy || (companySettings.requireOdometerStartPhoto && !order.initialOdometerPhotoPath)) &&
+                      styles.disabledButton,
+                  ]}
                 >
                   {busy ? <ActivityIndicator color="#fff" /> : <Text style={styles.primaryButtonText}>Iniciar rota da OS</Text>}
                 </Pressable>
@@ -1357,7 +1406,9 @@ function OrdersList({
 
             {order.status === 'IN_PROGRESS' ? (
               <View style={styles.orderActionArea}>
-                <Text style={[styles.inputLabel, { color: colors.text }]}>KM final</Text>
+                <Text style={[styles.inputLabel, { color: colors.text }]}>
+                  KM final {companySettings.requireOdometerFinishKm ? '(obrigatorio)' : '(opcional)'}
+                </Text>
                 <TextInput
                   keyboardType="numeric"
                   onChangeText={(value) => onUpdateKm(order.id, 'finish', value)}
@@ -1372,13 +1423,19 @@ function OrdersList({
                   style={[styles.secondaryButton, busy && styles.disabledButton]}
                 >
                   <Text style={styles.secondaryButtonText}>
-                    {order.finalOdometerPhotoPath ? 'Foto final enviada' : 'Enviar foto final'}
+                    {order.finalOdometerPhotoPath
+                      ? 'Foto final enviada'
+                      : `Enviar foto final ${companySettings.requireOdometerFinishPhoto ? '(obrigatoria)' : '(opcional)'}`}
                   </Text>
                 </Pressable>
                 <Pressable
-                  disabled={busy || !order.finalOdometerPhotoPath}
+                  disabled={busy || (companySettings.requireOdometerFinishPhoto && !order.finalOdometerPhotoPath)}
                   onPress={() => void onFinishOrder(order)}
-                  style={[styles.dangerButton, (busy || !order.finalOdometerPhotoPath) && styles.disabledButton]}
+                  style={[
+                    styles.dangerButton,
+                    (busy || (companySettings.requireOdometerFinishPhoto && !order.finalOdometerPhotoPath)) &&
+                      styles.disabledButton,
+                  ]}
                 >
                   {busy ? <ActivityIndicator color="#fff" /> : <Text style={styles.primaryButtonText}>Finalizar jornada da OS</Text>}
                 </Pressable>
@@ -1400,6 +1457,14 @@ function toMapCoordinate(latitude?: number | string | null, longitude?: number |
   }
 
   return { latitude: lat, longitude: lng };
+}
+
+function buildGoogleMapsUrl(coordinate?: { latitude: number; longitude: number } | null, address?: string | null) {
+  if (coordinate) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${coordinate.latitude},${coordinate.longitude}`;
+  }
+
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address ?? '')}`;
 }
 
 function OrderMapPreview({
@@ -1432,8 +1497,8 @@ function OrderMapPreview({
     );
   }
 
-  if (Platform.OS === 'web' || !NativeMapView || !NativeMarker || !NativePolyline) {
-    const url = `https://www.openstreetmap.org/?mlat=${firstCoordinate.latitude}&mlon=${firstCoordinate.longitude}#map=16/${firstCoordinate.latitude}/${firstCoordinate.longitude}`;
+  if (Platform.OS === 'web' || !NativeMapView || !NativeMarker || !NativePolyline || !GOOGLE_MAPS_API_KEY) {
+    const url = buildGoogleMapsUrl(firstCoordinate, nextStop?.stop.address);
     return (
       <View style={[styles.mobileMapFallback, { backgroundColor: colors.input, borderColor: colors.border }]}>
         <Text style={[styles.infoTitle, { color: colors.text }]}>Mapa da OS</Text>
@@ -1441,7 +1506,7 @@ function OrderMapPreview({
           Proximo endereco: {nextStop?.stop.address ?? 'coordenada selecionada'}
         </Text>
         <Pressable style={styles.secondaryButton} onPress={() => void Linking.openURL(url)}>
-          <Text style={styles.secondaryButtonText}>Abrir no OpenStreetMap</Text>
+          <Text style={styles.secondaryButtonText}>Abrir no Google Maps</Text>
         </Pressable>
       </View>
     );
@@ -1458,6 +1523,7 @@ function OrderMapPreview({
           latitudeDelta: 0.035,
           longitudeDelta: 0.035,
         }}
+        provider={NativeProviderGoogle}
         style={styles.mobileMap}
       >
         {path.length > 1 ? (
@@ -1484,6 +1550,12 @@ function OrderMapPreview({
         <Text style={[styles.infoText, { color: colors.muted }]}>
           {nextStop ? `Proximo: ${nextStop.stop.address}` : 'Todas as paradas foram concluidas.'}
         </Text>
+        <Pressable
+          style={styles.secondaryButton}
+          onPress={() => void Linking.openURL(buildGoogleMapsUrl(nextStop?.coordinate ?? firstCoordinate, nextStop?.stop.address))}
+        >
+          <Text style={styles.secondaryButtonText}>Abrir no Google Maps</Text>
+        </Pressable>
       </View>
     </View>
   );

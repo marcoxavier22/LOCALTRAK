@@ -1,4 +1,4 @@
-# WEB_TEST_CHECKLIST.md
+﻿# WEB_TEST_CHECKLIST.md
 
 Checklist manual do painel web do LocalTrak Rotas para testes online com Supabase PostgreSQL.
 
@@ -44,7 +44,7 @@ No Sprint 0, `/health` foi validado em localhost contra Supabase e retornou `sta
 
 - [ ] Acesse `http://localhost:3000/login`.
 - [ ] Insira o email do MASTER_ADMIN: `admin@localtrak.test`
-- [ ] Insira a senha do MASTER_ADMIN: `ChangeMe123!`
+- [ ] Insira a senha do MASTER_ADMIN: `<MASTER_ADMIN_PASSWORD>`
 - [ ] Clique em "Entrar".
 - [ ] Confirmar redirecionamento para `/master/dashboard`.
 - [ ] Confirmar que o painel master carrega cards reais.
@@ -67,8 +67,8 @@ No Sprint 0, o login API do `MASTER_ADMIN` foi validado com sucesso.
 
 - [ ] Fazer logout do `MASTER_ADMIN`.
 - [ ] Acesse `http://localhost:3000/login`.
-- [ ] Insira o email do COMPANY_ADMIN: `admin@empresateste.com`
-- [ ] Insira a senha do COMPANY_ADMIN: `Senha123!`
+- [ ] Insira o email do COMPANY_ADMIN: `<SEED_COMPANY_ADMIN_EMAIL>`
+- [ ] Insira a senha do COMPANY_ADMIN: `<SEED_DEMO_PASSWORD>`
 - [ ] Clique em "Entrar".
 - [ ] Confirmar redirecionamento para `/empresa/dashboard`.
 - [ ] Confirmar que o dashboard da empresa carrega.
@@ -127,3 +127,4 @@ No Sprint 0, o login API do `EMPLOYEE` foi validado e o acesso a `/master/compan
 - [ ] Filtrar pagamentos por funcionario, veiculo, periodo e status.
 - [ ] Confirmar que nao ocorre `Internal Server Error`.
 - [ ] Alternar dark/light mode e confirmar persistencia apos refresh.
+

@@ -3,10 +3,11 @@ import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'clas
 import { Trim } from '../../common/decorators/trim.decorator';
 
 export class OdometerPhotoDto {
+  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   @Min(0)
-  odometerKm: number;
+  odometerKm?: number;
 
   @IsOptional()
   @IsString()

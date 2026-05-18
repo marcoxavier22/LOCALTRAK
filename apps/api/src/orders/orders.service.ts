@@ -1,5 +1,13 @@
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma, Role, RouteShiftStatus, ServiceOrderStatus, ServiceOrderStopStatus } from '@prisma/client';
+import {
+  GeocodingStatus,
+  OdometerPhotoType,
+  Prisma,
+  Role,
+  RouteShiftStatus,
+  ServiceOrderStatus,
+  ServiceOrderStopStatus,
+} from '@prisma/client';
 import { TenantScopeService } from '../common/tenant/tenant-scope.service';
 import { AuthenticatedUser } from '../common/types/authenticated-user';
 import { PrismaService } from '../prisma/prisma.service';
@@ -7,12 +15,21 @@ import { calculateRouteDistanceKm } from '../routes/route-distance';
 import { CreateServiceOrderDto } from './dto/create-service-order.dto';
 import { OdometerPhotoDto, UploadOdometerPhotoDto } from './dto/odometer-photo.dto';
 import { OrdersQueryDto } from './dto/orders-query.dto';
+import { ServiceOrderStopDto } from './dto/service-order-stop.dto';
 import { UpdateServiceOrderDto } from './dto/update-service-order.dto';
 import { OrdersStorageService } from './orders-storage.service';
+import { GeocodingService } from '../common/geocoding/geocoding.service';
 
 type OrderWithRelations = Prisma.ServiceOrderGetPayload<{
   include: ReturnType<OrdersService['orderInclude']>;
 }>;
+
+type CompanyOperationSettings = {
+  requireOdometerStartPhoto: boolean;
+  requireOdometerFinishPhoto: boolean;
+  requireOdometerStartKm: boolean;
+  requireOdometerFinishKm: boolean;
+};
 
 @Injectable()
 export class OrdersService {
@@ -20,11 +37,18 @@ export class OrdersService {
     private readonly prisma: PrismaService,
     private readonly tenantScope: TenantScopeService,
     private readonly storage: OrdersStorageService,
+    private readonly geocodingService: GeocodingService,
   ) {}
 
   async create(user: AuthenticatedUser, dto: CreateServiceOrderDto) {
     const companyId = this.tenantScope.requireCompanyId(user);
     await this.ensureAssignment(companyId, dto.employeeId, dto.vehicleId);
+
+    // Resolve as coordenadas de cada parada de forma síncrona/segura antes de criar a OS
+    const processedStops = [];
+    for (const stop of dto.stops) {
+      processedStops.push(await this.prepareStopForCreate(companyId, stop));
+    }
 
     const order = await this.prisma.serviceOrder.create({
       data: {
@@ -35,16 +59,7 @@ export class OrdersService {
         vehicleId: dto.vehicleId,
         scheduledDate: dto.scheduledDate,
         stops: {
-          create: dto.stops
-            .sort((a, b) => a.visitOrder - b.visitOrder)
-            .map((stop) => ({
-              companyId,
-              customerName: stop.customerName,
-              address: stop.address,
-              latitude: stop.latitude,
-              longitude: stop.longitude,
-              visitOrder: stop.visitOrder,
-            })),
+          create: processedStops.sort((a, b) => a.visitOrder - b.visitOrder),
         },
       },
       include: this.orderInclude(),
@@ -114,10 +129,24 @@ export class OrdersService {
       status: order.status,
       stops: order.stops.map((stop) => ({
         id: stop.id,
+        customerId: stop.customerId,
         customerName: stop.customerName,
+        customerEmail: stop.customerEmail,
+        customerPhone: stop.customerPhone,
         address: stop.address,
+        cep: stop.cep,
+        street: stop.street,
+        number: stop.number,
+        complement: stop.complement,
+        neighborhood: stop.neighborhood,
+        city: stop.city,
+        state: stop.state,
+        country: stop.country,
+        addressReference: stop.addressReference,
         latitude: stop.latitude,
         longitude: stop.longitude,
+        geocodingStatus: stop.geocodingStatus,
+        geocodingUpdatedAt: stop.geocodingUpdatedAt,
         visitOrder: stop.visitOrder,
         status: stop.status,
         completedAt: stop.completedAt,
@@ -171,7 +200,9 @@ export class OrdersService {
       throw new BadRequestException('Somente OS pendente pode ser iniciada.');
     }
 
-    const photoPath = await this.resolveOdometerPhotoPath(order, dto, 'start', user.sub);
+    const settings = await this.getCompanyOperationSettings(order.companyId);
+    const initialOdometerKm = this.resolveRequiredOdometerKm(order, dto, 'start', settings);
+    const photoPath = await this.resolveOdometerPhotoPath(order, dto, 'start', user.sub, settings);
     const activeRoute = await this.prisma.routeShift.findFirst({
       where: { companyId: order.companyId, employeeId: user.sub, status: RouteShiftStatus.IN_PROGRESS },
       select: { id: true },
@@ -202,7 +233,7 @@ export class OrdersService {
           routeShiftId: routeShift.id,
           status: ServiceOrderStatus.IN_PROGRESS,
           startedAt: now,
-          initialOdometerKm: dto.odometerKm,
+          initialOdometerKm,
           initialOdometerPhotoPath: photoPath,
           notes: dto.notes ?? order.notes,
         },
@@ -236,19 +267,12 @@ export class OrdersService {
 
     if (dto.stage === 'FINISH') {
       const initialKm = Number(order.initialOdometerKm ?? 0);
-      if (dto.odometerKm < initialKm) {
+      if (dto.odometerKm !== undefined && dto.odometerKm < initialKm) {
         throw new BadRequestException('KM final nao pode ser menor que o KM inicial.');
       }
     }
 
-    const photo = await this.storage.uploadOdometerPhoto({
-      companyId: order.companyId,
-      orderId: order.id,
-      userId: user.sub,
-      stage: dto.stage === 'START' ? 'start' : 'finish',
-      base64: dto.photoBase64,
-      contentType: dto.photoContentType,
-    });
+    const photoPath = await this.uploadAndRecordOdometerPhoto(order, dto, dto.stage === 'START' ? 'start' : 'finish', user.sub);
 
     const updated = await this.prisma.serviceOrder.update({
       where: { id: order.id },
@@ -256,12 +280,12 @@ export class OrdersService {
         dto.stage === 'START'
           ? {
               initialOdometerKm: dto.odometerKm,
-              initialOdometerPhotoPath: photo.path,
+              initialOdometerPhotoPath: photoPath,
               notes: dto.notes ?? order.notes,
             }
           : {
               finalOdometerKm: dto.odometerKm,
-              finalOdometerPhotoPath: photo.path,
+              finalOdometerPhotoPath: photoPath,
               notes: dto.notes ?? order.notes,
             },
       include: this.orderInclude(),
@@ -288,22 +312,24 @@ export class OrdersService {
       throw new BadRequestException('Somente OS em andamento pode ser finalizada.');
     }
 
-    const initialKm = Number(order.initialOdometerKm ?? 0);
-    if (dto.odometerKm < initialKm) {
+    const settings = await this.getCompanyOperationSettings(order.companyId);
+    const finalOdometerKm = this.resolveRequiredOdometerKm(order, dto, 'finish', settings);
+    const initialKm = order.initialOdometerKm == null ? null : Number(order.initialOdometerKm);
+    if (finalOdometerKm !== undefined && initialKm !== null && finalOdometerKm < initialKm) {
       throw new BadRequestException('KM final nao pode ser menor que o KM inicial.');
     }
 
-    const photoPath = await this.resolveOdometerPhotoPath(order, dto, 'finish', user.sub);
-    if (order.routeShiftId) {
-      await this.finishLinkedRouteShift(order.routeShiftId, dto.latitude, dto.longitude);
-    }
+    const photoPath = await this.resolveOdometerPhotoPath(order, dto, 'finish', user.sub, settings);
+    const linkedRoute = order.routeShiftId
+      ? await this.finishLinkedRouteShift(order.routeShiftId, dto.latitude, dto.longitude)
+      : null;
 
     const updated = await this.prisma.serviceOrder.update({
       where: { id: order.id },
       data: {
         status: ServiceOrderStatus.FINISHED,
         finishedAt: new Date(),
-        finalOdometerKm: dto.odometerKm,
+        finalOdometerKm,
         finalOdometerPhotoPath: photoPath,
         notes: dto.notes ?? order.notes,
         stops: {
@@ -316,10 +342,15 @@ export class OrdersService {
       include: this.orderInclude(),
     });
 
-    if (order.vehicleId) {
+    const odometerDelta =
+      finalOdometerKm !== undefined && initialKm !== null ? Number((finalOdometerKm - initialKm).toFixed(2)) : null;
+    const routeDistance = linkedRoute?.totalDistanceKm == null ? 0 : Number(linkedRoute.totalDistanceKm);
+    const distanceToIncrement = odometerDelta !== null && odometerDelta >= 0 ? odometerDelta : routeDistance;
+
+    if (order.vehicleId && distanceToIncrement > 0) {
       await this.prisma.vehicle.updateMany({
         where: { id: order.vehicleId, companyId: order.companyId },
-        data: { currentKm: { increment: new Prisma.Decimal(dto.odometerKm - initialKm) } },
+        data: { currentKm: { increment: new Prisma.Decimal(distanceToIncrement) } },
       });
     }
 
@@ -331,7 +362,8 @@ export class OrdersService {
       entityId: order.id,
       metadata: {
         routeShiftId: order.routeShiftId ?? null,
-        odometerDistanceKm: Number((dto.odometerKm - initialKm).toFixed(2)),
+        odometerDistanceKm: odometerDelta,
+        routeDistanceKm: routeDistance,
       },
     });
 
@@ -455,6 +487,102 @@ export class OrdersService {
     });
   }
 
+  private async prepareStopForCreate(companyId: string, stop: ServiceOrderStopDto) {
+    const customer = stop.customerId
+      ? await this.prisma.customer.findFirst({
+          where: { id: stop.customerId, companyId, deletedAt: null },
+        })
+      : null;
+
+    if (stop.customerId && !customer) {
+      throw new NotFoundException('Cliente informado na OS nao foi encontrado.');
+    }
+
+    const address = this.buildStopAddress({
+      address: stop.address ?? customer?.address,
+      street: stop.street ?? customer?.street ?? undefined,
+      number: stop.number ?? customer?.number ?? undefined,
+      complement: stop.complement ?? customer?.complement ?? undefined,
+      neighborhood: stop.neighborhood ?? customer?.neighborhood ?? undefined,
+      city: stop.city ?? customer?.city ?? undefined,
+      state: stop.state ?? customer?.state ?? undefined,
+      country: stop.country ?? customer?.country ?? undefined,
+    });
+
+    if (!address) {
+      throw new BadRequestException('Informe o endereco da parada da OS.');
+    }
+
+    let latitude = stop.latitude ?? (customer?.latitude == null ? undefined : Number(customer.latitude));
+    let longitude = stop.longitude ?? (customer?.longitude == null ? undefined : Number(customer.longitude));
+    let geocodingStatus: GeocodingStatus =
+      latitude !== undefined && longitude !== undefined
+        ? customer?.geocodingStatus ?? GeocodingStatus.MANUAL
+        : GeocodingStatus.PENDING;
+    let geocodingUpdatedAt = customer?.geocodingUpdatedAt ?? null;
+
+    if (latitude === undefined || longitude === undefined) {
+      const resolved = await this.geocodingService.geocode(address);
+      if (resolved) {
+        latitude = resolved.latitude;
+        longitude = resolved.longitude;
+        geocodingStatus = GeocodingStatus.RESOLVED;
+      } else {
+        geocodingStatus = GeocodingStatus.FAILED;
+      }
+      geocodingUpdatedAt = new Date();
+    }
+
+    return {
+      companyId,
+      customerId: customer?.id ?? null,
+      customerName: stop.customerName || customer?.name || null,
+      customerEmail: stop.customerEmail || customer?.email || null,
+      customerPhone: stop.customerPhone || customer?.phone || null,
+      address,
+      cep: stop.cep || customer?.cep || null,
+      street: stop.street || customer?.street || null,
+      number: stop.number || customer?.number || null,
+      complement: stop.complement || customer?.complement || null,
+      neighborhood: stop.neighborhood || customer?.neighborhood || null,
+      city: stop.city || customer?.city || null,
+      state: stop.state || customer?.state || null,
+      country: stop.country || customer?.country || 'Brasil',
+      addressReference: stop.addressReference || null,
+      latitude,
+      longitude,
+      geocodingStatus,
+      geocodingUpdatedAt,
+      visitOrder: stop.visitOrder,
+    };
+  }
+
+  private buildStopAddress(input: {
+    address?: string | null;
+    street?: string | null;
+    number?: string | null;
+    complement?: string | null;
+    neighborhood?: string | null;
+    city?: string | null;
+    state?: string | null;
+    country?: string | null;
+  }) {
+    const explicit = this.optional(input.address);
+    if (explicit) {
+      return explicit;
+    }
+
+    const line = [input.street, input.number].map((part) => this.optional(part)).filter(Boolean).join(', ');
+    const area = [input.neighborhood, input.city, input.state].map((part) => this.optional(part)).filter(Boolean).join(' - ');
+    const country = this.optional(input.country) ?? 'Brasil';
+    return [line, area, country].filter(Boolean).join(', ');
+  }
+
+  private optional(value?: string | null) {
+    const normalized = typeof value === 'string' ? value.trim() : value;
+    return normalized || null;
+  }
+
   private async ensureAssignment(companyId: string, employeeId?: string | null, vehicleId?: string | null) {
     if (employeeId) {
       const employee = await this.prisma.user.findFirst({
@@ -494,22 +622,20 @@ export class OrdersService {
     dto: OdometerPhotoDto,
     stage: 'start' | 'finish',
     userId: string,
+    settings: CompanyOperationSettings,
   ) {
     if (dto.photoBase64) {
-      const photo = await this.storage.uploadOdometerPhoto({
-        companyId: order.companyId,
-        orderId: order.id,
-        userId,
-        stage,
-        base64: dto.photoBase64,
-        contentType: dto.photoContentType,
-      });
-
-      return photo.path;
+      return this.uploadAndRecordOdometerPhoto(order, dto, stage, userId);
     }
 
     const existingPath = stage === 'start' ? order.initialOdometerPhotoPath : order.finalOdometerPhotoPath;
+    const isRequired =
+      stage === 'start' ? settings.requireOdometerStartPhoto : settings.requireOdometerFinishPhoto;
     if (!existingPath) {
+      if (!isRequired) {
+        return null;
+      }
+
       throw new BadRequestException(
         stage === 'start'
           ? 'Foto do odometro inicial e obrigatoria antes de iniciar a OS.'
@@ -518,6 +644,83 @@ export class OrdersService {
     }
 
     return existingPath;
+  }
+
+  private async uploadAndRecordOdometerPhoto(
+    order: OrderWithRelations,
+    dto: OdometerPhotoDto,
+    stage: 'start' | 'finish',
+    userId: string,
+  ) {
+    if (!dto.photoBase64) {
+      throw new BadRequestException('Foto do odometro nao enviada.');
+    }
+
+    const photo = await this.storage.uploadOdometerPhoto({
+      companyId: order.companyId,
+      orderId: order.id,
+      userId,
+      stage,
+      base64: dto.photoBase64,
+      contentType: dto.photoContentType,
+    });
+
+    await this.prisma.odometerPhoto.create({
+      data: {
+        companyId: order.companyId,
+        orderId: order.id,
+        routeShiftId: order.routeShiftId,
+        employeeId: userId,
+        vehicleId: order.vehicleId,
+        type: stage === 'start' ? OdometerPhotoType.START : OdometerPhotoType.FINISH,
+        filePath: photo.path,
+        contentType: photo.contentType,
+        sizeBytes: photo.sizeBytes,
+        odometerKm: dto.odometerKm,
+      },
+    });
+
+    return photo.path;
+  }
+
+  private resolveRequiredOdometerKm(
+    order: OrderWithRelations,
+    dto: OdometerPhotoDto,
+    stage: 'start' | 'finish',
+    settings: CompanyOperationSettings,
+  ) {
+    const existing = stage === 'start' ? order.initialOdometerKm : order.finalOdometerKm;
+    const value = dto.odometerKm ?? (existing == null ? undefined : Number(existing));
+    const isRequired = stage === 'start' ? settings.requireOdometerStartKm : settings.requireOdometerFinishKm;
+
+    if (value === undefined && isRequired) {
+      throw new BadRequestException(
+        stage === 'start'
+          ? 'KM inicial e obrigatorio antes de iniciar a OS.'
+          : 'KM final e obrigatorio antes de finalizar a OS.',
+      );
+    }
+
+    return value;
+  }
+
+  private async getCompanyOperationSettings(companyId: string) {
+    const company = await this.prisma.company.findUnique({
+      where: { id: companyId },
+      select: {
+        requireOdometerStartPhoto: true,
+        requireOdometerFinishPhoto: true,
+        requireOdometerStartKm: true,
+        requireOdometerFinishKm: true,
+      },
+    });
+
+    return {
+      requireOdometerStartPhoto: company?.requireOdometerStartPhoto ?? true,
+      requireOdometerFinishPhoto: company?.requireOdometerFinishPhoto ?? true,
+      requireOdometerStartKm: company?.requireOdometerStartKm ?? true,
+      requireOdometerFinishKm: company?.requireOdometerFinishKm ?? true,
+    };
   }
 
   private async finishLinkedRouteShift(routeShiftId: string, latitude?: number, longitude?: number) {

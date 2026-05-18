@@ -67,8 +67,20 @@ export type ServiceOrderStopStatus = 'PENDING' | 'COMPLETED';
 
 export type ServiceOrderStop = {
   id: string;
+  customerId?: string | null;
   customerName?: string | null;
+  customerEmail?: string | null;
+  customerPhone?: string | null;
   address: string;
+  cep?: string | null;
+  street?: string | null;
+  number?: string | null;
+  complement?: string | null;
+  neighborhood?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+  addressReference?: string | null;
   latitude?: number | string | null;
   longitude?: number | string | null;
   visitOrder: number;
@@ -104,4 +116,13 @@ export type ServiceOrder = {
   notes?: string | null;
   vehicle?: RouteVehicle | null;
   stops: ServiceOrderStop[];
+};
+
+export type CompanySettings = {
+  id: string;
+  name: string;
+  requireOdometerStartPhoto: boolean;
+  requireOdometerFinishPhoto: boolean;
+  requireOdometerStartKm: boolean;
+  requireOdometerFinishKm: boolean;
 };

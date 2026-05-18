@@ -1,4 +1,4 @@
-# Checklist - Combustivel
+﻿# Checklist - Combustivel
 
 ## Preparacao
 
@@ -32,3 +32,4 @@
 - [ ] `POST /company/fuel/settings` exige valor por litro, valor por km ou ambos.
 - [ ] `GET /company/reimbursements` aceita filtros `employeeId`, `vehicleId`, `startDate` e `endDate`.
 - [ ] `COMPANY_ADMIN` nao acessa dados de outra empresa.
+

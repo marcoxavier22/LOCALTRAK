@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:3333
-@companyEmail = admin@empresateste.com
-@employeeEmail = funcionario@empresateste.com
-@password = Senha123!
+@companyEmail = {{$dotenv SEED_COMPANY_ADMIN_EMAIL}}
+@employeeEmail = {{$dotenv SEED_EMPLOYEE_EMAIL}}
+@password = {{$dotenv SEED_DEMO_PASSWORD}}
 
 ### Login COMPANY_ADMIN
 # @name companyLogin

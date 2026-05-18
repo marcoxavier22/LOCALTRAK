@@ -1,4 +1,4 @@
-# Checklist - Manutencao Preventiva
+﻿# Checklist - Manutencao Preventiva
 
 ## Preparacao
 
@@ -7,7 +7,7 @@
 - [ ] Rodar `pnpm prisma:seed`.
 - [ ] Iniciar API com `pnpm dev:api`.
 - [ ] Iniciar web com `pnpm dev:web`.
-- [ ] Entrar como `COMPANY_ADMIN` (`admin@empresateste.com` / `Senha123!`).
+- [ ] Entrar como `COMPANY_ADMIN` (`<SEED_COMPANY_ADMIN_EMAIL>` / `<SEED_DEMO_PASSWORD>`).
 
 ## Fluxo Web
 
@@ -30,3 +30,4 @@
 - [ ] `POST /company/maintenance/records` exige veiculo, tipo, km, data, descricao e custo.
 - [ ] `GET /company/maintenance/alerts` retorna manutencoes vencidas por km ou data.
 - [ ] `EMPLOYEE` nao acessa endpoints administrativos.
+

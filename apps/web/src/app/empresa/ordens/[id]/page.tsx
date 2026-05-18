@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import { CalendarDays, Camera, CheckCircle2, ClipboardList, Gauge, MapPin, Save } from 'lucide-react';
 import { AppShell } from '@/components/AppShell';
 import { MetricCard } from '@/components/MetricCard';
+import { GoogleMapPreview } from '@/components/GoogleMapPreview';
 import { StatusBadge } from '@/components/StatusBadge';
 import { apiFetch, toJsonBody } from '@/lib/api';
 import { formatOdometer, orderStatusLabels, orderStopStatusLabels } from '@/lib/order-labels';
@@ -96,6 +97,7 @@ export default function CompanyOrderDetailPage() {
   const plannedMapPoints = useMemo(() => (order ? buildStopMapPoints(order) : []), [order]);
   const mapPoints = tracking?.points?.length ? tracking.points : plannedMapPoints;
   const completedStops = order?.stops.filter((stop) => stop.status === 'COMPLETED').length ?? 0;
+  const firstStop = order?.stops[0] ?? null;
 
   async function handleUpdate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -286,6 +288,14 @@ export default function CompanyOrderDetailPage() {
                   status: stop.status,
                 }))}
             />
+            <div style={{ marginTop: 16 }}>
+              <GoogleMapPreview
+                address={firstStop?.address}
+                latitude={firstStop?.latitude}
+                longitude={firstStop?.longitude}
+                title="Abrir ponto principal no Google Maps"
+              />
+            </div>
           </section>
 
           <section className="panel">

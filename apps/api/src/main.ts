@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { json, urlencoded } from 'express';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 
@@ -37,6 +38,8 @@ async function bootstrap() {
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
   app.getHttpAdapter().getInstance().disable('x-powered-by');
   app.use(helmet());
+  app.use(json({ limit: config.get<string>('JSON_BODY_LIMIT') ?? '8mb' }));
+  app.use(urlencoded({ extended: true, limit: config.get<string>('JSON_BODY_LIMIT') ?? '8mb' }));
   app.enableCors({
     origin: originOption,
     credentials: true,

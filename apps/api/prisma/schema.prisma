@@ -92,6 +92,23 @@ enum ServiceOrderStopStatus {
   COMPLETED
 }
 
+enum GeocodingStatus {
+  PENDING
+  RESOLVED
+  FAILED
+  MANUAL
+}
+
+enum CustomerStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum OdometerPhotoType {
+  START
+  FINISH
+}
+
 model User {
   id                    String       @id @default(uuid())
   name                  String
@@ -110,6 +127,7 @@ model User {
   routeShifts           RouteShift[]
   serviceOrders         ServiceOrder[]
   reimbursementPayments ReimbursementPayment[] @relation("EmployeeReimbursementPayments")
+  odometerPhotos        OdometerPhoto[] @relation("EmployeeOdometerPhotos")
   consentLogs           ConsentLog[]
   auditLogs             AuditLog[]
 
@@ -119,29 +137,35 @@ model User {
 }
 
 model Company {
-  id           String          @id @default(uuid())
-  name         String
-  document     String?         @unique
-  phone        String?
-  email        String?
-  status       CompanyStatus   @default(TRIAL)
-  planId       String?         @map("plan_id")
-  plan         Plan?           @relation(fields: [planId], references: [id])
-  maxEmployees Int             @default(5) @map("max_employees")
-  maxVehicles  Int             @default(5) @map("max_vehicles")
-  createdAt    DateTime        @default(now()) @map("created_at")
-  updatedAt    DateTime        @updatedAt @map("updated_at")
-  users        User[]
-  vehicles     Vehicle[]
-  routeShifts  RouteShift[]
-  serviceOrders ServiceOrder[]
-  serviceOrderStops ServiceOrderStop[]
-  maintenanceRules MaintenanceRule[]
-  vehicleMaintenances VehicleMaintenance[]
-  fuelSettings FuelSetting[]
-  reimbursementPayments ReimbursementPayment[]
-  consentLogs  ConsentLog[]
-  auditLogs    AuditLog[]
+  id                         String               @id @default(uuid())
+  name                       String
+  document                   String?              @unique
+  phone                      String?
+  email                      String?
+  status                     CompanyStatus        @default(TRIAL)
+  planId                     String?              @map("plan_id")
+  plan                       Plan?                @relation(fields: [planId], references: [id])
+  maxEmployees               Int                  @default(5) @map("max_employees")
+  maxVehicles                Int                  @default(5) @map("max_vehicles")
+  requireOdometerStartPhoto  Boolean              @default(true) @map("require_odometer_start_photo")
+  requireOdometerFinishPhoto Boolean              @default(true) @map("require_odometer_finish_photo")
+  requireOdometerStartKm     Boolean              @default(true) @map("require_odometer_start_km")
+  requireOdometerFinishKm    Boolean              @default(true) @map("require_odometer_finish_km")
+  createdAt                  DateTime             @default(now()) @map("created_at")
+  updatedAt                  DateTime             @updatedAt @map("updated_at")
+  users                      User[]
+  vehicles                   Vehicle[]
+  routeShifts                RouteShift[]
+  serviceOrders              ServiceOrder[]
+  serviceOrderStops          ServiceOrderStop[]
+  customers                  Customer[]
+  odometerPhotos             OdometerPhoto[]
+  maintenanceRules           MaintenanceRule[]
+  vehicleMaintenances        VehicleMaintenance[]
+  fuelSettings               FuelSetting[]
+  reimbursementPayments      ReimbursementPayment[]
+  consentLogs                ConsentLog[]
+  auditLogs                  AuditLog[]
 
   @@map("companies")
 }
@@ -181,6 +205,7 @@ model Vehicle {
   updatedAt          DateTime             @updatedAt @map("updated_at")
   routeShifts        RouteShift[]
   serviceOrders      ServiceOrder[]
+  odometerPhotos     OdometerPhoto[]
   maintenances       VehicleMaintenance[]
   reimbursementPayments ReimbursementPayment[]
 
@@ -214,6 +239,7 @@ model RouteShift {
   updatedAt            DateTime         @updatedAt @map("updated_at")
   points               RoutePoint[]
   serviceOrder         ServiceOrder?
+  odometerPhotos       OdometerPhoto[]
 
   @@index([companyId, startedAt])
   @@index([companyId, status])
@@ -335,6 +361,7 @@ model ServiceOrder {
   createdAt                DateTime           @default(now()) @map("created_at")
   updatedAt                DateTime           @updatedAt @map("updated_at")
   stops                    ServiceOrderStop[]
+  odometerPhotos           OdometerPhoto[]
 
   @@index([companyId, scheduledDate])
   @@index([companyId, status])
@@ -345,20 +372,35 @@ model ServiceOrder {
 }
 
 model ServiceOrderStop {
-  id          String                 @id @default(uuid())
-  companyId   String                 @map("company_id")
-  company     Company                @relation(fields: [companyId], references: [id])
-  orderId     String                 @map("order_id")
-  order       ServiceOrder           @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  customerName String?               @map("customer_name")
-  address     String
-  latitude    Decimal?               @db.Decimal(10, 7)
-  longitude   Decimal?               @db.Decimal(10, 7)
-  visitOrder  Int                    @map("visit_order")
-  status      ServiceOrderStopStatus @default(PENDING)
-  completedAt DateTime?              @map("completed_at")
-  createdAt   DateTime               @default(now()) @map("created_at")
-  updatedAt   DateTime               @updatedAt @map("updated_at")
+  id              String                 @id @default(uuid())
+  companyId       String                 @map("company_id")
+  company         Company                @relation(fields: [companyId], references: [id])
+  orderId         String                 @map("order_id")
+  order           ServiceOrder           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  customerId      String?                @map("customer_id")
+  customer        Customer?              @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customerName    String?                @map("customer_name")
+  customerEmail   String?                @map("customer_email")
+  customerPhone   String?                @map("customer_phone")
+  address         String
+  cep             String?
+  street          String?
+  number          String?
+  complement      String?
+  neighborhood    String?
+  city            String?
+  state           String?
+  country         String?                @default("Brasil")
+  addressReference String?              @map("address_reference")
+  latitude        Decimal?               @db.Decimal(10, 7)
+  longitude       Decimal?               @db.Decimal(10, 7)
+  geocodingStatus GeocodingStatus        @default(PENDING) @map("geocoding_status")
+  geocodingUpdatedAt DateTime?           @map("geocoding_updated_at")
+  visitOrder      Int                    @map("visit_order")
+  status          ServiceOrderStopStatus @default(PENDING)
+  completedAt     DateTime?              @map("completed_at")
+  createdAt       DateTime               @default(now()) @map("created_at")
+  updatedAt       DateTime               @updatedAt @map("updated_at")
 
   @@index([companyId])
   @@index([orderId, visitOrder])
@@ -395,4 +437,64 @@ model AuditLog {
   @@index([companyId, createdAt])
   @@index([userId])
   @@map("audit_logs")
+}
+
+model Customer {
+  id              String          @id @default(uuid())
+  companyId       String          @map("company_id")
+  company         Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name            String
+  document        String?
+  email           String?
+  phone           String?
+  address         String          @default("")
+  cep             String?
+  street          String?
+  number          String?
+  complement      String?
+  neighborhood    String?
+  city            String?
+  state           String?
+  country         String?         @default("Brasil")
+  notes           String?
+  latitude        Decimal?        @db.Decimal(10, 7)
+  longitude       Decimal?        @db.Decimal(10, 7)
+  geocodingStatus GeocodingStatus @default(PENDING) @map("geocoding_status")
+  geocodingUpdatedAt DateTime?    @map("geocoding_updated_at")
+  status          CustomerStatus  @default(ACTIVE)
+  deletedAt       DateTime?       @map("deleted_at")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  stops           ServiceOrderStop[]
+
+  @@index([companyId])
+  @@index([companyId, status])
+  @@map("customers")
+}
+
+model OdometerPhoto {
+  id           String            @id @default(uuid())
+  companyId    String            @map("company_id")
+  company      Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  orderId      String?           @map("order_id")
+  order        ServiceOrder?     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  routeShiftId String?           @map("route_shift_id")
+  routeShift   RouteShift?       @relation(fields: [routeShiftId], references: [id], onDelete: SetNull)
+  employeeId   String            @map("employee_id")
+  employee     User              @relation("EmployeeOdometerPhotos", fields: [employeeId], references: [id], onDelete: Restrict)
+  vehicleId    String?           @map("vehicle_id")
+  vehicle      Vehicle?          @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  type         OdometerPhotoType
+  filePath     String            @map("file_path")
+  contentType  String?           @map("content_type")
+  sizeBytes    Int?              @map("size_bytes")
+  odometerKm   Decimal?          @map("odometer_km") @db.Decimal(12, 2)
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  @@index([companyId, createdAt])
+  @@index([orderId, type])
+  @@index([routeShiftId])
+  @@index([employeeId, createdAt])
+  @@map("odometer_photos")
 }

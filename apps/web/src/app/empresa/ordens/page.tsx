@@ -11,16 +11,45 @@ import { apiFetch, toJsonBody } from '@/lib/api';
 import { orderStatusLabels } from '@/lib/order-labels';
 import { formatDateTime } from '@/lib/route-labels';
 import { formatKm } from '@/lib/vehicle-labels';
-import type { Employee, ServiceOrder, ServiceOrderStatus, Vehicle } from '@/types';
+import type { Customer, Employee, ServiceOrder, ServiceOrderStatus, Vehicle } from '@/types';
 
 type StopDraft = {
   customerName: string;
+  customerEmail: string;
+  customerPhone: string;
   address: string;
+  cep: string;
+  street: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  country: string;
+  addressReference: string;
   latitude: string;
   longitude: string;
+  customerId?: string;
 };
 
-const emptyStop = (): StopDraft => ({ customerName: '', address: '', latitude: '', longitude: '' });
+const emptyStop = (): StopDraft => ({
+  customerName: '',
+  customerEmail: '',
+  customerPhone: '',
+  address: '',
+  cep: '',
+  street: '',
+  number: '',
+  complement: '',
+  neighborhood: '',
+  city: '',
+  state: '',
+  country: 'Brasil',
+  addressReference: '',
+  latitude: '',
+  longitude: '',
+  customerId: '',
+});
 
 function buildOrdersQuery(filters: {
   employeeId: string;
@@ -45,7 +74,9 @@ export default function CompanyOrdersPage() {
   const [orders, setOrders] = useState<ServiceOrder[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [stops, setStops] = useState<StopDraft[]>([emptyStop()]);
+  const [isSearchingCep, setIsSearchingCep] = useState<{ [key: number]: boolean }>({});
   const [filters, setFilters] = useState({
     employeeId: '',
     vehicleId: '',
@@ -77,19 +108,54 @@ export default function CompanyOrdersPage() {
 
     try {
       const query = buildOrdersQuery(filters);
-      const [loadedOrders, loadedEmployees, loadedVehicles] = await Promise.all([
+      const [loadedOrders, loadedEmployees, loadedVehicles, loadedCustomers] = await Promise.all([
         apiFetch<ServiceOrder[]>(`/orders${query}`),
         apiFetch<Employee[]>('/company/employees'),
         apiFetch<Vehicle[]>('/company/vehicles'),
+        apiFetch<Customer[]>('/company/customers').catch(() => []),
       ]);
 
       setOrders(loadedOrders);
       setEmployees(loadedEmployees);
       setVehicles(loadedVehicles);
+      setCustomers(loadedCustomers);
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar ordens de servico.');
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handleCepLookup(index: number, cep: string) {
+    const cleanCep = cep.replace(/\D/g, '');
+    if (cleanCep.length !== 8) {
+      alert('CEP inválido. Deve conter 8 dígitos.');
+      return;
+    }
+
+    setIsSearchingCep((prev) => ({ ...prev, [index]: true }));
+
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
+      const data = await res.json();
+
+      if (data.erro) {
+        alert('CEP não encontrado.');
+      } else {
+        const formattedAddress = `${data.logradouro}, ${data.bairro} - ${data.localidade} / ${data.uf}`;
+        updateStop(index, 'cep', cleanCep);
+        updateStop(index, 'street', data.logradouro ?? '');
+        updateStop(index, 'neighborhood', data.bairro ?? '');
+        updateStop(index, 'city', data.localidade ?? '');
+        updateStop(index, 'state', data.uf ?? '');
+        updateStop(index, 'country', 'Brasil');
+        updateStop(index, 'address', formattedAddress);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao buscar o CEP.');
+    } finally {
+      setIsSearchingCep((prev) => ({ ...prev, [index]: false }));
     }
   }
 
@@ -109,10 +175,20 @@ export default function CompanyOrdersPage() {
       stops: stops
         .filter((stop) => stop.address.trim())
         .map((stop, index) => ({
+          customerId: stop.customerId || undefined,
           customerName: stop.customerName.trim() || undefined,
+          customerEmail: stop.customerEmail.trim() || undefined,
+          customerPhone: stop.customerPhone.trim() || undefined,
           address: stop.address.trim(),
-          latitude: stop.latitude.trim() ? Number(stop.latitude) : undefined,
-          longitude: stop.longitude.trim() ? Number(stop.longitude) : undefined,
+          cep: stop.cep.trim() || undefined,
+          street: stop.street.trim() || undefined,
+          number: stop.number.trim() || undefined,
+          complement: stop.complement.trim() || undefined,
+          neighborhood: stop.neighborhood.trim() || undefined,
+          city: stop.city.trim() || undefined,
+          state: stop.state.trim() || undefined,
+          country: stop.country.trim() || undefined,
+          addressReference: stop.addressReference.trim() || undefined,
           visitOrder: index + 1,
         })),
     };
@@ -200,36 +276,188 @@ export default function CompanyOrdersPage() {
 
           <div className="form-section">
             <div className="section-title">
-              <h2>Enderecos da rota</h2>
-              <p>Use latitude e longitude quando ja tiver coordenadas do cliente.</p>
+              <h2>Endereços da rota</h2>
+              <p>Busque clientes cadastrados ou consulte endereços por CEP de forma simplificada.</p>
             </div>
 
             {stops.map((stop, index) => (
               <div className="stop-editor" key={index}>
-                <strong>Parada {index + 1}</strong>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <strong>Parada {index + 1}</strong>
+                  {stops.length > 1 && (
+                    <button
+                      type="button"
+                      className="button secondary small"
+                      style={{ color: '#ef4444', padding: '2px 8px' }}
+                      onClick={() => setStops((current) => current.filter((_, idx) => idx !== index))}
+                    >
+                      Remover
+                    </button>
+                  )}
+                </div>
+
                 <label>
-                  Cliente
-                  <input value={stop.customerName} onChange={(event) => updateStop(index, 'customerName', event.target.value)} />
+                  Vincular Cliente Cadastrado (Opcional)
+                  <select
+                    value={stop.customerId || ''}
+                    onChange={(event) => {
+                      const selectedId = event.target.value;
+                      if (selectedId) {
+                        const cust = customers.find((c) => c.id === selectedId);
+                        if (cust) {
+                          updateStop(index, 'customerId', cust.id);
+                          updateStop(index, 'customerName', cust.name);
+                          updateStop(index, 'customerEmail', cust.email ?? '');
+                          updateStop(index, 'customerPhone', cust.phone ?? '');
+                          updateStop(index, 'address', cust.address);
+                          updateStop(index, 'cep', cust.cep ?? '');
+                          updateStop(index, 'street', cust.street ?? '');
+                          updateStop(index, 'number', cust.number ?? '');
+                          updateStop(index, 'complement', cust.complement ?? '');
+                          updateStop(index, 'neighborhood', cust.neighborhood ?? '');
+                          updateStop(index, 'city', cust.city ?? '');
+                          updateStop(index, 'state', cust.state ?? '');
+                          updateStop(index, 'country', cust.country ?? 'Brasil');
+                        }
+                      } else {
+                        updateStop(index, 'customerId', '');
+                        updateStop(index, 'customerName', '');
+                        updateStop(index, 'customerEmail', '');
+                        updateStop(index, 'customerPhone', '');
+                        updateStop(index, 'address', '');
+                        updateStop(index, 'cep', '');
+                        updateStop(index, 'street', '');
+                        updateStop(index, 'number', '');
+                        updateStop(index, 'complement', '');
+                        updateStop(index, 'neighborhood', '');
+                        updateStop(index, 'city', '');
+                        updateStop(index, 'state', '');
+                        updateStop(index, 'country', 'Brasil');
+                      }
+                    }}
+                    style={{ width: '100%' }}
+                  >
+                    <option value="">-- Selecione um cliente --</option>
+                    {customers.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} ({c.address})
+                      </option>
+                    ))}
+                  </select>
                 </label>
-                <label>
-                  Endereco completo
-                  <input required value={stop.address} onChange={(event) => updateStop(index, 'address', event.target.value)} />
-                </label>
-                <div className="field-row">
-                  <label>
-                    Latitude
-                    <input value={stop.latitude} onChange={(event) => updateStop(index, 'latitude', event.target.value)} />
+
+                <div className="field-row" style={{ marginTop: '8px' }}>
+                  <label style={{ flex: '1' }}>
+                    Cliente / Nome do Contato
+                    <input
+                      value={stop.customerName}
+                      onChange={(event) => updateStop(index, 'customerName', event.target.value)}
+                      placeholder="Ex: Auto Posto Silva"
+                    />
                   </label>
-                  <label>
-                    Longitude
-                    <input value={stop.longitude} onChange={(event) => updateStop(index, 'longitude', event.target.value)} />
+
+                  <label style={{ flex: '1' }}>
+                    Buscar Endereço por CEP
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        placeholder="Ex: 01310-100"
+                        id={`cep-${index}`}
+                        maxLength={9}
+                        type="text"
+                        style={{ flex: 1 }}
+                      />
+                      <button
+                        type="button"
+                        className="button secondary small"
+                        onClick={() => {
+                          const input = document.getElementById(`cep-${index}`) as HTMLInputElement;
+                          if (input) {
+                            handleCepLookup(index, input.value);
+                          }
+                        }}
+                        disabled={isSearchingCep[index]}
+                      >
+                        {isSearchingCep[index] ? '...' : 'Buscar'}
+                      </button>
+                    </div>
                   </label>
                 </div>
+
+                <label style={{ marginTop: '8px', display: 'block' }}>
+                  Endereço completo
+                  <input
+                    required
+                    value={stop.address}
+                    onChange={(event) => updateStop(index, 'address', event.target.value)}
+                    placeholder="Av. Paulista, 1000 - Bela Vista, São Paulo - SP"
+                    style={{ width: '100%' }}
+                  />
+                </label>
+
+                <div className="field-row" style={{ marginTop: '8px' }}>
+                  <label>
+                    Rua
+                    <input value={stop.street} onChange={(event) => updateStop(index, 'street', event.target.value)} />
+                  </label>
+                  <label>
+                    Numero
+                    <input value={stop.number} onChange={(event) => updateStop(index, 'number', event.target.value)} />
+                  </label>
+                </div>
+
+                <div className="field-row" style={{ marginTop: '8px' }}>
+                  <label>
+                    Bairro
+                    <input value={stop.neighborhood} onChange={(event) => updateStop(index, 'neighborhood', event.target.value)} />
+                  </label>
+                  <label>
+                    Cidade
+                    <input value={stop.city} onChange={(event) => updateStop(index, 'city', event.target.value)} />
+                  </label>
+                  <label>
+                    UF
+                    <input maxLength={2} value={stop.state} onChange={(event) => updateStop(index, 'state', event.target.value.toUpperCase())} />
+                  </label>
+                </div>
+
+                <label style={{ marginTop: '8px', display: 'block' }}>
+                  Referencia / observacoes do endereco
+                  <input
+                    value={stop.addressReference}
+                    onChange={(event) => updateStop(index, 'addressReference', event.target.value)}
+                    placeholder="Portao azul, entrada lateral, bloco B..."
+                    style={{ width: '100%' }}
+                  />
+                </label>
+
+                <details style={{ display: 'none' }}>
+                  <summary style={{ cursor: 'pointer', fontSize: '13px', color: '#6d28d9', fontWeight: 'bold' }}>
+                    Coordenadas Manuais (Opcional / Avançado)
+                  </summary>
+                  <div className="field-row" style={{ marginTop: '8px' }}>
+                    <label>
+                      Latitude
+                      <input
+                        value={stop.latitude}
+                        onChange={(event) => updateStop(index, 'latitude', event.target.value)}
+                        placeholder="Ex: -23.55052"
+                      />
+                    </label>
+                    <label>
+                      Longitude
+                      <input
+                        value={stop.longitude}
+                        onChange={(event) => updateStop(index, 'longitude', event.target.value)}
+                        placeholder="Ex: -46.633308"
+                      />
+                    </label>
+                  </div>
+                </details>
               </div>
             ))}
 
             <button className="button secondary" type="button" onClick={() => setStops((current) => [...current, emptyStop()])}>
-              Adicionar endereco
+              Adicionar endereço
             </button>
           </div>
 

@@ -1,4 +1,4 @@
-# Checklist Mobile - Ordens de Servico
+﻿# Checklist Mobile - Ordens de Servico
 
 Checklist complementar e mais atual: `docs/OS_MOBILE_CHECKLIST.md`.
 
@@ -13,7 +13,7 @@ Checklist complementar e mais atual: `docs/OS_MOBILE_CHECKLIST.md`.
 
 ## Login
 
-- [ ] Entrar com `funcionario@empresateste.com` / `Senha123!`.
+- [ ] Entrar com `<SEED_EMPLOYEE_EMAIL>` / `<SEED_DEMO_PASSWORD>`.
 - [ ] Confirmar que `MASTER_ADMIN` e `COMPANY_ADMIN` recebem a mensagem de acesso exclusivo para funcionarios.
 - [ ] Confirmar botao de sair.
 
@@ -53,3 +53,4 @@ Checklist complementar e mais atual: `docs/OS_MOBILE_CHECKLIST.md`.
 - [ ] Testar KM final menor que inicial e confirmar mensagem amigavel.
 - [ ] Testar sem permissao de camera e confirmar erro visivel.
 - [ ] Testar backend sem Storage configurado e confirmar erro 503 explicativo.
+

@@ -1,4 +1,4 @@
-# Checklist - Reembolsos
+﻿# Checklist - Reembolsos
 
 ## Preparacao
 
@@ -30,3 +30,4 @@
 - [ ] Veiculo vinculado a outro funcionario retorna erro amigavel.
 - [ ] Resposta inclui funcionario e veiculo, sem dados sensiveis.
 - [ ] `EMPLOYEE` nao acessa endpoints administrativos.
+

@@ -1,4 +1,4 @@
-# SECURITY_CHECKLIST.md
+﻿# SECURITY_CHECKLIST.md
 
 Checklist minimo de seguranca para o backend do LocalTrak Rotas antes do primeiro deploy online.
 
@@ -78,3 +78,4 @@ Checklist minimo de seguranca para o backend do LocalTrak Rotas antes do primeir
 - [x] Upload de odometro com `text/plain` foi rejeitado com `400`.
 - [x] Upload de odometro com `image/png` foi aceito e persistiu caminho privado.
 - [x] Advisor de seguranca Supabase rodado; retornou apenas avisos informativos de RLS habilitado sem policies nas tabelas `public`.
+
