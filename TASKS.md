@@ -1,8 +1,23 @@
 # TASKS.md
 
-Roadmap do projeto LocalTrak Rotas / Routify.
+Roadmap do projeto LocalTrak Rotas / TrakFlow.
 
-## 16. Rebranding LocalTrak → Routify
+## 17. Rebranding LocalTrak/Routify → TrakFlow
+
+- [x] Auditar todos os textos e logos visíveis no frontend web e mobile.
+- [x] Atualizar `apps/web/src/app/layout.tsx` — metadata title/description e script de tema.
+- [x] Atualizar `apps/web/src/app/login/page.tsx` — textos, tagline, logo SVG e marketing copy.
+- [x] Atualizar `apps/web/src/components/AppShell.tsx` — sidebar com logo SVG e marca TrakFlow.
+- [x] Atualizar `apps/web/src/components/ThemeToggle.tsx` — chave localStorage `trakflow-theme` com fallbacks.
+- [x] Atualizar `apps/mobile/app.json` — nome do app TrakFlow e descrições de permissões.
+- [x] Atualizar `apps/mobile/src/App.tsx` — logo Svg TrakFlow, títulos de notificações, loading e login.
+- [x] Atualizar `README.md` com posicionamento de marca, descrição e stack TrakFlow.
+- [x] Atualizar `DECISIONS.md` documentando a decisão do rebranding definitivo.
+- [~] Rodar builds obrigatórios locais para validar compilação (`pnpm install`, `pnpm prisma:generate`, `pnpm build:api`, `pnpm build:web`).
+- [ ] Realizar commit e push para o repositório GitHub `marcoxavier22/LOCALTRAK`.
+- [ ] Confirmar deploys em produção (Vercel e Render) e realizar testes de fumaça.
+
+## 16. Rebranding LocalTrak → Routify (Legado)
 
 - [x] Auditar todos os textos visíveis de marca no frontend web e mobile.
 - [x] Atualizar `apps/web/src/app/layout.tsx` — title e description metadata.
@@ -15,9 +30,9 @@ Roadmap do projeto LocalTrak Rotas / Routify.
 - [x] Otimizar `render.yaml` — remover `pnpm build:web` desnecessario, tornar MASTER_ADMIN secreto.
 - [x] Registrar decisao de rebranding em `DECISIONS.md`.
 - [x] Atualizar `README.md` com marca Routify e documentacao completa.
-- [ ] Criar logo Routify (SVG/PNG) para substituir localtrak-logo.png.
-- [ ] Atualizar URLs de deploy para dominio Routify quando disponivel.
-- [ ] Migrar slug Expo de `localtrak-rotas` para `routify` apos confirmacao de novo bundle ID.
+- [x] Criar logo TrakFlow (SVG) em `apps/web/public/trakflow-logo.svg`.
+- [ ] Atualizar URLs de deploy para novo dominio quando disponivel.
+- [ ] Migrar slug Expo de `localtrak-rotas` para `trakflow` apos confirmacao.
 
 
 Legenda:

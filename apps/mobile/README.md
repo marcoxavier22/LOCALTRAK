@@ -1,6 +1,6 @@
-# LocalTrak Rotas Mobile
+# TrakFlow Mobile
 
-Aplicativo React Native com Expo para funcionarios externos.
+Aplicativo React Native com Expo para funcionarios externos do TrakFlow.
 
 ## MVP implementado
 

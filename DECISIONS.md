@@ -1,35 +1,32 @@
 # DECISIONS.md
 
-Registro de decisoes tecnicas do projeto LocalTrak Rotas / Routify.
+Registro de decisoes tecnicas do projeto LocalTrak Rotas / TrakFlow.
 
 ## Decisoes Tomadas
 
-### Rebranding: LocalTrak Rotas → Routify
+### Rebranding Definitorio: LocalTrak/Routify → TrakFlow
 
 Data: 2026-05-18
 
-Decisao: a plataforma evoluira comercialmente com a marca **Routify**.
+Decisao: a plataforma evoluira comercialmente com a marca definitiva **TrakFlow**.
 
-Justificativa: o produto e um SaaS B2B vendavel e a marca Routify comunica melhor o posicionamento comercial focado em rotas, equipes externas e operacoes em campo.
+Justificativa: TrakFlow representa de forma premium, fluida e moderna a promessa central de colocar a empresa no controle do fluxo de cada rota, visita e operacao em campo. O termo "Flow" conecta-se ao fluxo de trabalho operacional, produtividade e eficiencia, superando as marcas provisorias ou legadas (LocalTrak e Routify).
 
 Estrategia de transicao:
 
-- Textos **visiveis** ao usuario final foram migrados para Routify imediatamente (interface web e mobile).
-- Nomes **tecnicos internos** (`@localtrak/api`, `@localtrak/web`, package names, slugs Expo, URLs de deploy ja ativas) sao mantidos temporariamente para compatibilidade com producao.
-- URLs de producao (`localtrak-web.vercel.app`, `localtrak.onrender.com`) serao migradas em etapa futura apos confirmacao de novo dominio.
-- Chave localStorage migrada de `localtrak-theme` para `routify-theme` com fallback backward-compatible.
+- Textos e logos **visiveis** ao usuario final foram completamente migrados para **TrakFlow** nas interfaces web e mobile.
+- Nomes **tecnicos internos** (`@localtrak/api`, `@localtrak/web`, package names, slugs Expo, URLs de deploy legadas) sao mantidos temporariamente para compatibilidade e estabilidade com a infraestrutura de deploy continuo.
+- Chave localStorage migrada de `routify-theme` para `trakflow-theme` com fallback backward-compatible de multiplos niveis.
 
 Arquivos alterados:
 
-- `apps/web/src/app/layout.tsx` — metadata Routify
-- `apps/web/src/app/login/page.tsx` — textos e tagline
-- `apps/web/src/components/AppShell.tsx` — marca na sidebar
-- `apps/web/src/components/ThemeToggle.tsx` — chave localStorage
-- `apps/mobile/app.json` — nome do app e permissoes iOS
-- `apps/mobile/src/App.tsx` — textos visiveis
-- `.env.example` — variaveis generalizadas
-- `render.yaml` — build command otimizado
-- `README.md` — documentacao atualizada
+- `apps/web/src/app/layout.tsx` — metadata TrakFlow e fallback inline de tema.
+- `apps/web/src/app/login/page.tsx` — textos de login, tagline e logo TrakFlow.
+- `apps/web/src/components/AppShell.tsx` — logo e marca TrakFlow na sidebar.
+- `apps/web/src/components/ThemeToggle.tsx` — chave localStorage `trakflow-theme`.
+- `apps/mobile/app.json` — nome do app TrakFlow e permissoes iOS atualizadas.
+- `apps/mobile/src/App.tsx` — logo Svg de TrakFlow e textos visiveis no app mobile.
+- `README.md` — documentacao e posicionamento da marca TrakFlow atualizada
 
 ### Deploy API
 

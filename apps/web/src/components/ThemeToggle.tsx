@@ -5,21 +5,23 @@ import { useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
 
-const STORAGE_KEY = 'routify-theme';
-const LEGACY_KEY = 'localtrak-theme';
+const STORAGE_KEY = 'trakflow-theme';
+const LEGACY_KEY = 'routify-theme';
+const LEGACY_KEY_2 = 'localtrak-theme';
 
 function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
   localStorage.setItem(STORAGE_KEY, theme);
-  // Remove legacy key on update
+  // Remove legacy keys on update
   try { localStorage.removeItem(LEGACY_KEY); } catch {}
+  try { localStorage.removeItem(LEGACY_KEY_2); } catch {}
 }
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>('light');
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem(STORAGE_KEY) as Theme | null;
+    const storedTheme = (localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY) || localStorage.getItem(LEGACY_KEY_2)) as Theme | null;
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = storedTheme ?? (prefersDark ? 'dark' : 'light');
 

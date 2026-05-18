@@ -53,14 +53,14 @@ export default function LoginPage() {
       <div className="login-theme-action">
         <ThemeToggle />
       </div>
-      <section className="login-intro" aria-label="Routify">
+      <section className="login-intro" aria-label="TrakFlow">
         <div className="login-logo">
-          <img alt="Routify" className="login-logo-image" src="/routify-logo.svg" />
-          <strong>Routify</strong>
+          <img alt="TrakFlow" className="login-logo-image" src="/trakflow-logo.svg" />
+          <strong>TrakFlow</strong>
         </div>
         <h2>Controle rotas, equipes externas e operações em campo em uma única plataforma.</h2>
         <p>
-          A Routify ajuda empresas a acompanhar veículos, organizar rotas, registrar visitas e medir a produtividade das equipes externas.
+          A TrakFlow ajuda empresas a acompanhar veículos, organizar rotas, registrar visitas e medir a produtividade das equipes externas.
         </p>
         <div className="login-stats">
           <div>
@@ -79,7 +79,7 @@ export default function LoginPage() {
       </section>
 
       <section className="auth-panel">
-        <span className="eyebrow">Routify</span>
+        <span className="eyebrow">TrakFlow</span>
         <h1>Acessar painel</h1>
         <p>Entre com seu usuário administrativo para gerenciar empresas, equipe e operação em campo.</p>
 

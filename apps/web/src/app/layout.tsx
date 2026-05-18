@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Routify — Controle de Rotas e Equipes em Campo',
+  title: 'TrakFlow — Controle de Rotas e Equipes em Campo',
   description: 'Plataforma SaaS para controle de rotas, equipes externas, veículos, ordens de serviço e operações em campo.',
 };
 
@@ -18,7 +18,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{var t=localStorage.getItem('routify-theme')||localStorage.getItem('localtrak-theme');if(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)t='dark';if(t)document.documentElement.dataset.theme=t;}catch(e){}",
+              "try{var t=localStorage.getItem('trakflow-theme')||localStorage.getItem('routify-theme')||localStorage.getItem('localtrak-theme');if(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)t='dark';if(t)document.documentElement.dataset.theme=t;}catch(e){}",
           }}
         />
         {children}

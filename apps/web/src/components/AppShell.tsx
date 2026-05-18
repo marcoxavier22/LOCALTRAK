@@ -165,9 +165,9 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand-block">
-          <img alt="Routify" className="brand-logo" src="/routify-logo.svg" />
+          <img alt="TrakFlow" className="brand-logo" src="/trakflow-logo.svg" />
           <div>
-            <strong>Routify</strong>
+            <strong>TrakFlow</strong>
             <span>Gestão em Campo</span>
           </div>
         </div>

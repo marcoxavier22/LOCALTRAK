@@ -1,6 +1,6 @@
-# LocalTrak Rotas Web
+# TrakFlow Web
 
-Painel administrativo em Next.js para o MVP do LocalTrak Rotas.
+Painel administrativo em Next.js para o MVP do TrakFlow.
 
 ## Variaveis De Ambiente
 

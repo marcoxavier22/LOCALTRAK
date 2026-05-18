@@ -40,9 +40,9 @@ type Theme = 'light' | 'dark';
 
 const BACKGROUND_LOCATION_TASK = 'LOCALTRAK_ROUTE_BACKGROUND_LOCATION';
 
-function RoutifyLogo({ style }: { style?: any }) {
+function TrakFlowLogo({ style }: { style?: any }) {
   return (
-    <Svg viewBox="0 0 500 150" style={style}>
+    <Svg viewBox="0 0 550 150" style={style}>
       <Defs>
         <LinearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
           <Stop offset="0%" stopColor="#7C3AED" />
@@ -58,8 +58,8 @@ function RoutifyLogo({ style }: { style?: any }) {
       <Path d="M 75 25 C 50 25 35 45 35 65 C 35 95 75 130 75 130 C 75 130 115 95 115 65 C 115 45 100 25 75 25 Z" fill="url(#purpleGradient)" />
       <Path d="M 75 125 C 65 100 85 80 75 65 C 65 50 75 45 75 45" fill="none" stroke="#FFFFFF" strokeWidth="4" strokeDasharray="4 4" />
       <Circle cx="75" cy="55" r="12" fill="#22D3EE" />
-      <SvgText x="160" y="95" fontFamily="System" fontWeight="900" fontSize="56" letterSpacing="4" fill="#150B4F">ROUTIFY</SvgText>
-      <Path d="M 440 90 L 455 65 L 470 65 L 455 90 Z" fill="#A3E635" />
+      <SvgText x="160" y="95" fontFamily="System" fontWeight="900" fontSize="56" letterSpacing="4" fill="#150B4F">TRAKFLOW</SvgText>
+      <Path d="M 480 90 L 495 65 L 510 65 L 495 90 Z" fill="#A3E635" />
     </Svg>
   );
 }
@@ -240,7 +240,7 @@ async function startBackgroundTrackingIfAvailable() {
       pausesUpdatesAutomatically: false,
       showsBackgroundLocationIndicator: true,
       foregroundService: {
-        notificationTitle: 'Routify em andamento',
+        notificationTitle: 'TrakFlow em andamento',
         notificationBody: 'Sua localizacao esta sendo registrada somente durante o turno ativo.',
       },
     });
@@ -866,7 +866,7 @@ export default function App() {
     return (
       <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]}>
         <ActivityIndicator color={colors.accent} />
-        <Text style={[styles.loadingText, { color: colors.muted }]}>Carregando Routify...</Text>
+        <Text style={[styles.loadingText, { color: colors.muted }]}>Carregando TrakFlow...</Text>
       </SafeAreaView>
     );
   }
@@ -891,9 +891,9 @@ export default function App() {
       <ScrollView contentContainerStyle={[styles.scrollContent, { backgroundColor: colors.background }]}>
         <View style={styles.header}>
           <View style={styles.headerBrand}>
-            <RoutifyLogo style={styles.headerLogo} />
+            <TrakFlowLogo style={styles.headerLogo} />
             <View style={styles.headerTextBlock}>
-              <Text style={[styles.kicker, { color: colors.accent }]}>Routify</Text>
+              <Text style={[styles.kicker, { color: colors.accent }]}>TrakFlow</Text>
             <Text style={styles.title}>Olá, {session.user.name}</Text>
               <Text style={[styles.subtitle, { color: colors.muted }]}>
                 Empresa: {session.user.companyId ?? 'Nao vinculada'}
@@ -1045,7 +1045,7 @@ function LoginScreen({
     >
       <View style={[styles.loginCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <View style={styles.mobileLogoWrap}>
-          <RoutifyLogo style={styles.mobileLogo} />
+          <TrakFlowLogo style={styles.mobileLogo} />
           <Pressable
             style={[styles.themeButton, { borderColor: colors.border, backgroundColor: colors.input }]}
             onPress={onToggleTheme}
@@ -1055,7 +1055,7 @@ function LoginScreen({
             </Text>
           </Pressable>
         </View>
-        <Text style={[styles.brand, { color: colors.accent }]}>Routify</Text>
+        <Text style={[styles.brand, { color: colors.accent }]}>TrakFlow</Text>
         <Text style={[styles.loginTitle, { color: colors.text }]}>Acesso do funcionario</Text>
         <Text style={[styles.loginSubtitle, { color: colors.muted }]}>
           Inicie e finalize sua rota de trabalho pelo app.
