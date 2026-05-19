@@ -6,8 +6,8 @@ services:
     branch: main
     autoDeployTrigger: commit
     healthCheckPath: /health
-    # Apenas o build da API — web está hospedada no Vercel separadamente.
-    buildCommand: pnpm install && pnpm build:api
+    # Build da API e Web para validação conforme instrução
+    buildCommand: pnpm install --frozen-lockfile && pnpm build:api && pnpm build:web
     preDeployCommand: pnpm prisma:migrate:deploy
     startCommand: pnpm start:api
     envVars:
