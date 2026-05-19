@@ -28,7 +28,7 @@ export default function MasterCompaniesPage() {
     apiFetch<Company[]>('/master/companies')
       .then(setCompanies)
       .catch((requestError) =>
-        setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar empresas.'),
+        setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar empresas.'),
       )
       .finally(() => setIsLoading(false));
   }
@@ -43,7 +43,7 @@ export default function MasterCompaniesPage() {
       });
       await loadCompanies();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel atualizar a empresa.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível atualizar a empresa.');
     } finally {
       setActionCompanyId(null);
     }
@@ -115,7 +115,7 @@ export default function MasterCompaniesPage() {
                 <th>Telefone</th>
                 <th>Status</th>
                 <th>Limites</th>
-                <th>Acoes</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -131,7 +131,7 @@ export default function MasterCompaniesPage() {
                     <StatusBadge status={company.status} />
                   </td>
                   <td>
-                    {company.maxEmployees} funcionarios / {company.maxVehicles} veiculos
+                    {company.maxEmployees} funcionários / {company.maxVehicles} veículos
                   </td>
                   <td>
                     <div className="table-actions">

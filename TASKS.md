@@ -1,4 +1,4 @@
-﻿# TASKS.md
+# TASKS.md
 
 Roadmap do projeto LocalTrak Rotas / TrakFlow.
 
@@ -14,6 +14,9 @@ Roadmap do projeto LocalTrak Rotas / TrakFlow.
 - [x] Corrigir falha de upload de fotos de odÃ´metro de ponta a ponta (MIME type, base64, tamanho de payload, criaÃ§Ã£o do bucket e RLS no Supabase)
 - [x] Criar tela de ConfiguraÃ§Ãµes Operacionais no web para controlar a obrigatoriedade de odÃ´metro e KM, com validaÃ§Ã£o rÃ­gida no backend
 - [x] Remover senhas de teste fixas da documentaÃ§Ã£o e migrar seed demo para variÃ¡veis de ambiente.
+- [x] Corrigir no backend a representação estruturada de endereço de OS e cliente, retirando lat/lng manuais.
+- [x] Corrigir encoding corrompido no importador/cadastro de clientes.
+- [x] Criar e integrar o componente de preview do mapa GoogleMapPreview na web para o admin na listagem de clientes.
 
 ## 17. Rebranding LocalTrak/Routify â†’ TrakFlow
 
@@ -482,6 +485,14 @@ Legenda:
 - [x] Implementar parser robusto de MIME type base64 via magic bytes signatures (PNG e WebP fallback para JPEG).
 - [x] Desenvolver endpoints GET e PATCH de ConfiguraÃ§Ãµes Operacionais da empresa com isolamento de tenant rÃ­gido.
 - [x] Criar interface web de ConfiguraÃ§Ãµes Operacionais (`/empresa/configuracoes`) com painel reativo e switches elegantes para exigÃªncia de odÃ´metro.
+
+## 19. Refinamento Visual e UX Front-End (Web e Mobile)
+
+- [x] Corrigir gramática, ortografia e pontuação (ABNT) em todo o frontend web e mobile.
+- [x] Ajustar tamanhos, margens e padding interno de todos os botões e cards (Desktop, Tablet e Mobile).
+- [x] Garantir legibilidade e centralização de textos nos botões.
+- [x] Atualizar estilos nativos do app mobile para a paleta correta da marca TrakFlow.
+- [x] Rodar builds obrigatórios locais para validar as modificações (Web e Mobile).
 
 ## Bloqueios Conhecidos
 

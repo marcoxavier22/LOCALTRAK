@@ -11,7 +11,7 @@ export const vehicleTypeLabels: Record<VehicleType, string> = {
 
 export const vehicleOwnershipLabels: Record<VehicleOwnershipType, string> = {
   COMPANY: 'Empresa',
-  EMPLOYEE: 'Funcionario',
+  EMPLOYEE: 'Funcionário',
 };
 
 export const vehicleFuelLabels: Record<VehicleFuelType, string> = {
@@ -26,7 +26,7 @@ export const vehicleFuelLabels: Record<VehicleFuelType, string> = {
 
 export const vehicleStatusLabels: Record<VehicleStatus, string> = {
   ACTIVE: 'Ativo',
-  MAINTENANCE: 'Manutencao',
+  MAINTENANCE: 'Manutenção',
   INACTIVE: 'Inativo',
 };
 

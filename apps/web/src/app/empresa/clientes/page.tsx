@@ -1,12 +1,13 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useMemo, useState, useRef } from 'react';
-import { Building2, Plus, Upload, Trash2, Edit, AlertCircle, CheckCircle2, Search, X } from 'lucide-react';
+import { Building2, Plus, Upload, Trash2, Edit, AlertCircle, CheckCircle2, Search, X, MapPin } from 'lucide-react';
 import { AppShell } from '@/components/AppShell';
 import { EmptyState } from '@/components/EmptyState';
 import { StatusBadge } from '@/components/StatusBadge';
 import { apiFetch } from '@/lib/api';
 import type { Customer, GeocodingStatus } from '@/types';
+import { GoogleMapPreview } from '@/components/GoogleMapPreview';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -14,6 +15,7 @@ export default function CustomersPage() {
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [geocodingFilter, setGeocodingFilter] = useState('ALL');
+  const [mapCustomer, setMapCustomer] = useState<Customer | null>(null);
 
   // Controle de Modal de CRUD
   const [isCrudModalOpen, setIsCrudModalOpen] = useState(false);
@@ -39,7 +41,7 @@ export default function CustomersPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [crudError, setCrudError] = useState('');
 
-  // Controle de Modal de ImportaÃ§Ã£o CSV
+  // Controle de Modal de Importação CSV
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvPreviewRows, setCsvPreviewRows] = useState<any[]>([]);
@@ -59,7 +61,7 @@ export default function CustomersPage() {
       .then(setCustomers)
       .catch((err) => {
         console.error(err);
-        setError('NÃ£o foi possÃ­vel carregar a lista de clientes.');
+        setError('Não foi possível carregar a lista de clientes.');
       })
       .finally(() => setIsLoading(false));
   }
@@ -82,7 +84,7 @@ export default function CustomersPage() {
     });
   }, [customers, search, geocodingFilter]);
 
-  // Abre modal para criaÃ§Ã£o de novo cliente
+  // Abre modal para criação de novo cliente
   function handleOpenCreateModal() {
     setEditingCustomer(null);
     setCrudForm({
@@ -107,7 +109,7 @@ export default function CustomersPage() {
     setIsCrudModalOpen(true);
   }
 
-  // Abre modal para ediÃ§Ã£o de cliente existente
+  // Abre modal para edição de cliente existente
   function handleOpenEditModal(customer: Customer) {
     setEditingCustomer(customer);
     setCrudForm({
@@ -132,7 +134,7 @@ export default function CustomersPage() {
     setIsCrudModalOpen(true);
   }
 
-  // Submete formulÃ¡rio de criaÃ§Ã£o/ediÃ§Ã£o
+  // Submete formulário de criação/edição
   async function handleCrudSubmit(e: React.FormEvent) {
     e.preventDefault();
     const composedAddress = crudForm.address.trim() || [
@@ -145,7 +147,7 @@ export default function CustomersPage() {
     ].filter(Boolean).join(', ');
 
     if (!crudForm.name.trim() || !composedAddress.trim()) {
-      setCrudError('Nome e EndereÃ§o sÃ£o campos obrigatÃ³rios.');
+      setCrudError('Nome e Endereço são campos obrigatórios.');
       return;
     }
 
@@ -191,7 +193,7 @@ export default function CustomersPage() {
     }
   }
 
-  // Exclui cliente com confirmaÃ§Ã£o nativa simples
+  // Exclui cliente com confirmação nativa simples
   async function handleDeleteCustomer(customer: Customer) {
     if (!confirm(`Tem certeza de que deseja remover o cliente ${customer.name}?`)) {
       return;
@@ -207,7 +209,7 @@ export default function CustomersPage() {
     }
   }
 
-  // --- LÃ“GICA DE IMPORTAÃ‡ÃƒO CSV ---
+  // --- LÓGICA DE IMPORTAÃ‡ÃƒO CSV ---
 
   function handleOpenImportModal() {
     setCsvFile(null);
@@ -218,7 +220,7 @@ export default function CustomersPage() {
     setIsImportModalOpen(true);
   }
 
-  // Detecta alteraÃ§Ã£o no input de arquivo CSV
+  // Detecta alteração no input de arquivo CSV
   function handleCsvFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
@@ -251,13 +253,13 @@ export default function CustomersPage() {
         const findHeader = (...terms: string[]) => headers.findIndex((h) => terms.some((term) => h.includes(term)));
 
         const nameIdx = findHeader('nome', 'name');
-        const addressIdx = findHeader('endereco', 'endereço', 'address');
+        const addressIdx = findHeader('endereço', 'endereço', 'address');
         const docIdx = findHeader('documento', 'cnpj', 'cpf', 'document');
         const emailIdx = findHeader('email', 'e-mail');
         const phoneIdx = findHeader('telefone', 'phone', 'tel');
         const cepIdx = findHeader('cep', 'zip', 'postal');
         const streetIdx = findHeader('street', 'logradouro', 'rua');
-        const numberIdx = findHeader('number', 'numero', 'número');
+        const numberIdx = findHeader('number', 'número', 'número');
         const complementIdx = findHeader('complement');
         const neighborhoodIdx = findHeader('bairro', 'neighborhood');
         const cityIdx = findHeader('cidade', 'city');
@@ -323,7 +325,7 @@ export default function CustomersPage() {
 
     reader.readAsText(file, 'UTF-8');
   }
-  // Dispara a importaÃ§Ã£o final para o backend
+  // Dispara a importação final para o backend
   async function handleConfirmImport() {
     const validRows = csvPreviewRows.filter((r) => r.isValid).map((r) => ({
       name: r.name,
@@ -343,7 +345,7 @@ export default function CustomersPage() {
     }));
 
     if (validRows.length === 0) {
-      setImportError('Nenhum registro vÃ¡lido para importar.');
+      setImportError('Nenhum registro válido para importar.');
       return;
     }
 
@@ -364,7 +366,7 @@ export default function CustomersPage() {
       setImportStatus('success');
       loadCustomers();
     } catch (err: any) {
-      setImportError(err.message || 'Erro ao processar a importaÃ§Ã£o em lote.');
+      setImportError(err.message || 'Erro ao processar a importação em lote.');
       setImportStatus('error');
     }
   }
@@ -389,7 +391,7 @@ export default function CustomersPage() {
         <div className="panel-header">
           <div>
             <h2>Cadastro de Clientes</h2>
-            <p>Gerencie seus clientes e localize-os de forma geocodificada automÃ¡tica para criar Ordens de ServiÃ§o.</p>
+            <p>Gerencie seus clientes e localize-os de forma geocodificada automática para criar Ordens de Serviço.</p>
           </div>
           <div className="action-row" style={{ display: 'flex', gap: '8px' }}>
             <button className="button secondary" onClick={handleOpenImportModal}>
@@ -417,7 +419,7 @@ export default function CustomersPage() {
             <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
             <input
               type="text"
-              placeholder="Buscar por nome, documento, e-mail, telefone ou endereÃ§o..."
+              placeholder="Buscar por nome, documento, e-mail, telefone ou endereço..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="form-control"
@@ -426,7 +428,7 @@ export default function CustomersPage() {
           </div>
           <div className="filters-box" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <label className="inline-filter" style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '14px' }}>
-              GeocodificaÃ§Ã£o:
+              Geocodificação:
               <select
                 value={geocodingFilter}
                 onChange={(e) => setGeocodingFilter(e.target.value)}
@@ -450,10 +452,10 @@ export default function CustomersPage() {
                 <th>Nome</th>
                 <th>Documento</th>
                 <th>Contato</th>
-                <th>EndereÃ§o</th>
+                <th>Endereço</th>
                 <th>Coordenadas</th>
-                <th>GeocodificaÃ§Ã£o</th>
-                <th>AÃ§Ãµes</th>
+                <th>Geocodificação</th>
+                <th>AçÃµes</th>
               </tr>
             </thead>
             <tbody>
@@ -478,6 +480,13 @@ export default function CustomersPage() {
                   <td>{renderGeocodingBadge(c.geocodingStatus)}</td>
                   <td>
                     <div style={{ display: 'flex', gap: '8px' }}>
+                      <button
+                        className="button secondary small"
+                        title="Ver no Mapa"
+                        onClick={() => setMapCustomer(c)}
+                      >
+                        <MapPin size={14} />
+                      </button>
                       <button className="button secondary small" onClick={() => handleOpenEditModal(c)}>
                         <Edit size={14} />
                       </button>
@@ -506,7 +515,7 @@ export default function CustomersPage() {
             title={customers.length === 0 ? 'Nenhum cliente cadastrado' : 'Nenhum cliente encontrado'}
             description={
               customers.length === 0
-                ? 'Cadastre ou importe seus clientes para associar automaticamente endereÃ§os Ã s suas ordens de serviÃ§o.'
+                ? 'Cadastre ou importe seus clientes para associar automaticamente endereços às suas ordens de serviço.'
                 : 'Ajuste a busca ou os filtros para visualizar outros registros.'
             }
           />
@@ -574,13 +583,13 @@ export default function CustomersPage() {
               </div>
 
               <label>
-                EndereÃ§o Completo (Rua, NÃºmero, Bairro, Cidade, Estado) *
+                Endereço Completo (Rua, Número, Bairro, Cidade, Estado) *
                 <input
                   type="text"
                   required
                   value={crudForm.address}
                   onChange={(e) => setCrudForm({ ...crudForm, address: e.target.value })}
-                  placeholder="Ex: Av. Paulista, 1000 - Bela Vista, SÃ£o Paulo - SP"
+                  placeholder="Ex: Av. Paulista, 1000 - Bela Vista, São Paulo - SP"
                   className="form-control"
                   style={{ width: '100%' }}
                 />
@@ -608,7 +617,7 @@ export default function CustomersPage() {
                   />
                 </label>
                 <label>
-                  Numero
+                  Número
                   <input
                     type="text"
                     value={crudForm.number}
@@ -671,7 +680,7 @@ export default function CustomersPage() {
 
               <div style={{ display: 'none' }}>
                 <span style={{ fontSize: '12px', color: '#64748b', display: 'block', marginBottom: '8px' }}>
-                  <strong>AvanÃ§ado (Opcional):</strong> Insira coordenadas manuais para pular a geocodificaÃ§Ã£o automÃ¡tica.
+                  <strong>Avançado (Opcional):</strong> Insira coordenadas manuais para pular a geocodificação automática.
                 </span>
                 <div style={{ display: 'flex', gap: '12px' }}>
                   <label style={{ flex: 1, fontSize: '12px' }}>
@@ -725,7 +734,7 @@ export default function CustomersPage() {
 
             {importError ? <div className="form-message error" style={{ marginBottom: '16px' }}>{importError}</div> : null}
 
-            {/* Passo 1: SeleÃ§Ã£o de Arquivo */}
+            {/* Passo 1: Seleção de Arquivo */}
             {importStatus === 'idle' && (
               <div
                 onClick={() => fileInputRef.current?.click()}
@@ -734,7 +743,7 @@ export default function CustomersPage() {
                 <Upload size={40} style={{ color: '#6d28d9', margin: '0 auto 12px' }} />
                 <strong>Clique ou arraste um arquivo CSV</strong>
                 <p style={{ color: '#64748b', fontSize: '13px', marginTop: '8px' }}>
-                  O arquivo deve conter cabeÃ§alhos como: <em>Nome, EndereÃ§o, Documento, Email, Telefone</em>.
+                  O arquivo deve conter cabeçalhos como: <em>Nome, Endereço, Documento, Email, Telefone</em>.
                 </p>
                 <input
                   type="file"
@@ -754,19 +763,19 @@ export default function CustomersPage() {
               </div>
             )}
 
-            {/* Passo 2: Preview da tabela de dados e validaÃ§Ã£o */}
+            {/* Passo 2: Preview da tabela de dados e validação */}
             {importStatus === 'preview' && (
               <div>
                 <span style={{ fontSize: '13px', color: '#64748b', display: 'block', marginBottom: '12px' }}>
-                  Abaixo estÃ¡ uma prÃ©via de validaÃ§Ã£o dos clientes identificados no seu arquivo. Linhas invÃ¡lidas (sem nome ou endereÃ§o) serÃ£o ignoradas.
+                  Abaixo está uma prévia de validação dos clientes identificados no seu arquivo. Linhas inválidas (sem nome ou endereço) serão ignoradas.
                 </span>
                 <div style={{ maxHeight: '250px', overflowY: 'auto', border: '1px solid #cbd5e1', borderRadius: '6px', marginBottom: '20px' }}>
                   <table style={{ width: '100%', fontSize: '13px' }}>
                     <thead style={{ background: '#f8fafc', position: 'sticky', top: 0 }}>
                       <tr>
                         <th style={{ padding: '8px' }}>Nome</th>
-                        <th style={{ padding: '8px' }}>EndereÃ§o</th>
-                        <th style={{ padding: '8px' }}>ValidaÃ§Ã£o</th>
+                        <th style={{ padding: '8px' }}>Endereço</th>
+                        <th style={{ padding: '8px' }}>Validação</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -778,7 +787,7 @@ export default function CustomersPage() {
                             {row.isValid ? (
                               <CheckCircle2 size={16} style={{ color: '#10b981', margin: '0 auto' }} />
                             ) : (
-                              <span title="Nome e EndereÃ§o sÃ£o obrigatÃ³rios" style={{ display: 'inline-block' }}>
+                              <span title="Nome e Endereço são obrigatórios" style={{ display: 'inline-block' }}>
                                 <AlertCircle size={16} style={{ color: '#ef4444', margin: '0 auto' }} />
                               </span>
                             )}
@@ -791,14 +800,14 @@ export default function CustomersPage() {
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontSize: '13px', fontWeight: 'bold' }}>
-                    Total identificado: {csvPreviewRows.length} | VÃ¡lidos: {csvPreviewRows.filter(r => r.isValid).length}
+                    Total identificado: {csvPreviewRows.length} | Válidos: {csvPreviewRows.filter(r => r.isValid).length}
                   </span>
                   <div style={{ display: 'flex', gap: '12px' }}>
                     <button className="button secondary" onClick={() => setImportStatus('idle')}>
                       Trocar Arquivo
                     </button>
                     <button className="button primary" onClick={handleConfirmImport}>
-                      Confirmar ImportaÃ§Ã£o
+                      Confirmar Importação
                     </button>
                   </div>
                 </div>
@@ -809,16 +818,16 @@ export default function CustomersPage() {
             {importStatus === 'uploading' && (
               <div style={{ textAlign: 'center', padding: '40px 20px' }}>
                 <span className="loading-dot" style={{ margin: '0 auto 12px' }} />
-                <p>Processando importaÃ§Ã£o em lote e geocodificando endereÃ§os...</p>
-                <span style={{ fontSize: '12px', color: '#64748b' }}>Isso pode levar de alguns segundos a minutos dependendo do nÃºmero de registros.</span>
+                <p>Processando importação em lote e geocodificando endereços...</p>
+                <span style={{ fontSize: '12px', color: '#64748b' }}>Isso pode levar de alguns segundos a minutos dependendo do número de registros.</span>
               </div>
             )}
 
-            {/* Passo 4: Sucesso da ImportaÃ§Ã£o */}
+            {/* Passo 4: Sucesso da Importação */}
             {importStatus === 'success' && importResult && (
               <div style={{ textAlign: 'center', padding: '30px 20px' }}>
                 <CheckCircle2 size={50} style={{ color: '#10b981', margin: '0 auto 16px' }} />
-                <h4>ImportaÃ§Ã£o concluÃ­da com sucesso!</h4>
+                <h4>Importação concluída com sucesso!</h4>
                 <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', margin: '20px 0', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
                   <div>
                     <span style={{ display: 'block', fontSize: '24px', fontWeight: 'bold', color: '#1e293b' }}>{importResult.total}</span>
@@ -838,6 +847,36 @@ export default function CustomersPage() {
                 </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE PREVIEW DO MAPA */}
+      {mapCustomer && (
+        <div className="modal-backdrop" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className="modal-content" style={{ background: 'var(--bg-card, #ffffff)', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '550px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3>Localização de {mapCustomer.name}</h3>
+              <button onClick={() => setMapCustomer(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <X size={20} />
+              </button>
+            </div>
+            <div style={{ marginBottom: '16px', fontSize: '14px', color: '#64748b' }}>
+              <strong>Endereço: </strong>{mapCustomer.address}
+            </div>
+            <div style={{ minHeight: '300px', borderRadius: '8px', overflow: 'hidden' }}>
+              <GoogleMapPreview
+                latitude={mapCustomer.latitude}
+                longitude={mapCustomer.longitude}
+                address={mapCustomer.address}
+                title={`Mapa - ${mapCustomer.name}`}
+              />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
+              <button className="button secondary" onClick={() => setMapCustomer(null)}>
+                Fechar
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -38,15 +38,15 @@ const masterLinks = [
 
 const companyLinks = [
   { href: '/empresa/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/empresa/funcionarios', label: 'Funcionarios', icon: Users },
+  { href: '/empresa/funcionários', label: 'Funcionários', icon: Users },
   { href: '/empresa/clientes', label: 'Clientes', icon: Building2 },
-  { href: '/empresa/veiculos', label: 'Veiculos', icon: Car },
+  { href: '/empresa/veículos', label: 'Veículos', icon: Car },
   { href: '/empresa/rotas', label: 'Rotas', icon: Route },
-  { href: '/empresa/ordens', label: 'Ordens de Servico', icon: ClipboardList },
-  { href: '/empresa/manutencao', label: 'Manutencao', icon: Wrench },
-  { href: '/empresa/combustivel', label: 'Combustivel', icon: Fuel },
+  { href: '/empresa/ordens', label: 'Ordens de Serviço', icon: ClipboardList },
+  { href: '/empresa/manutenção', label: 'Manutenção', icon: Wrench },
+  { href: '/empresa/combustível', label: 'Combustível', icon: Fuel },
   { href: '/empresa/reembolsos', label: 'Reembolsos', icon: Receipt },
-  { href: '/empresa/configuracoes', label: 'Configurações', icon: Settings },
+  { href: '/empresa/configurações', label: 'Configurações', icon: Settings },
 ];
 
 export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellProps) {
@@ -62,7 +62,7 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
     let isMounted = true;
     const fallbackTimer = window.setTimeout(() => {
       if (isMounted) {
-        setMessage('Nao foi possivel validar a sessao. Entre novamente.');
+        setMessage('Não foi possível validar a sessao. Entre novamente.');
         setStatus('error');
       }
     }, 4000);
@@ -117,7 +117,7 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
       ? 'Admin Master'
       : user?.role === 'COMPANY_ADMIN'
         ? 'Admin da empresa'
-        : 'Funcionario';
+        : 'Funcionário';
 
   function handleLogout() {
     logout();
@@ -150,8 +150,8 @@ export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellPro
   if (status === 'denied') {
     const deniedMessage =
       user?.role === 'EMPLOYEE'
-        ? 'Funcionarios acessam pelo aplicativo mobile.'
-        : 'Este usuario nao tem permissao para acessar esta area.';
+        ? 'Funcionários acessam pelo aplicativo mobile.'
+        : 'Este usuário não tem permissao para acessar esta area.';
 
     return (
       <main className="center-screen">

@@ -52,7 +52,7 @@ export default function NewCompanyPage() {
       });
       router.push('/master/empresas');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel criar a empresa.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível criar a empresa.');
     } finally {
       setIsSubmitting(false);
     }
@@ -100,11 +100,11 @@ export default function NewCompanyPage() {
 
           <div className="field-row">
             <label>
-              Limite de funcionarios
+              Limite de funcionários
               <input defaultValue={20} min={1} name="maxEmployees" required type="number" />
             </label>
             <label>
-              Limite de veiculos
+              Limite de veículos
               <input defaultValue={15} min={1} name="maxVehicles" required type="number" />
             </label>
           </div>
@@ -113,7 +113,7 @@ export default function NewCompanyPage() {
         <div className="form-section">
           <div className="section-title">
             <h2>Primeiro administrador</h2>
-            <p>Usuario que vai gerenciar a empresa e cadastrar a equipe.</p>
+            <p>Usuário que vai gerenciar a empresa e cadastrar a equipe.</p>
           </div>
 
           <label>

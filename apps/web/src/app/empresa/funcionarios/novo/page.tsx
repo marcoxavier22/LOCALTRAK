@@ -30,21 +30,21 @@ export default function NewEmployeePage() {
         method: 'POST',
         body: toJsonBody(payload),
       });
-      router.push('/empresa/funcionarios');
+      router.push('/empresa/funcionários');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel criar o funcionario.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível criar o funcionário.');
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Novo funcionario">
+    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Novo funcionário">
       <form className="panel form-grid compact" onSubmit={handleSubmit}>
         <div className="form-section">
           <div className="section-title">
             <h2>Dados de acesso</h2>
-            <p>O funcionario usara estas credenciais no aplicativo mobile.</p>
+            <p>O funcionário usara estas credenciais no aplicativo mobile.</p>
           </div>
 
           <label>
@@ -71,11 +71,11 @@ export default function NewEmployeePage() {
         {error ? <div className="form-message error">{error}</div> : null}
 
         <div className="form-actions">
-          <button className="button secondary" onClick={() => router.push('/empresa/funcionarios')} type="button">
+          <button className="button secondary" onClick={() => router.push('/empresa/funcionários')} type="button">
             Cancelar
           </button>
           <button className="button primary" disabled={isSubmitting} type="submit">
-            {isSubmitting ? 'Criando...' : 'Criar funcionario'}
+            {isSubmitting ? 'Criando...' : 'Criar funcionário'}
           </button>
         </div>
       </form>

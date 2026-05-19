@@ -29,7 +29,7 @@ export default function LoginPage() {
 
       if (session.user.role === 'EMPLOYEE') {
         logout();
-        setError('Funcionarios acessam pelo aplicativo mobile.');
+        setError('Funcionários acessam pelo aplicativo mobile.');
         return;
       }
 
@@ -42,7 +42,7 @@ export default function LoginPage() {
 
       router.replace('/empresa/dashboard');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel entrar.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível entrar.');
     } finally {
       setIsSubmitting(false);
     }

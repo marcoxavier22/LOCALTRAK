@@ -140,7 +140,7 @@ export function RouteMap({
         {startPosition ? (
           <CircleMarker center={startPosition} pathOptions={{ color: '#315f9f', fillColor: '#315f9f', fillOpacity: 0.9 }} radius={8}>
             <Popup>
-              <strong>Inicio</strong>
+              <strong>Início</strong>
               <br />
               {formatPointTime(startPoint ?? points[0])}
             </Popup>
@@ -169,7 +169,7 @@ export function RouteMap({
             <Popup>
               <strong>{point.label ?? `Parada ${index + 1}`}</strong>
               <br />
-              {point.status ? `Status: ${point.status}` : 'Endereco planejado'}
+              {point.status ? `Status: ${point.status}` : 'Endereço planejado'}
             </Popup>
           </CircleMarker>
         ))}

@@ -59,7 +59,7 @@ export default function CompanyRouteDetailPage() {
         const nextRoute = await apiFetch<RouteDetail>(`/routes/${params.id}/live`);
         setRoute(nextRoute);
       } catch (requestError) {
-        setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar a rota.');
+        setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar a rota.');
       } finally {
         setIsLoading(false);
         setIsRefreshing(false);
@@ -153,7 +153,7 @@ export default function CompanyRouteDetailPage() {
             <div className="panel">
               <div className="panel-header">
                 <div>
-                  <h2>Funcionario</h2>
+                  <h2>Funcionário</h2>
                   <p>Dados do responsavel pela rota.</p>
                 </div>
               </div>
@@ -172,8 +172,8 @@ export default function CompanyRouteDetailPage() {
             <div className="panel">
               <div className="panel-header">
                 <div>
-                  <h2>Veiculo</h2>
-                  <p>Veiculo usado durante o turno.</p>
+                  <h2>Veículo</h2>
+                  <p>Veículo usado durante o turno.</p>
                 </div>
               </div>
               <div className="details-list">
@@ -192,12 +192,12 @@ export default function CompanyRouteDetailPage() {
               <div className="panel-header">
                 <div>
                   <h2>Periodo</h2>
-                  <p>Inicio, fim e ultima atualizacao recebida.</p>
+                  <p>Início, fim e ultima atualizacao recebida.</p>
                 </div>
               </div>
               <div className="details-list">
                 <div>
-                  <span>Inicio</span>
+                  <span>Início</span>
                   <strong>{formatDateTime(route.startedAt)}</strong>
                 </div>
                 <div>
@@ -220,7 +220,7 @@ export default function CompanyRouteDetailPage() {
               </div>
               <div className="details-list">
                 <div>
-                  <span>Inicio</span>
+                  <span>Início</span>
                   <strong>
                     {route.startPoint
                       ? `${formatCoordinate(route.startPoint.latitude)}, ${formatCoordinate(route.startPoint.longitude)}`

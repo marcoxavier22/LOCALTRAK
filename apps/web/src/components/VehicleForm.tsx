@@ -108,7 +108,7 @@ export function VehicleForm({
       <div className="form-section">
         <div className="section-title">
           <h2>Identificacao</h2>
-          <p>Dados principais usados para controle da frota e vinculo com funcionarios.</p>
+          <p>Dados principais usados para controle da frota e vinculo com funcionários.</p>
         </div>
 
         <div className="field-row">
@@ -200,7 +200,7 @@ export function VehicleForm({
       <div className="form-section">
         <div className="section-title">
           <h2>Uso e vinculo</h2>
-          <p>Defina se o veiculo e da empresa ou particular e associe um funcionario quando fizer sentido.</p>
+          <p>Defina se o veículo e da empresa ou particular e associe um funcionário quando fizer sentido.</p>
         </div>
 
         <div className="field-row">
@@ -225,7 +225,7 @@ export function VehicleForm({
           </label>
 
           <label>
-            Funcionario vinculado
+            Funcionário vinculado
             <select
               name="employeeId"
               onChange={(event) => setForm((current) => ({ ...current, employeeId: event.target.value }))}
@@ -245,7 +245,7 @@ export function VehicleForm({
       <div className="form-section">
         <div className="section-title">
           <h2>Quilometragem e custos</h2>
-          <p>Estes dados alimentam estimativas de consumo, reembolso e manutencao futura.</p>
+          <p>Estes dados alimentam estimativas de consumo, reembolso e manutenção futura.</p>
         </div>
 
         <div className="field-row">
@@ -263,7 +263,7 @@ export function VehicleForm({
           </label>
 
           <label>
-            Combustivel
+            Combustível
             <select
               name="fuelType"
               onChange={(event) =>
@@ -271,7 +271,7 @@ export function VehicleForm({
               }
               value={form.fuelType}
             >
-              <option value="">Nao informado</option>
+              <option value="">Não informado</option>
               {fuelTypes.map((fuelType) => (
                 <option key={fuelType} value={fuelType}>
                   {vehicleFuelLabels[fuelType]}

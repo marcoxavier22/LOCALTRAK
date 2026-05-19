@@ -28,7 +28,7 @@ export default function EmployeesPage() {
     apiFetch<Employee[]>('/company/employees')
       .then(setEmployees)
       .catch((requestError) =>
-        setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar funcionarios.'),
+        setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar funcionários.'),
       )
       .finally(() => setIsLoading(false));
   }
@@ -44,7 +44,7 @@ export default function EmployeesPage() {
       });
       await loadEmployees();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel atualizar o funcionario.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível atualizar o funcionário.');
     } finally {
       setActionEmployeeId(null);
     }
@@ -70,16 +70,16 @@ export default function EmployeesPage() {
   }, [employees, search, statusFilter]);
 
   return (
-    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Funcionarios">
+    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Funcionários">
       <section className="panel">
         <div className="panel-header">
           <div>
             <h2>Equipe externa</h2>
-            <p>Usuarios que acessam o aplicativo mobile para registrar turnos e rotas.</p>
+            <p>Usuários que acessam o aplicativo mobile para registrar turnos e rotas.</p>
           </div>
-          <Link className="button primary" href="/empresa/funcionarios/novo">
+          <Link className="button primary" href="/empresa/funcionários/novo">
             <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
-            Novo funcionario
+            Novo funcionário
           </Link>
         </div>
 
@@ -87,7 +87,7 @@ export default function EmployeesPage() {
         {isLoading ? (
           <div className="loading-row">
             <span className="loading-dot" />
-            Carregando funcionarios...
+            Carregando funcionários...
           </div>
         ) : null}
 
@@ -114,7 +114,7 @@ export default function EmployeesPage() {
                 <th>E-mail</th>
                 <th>Telefone</th>
                 <th>Status</th>
-                <th>Acoes</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -130,7 +130,7 @@ export default function EmployeesPage() {
                   </td>
                   <td>
                     <div className="table-actions">
-                      <Link className="button secondary small" href={`/empresa/funcionarios/${employee.id}`}>
+                      <Link className="button secondary small" href={`/empresa/funcionários/${employee.id}`}>
                         Editar
                       </Link>
                       <button
@@ -153,18 +153,18 @@ export default function EmployeesPage() {
           <EmptyState
             action={
               employees.length === 0 ? (
-                <Link className="button primary" href="/empresa/funcionarios/novo">
+                <Link className="button primary" href="/empresa/funcionários/novo">
                   <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
-                  Novo funcionario
+                  Novo funcionário
                 </Link>
               ) : undefined
             }
             icon={Users}
-            title={employees.length === 0 ? 'Nenhum funcionario cadastrado' : 'Nenhum funcionario encontrado'}
+            title={employees.length === 0 ? 'Nenhum funcionário cadastrado' : 'Nenhum funcionário encontrado'}
             description={
               employees.length === 0
                 ? 'Cadastre tecnicos, motoristas ou entregadores para usar o aplicativo mobile.'
-                : 'Ajuste a busca ou o filtro de status para visualizar outros funcionarios.'
+                : 'Ajuste a busca ou o filtro de status para visualizar outros funcionários.'
             }
           />
         ) : null}

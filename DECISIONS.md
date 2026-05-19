@@ -218,6 +218,20 @@ Decisão: Validar o formato das imagens de odômetro enviadas em Base64 utilizan
 
 Justificativa: Aumenta a segurança e a resiliência contra ataques de upload de arquivos maliciosos ou formatação incorreta do app mobile. O backend analisa os primeiros caracteres da string base64 limpa buscando assinaturas conhecidas (`iVBORw0KGgo` para PNG, `UklGR` para WebP) antes de decodificar o buffer físico.
 
+### Remoção de Coordenadas Manuais (Lat/Lng) e Centralização em Geocodificação Automática
+
+Data: 2026-05-18
+
+Decisão: Remover os campos manuais de `latitude` e `longitude` dos DTOs de entrada do backend para criação/edição de clientes (`CreateCustomerDto`) e paradas de ordens de serviço (`ServiceOrderStopDto`).
+
+Justificativa: Garante que todas as paradas e clientes sejam geolocalizados de forma 100% confiável através do `GeocodingService` no backend ou pela herança de coordenadas do cliente correspondente, removendo a necessidade de entrada de dados manuais técnicos nas telas de formulário do admin e padronizando o isolamento do cálculo de rotas.
+
+### Resiliência de Codificação UTF-8 e ABNT em Interfaces Administrativas
+
+Data: 2026-05-18
+
+Decisão: Sanear e garantir a conformidade UTF-8 em todos os textos da interface administrativa (Next.js), removendo corrupções de encoding herdadas (por exemplo, `Ã£` para `ã`, `Ã§` para `ç`) e revisando as telas de combustíveis, reembolsos e clientes de acordo com as regras ortográficas da ABNT.
+
 ## Decisoes Pendentes
 
 - Definir estrategia final de migrations para ambientes dev/staging/producao.

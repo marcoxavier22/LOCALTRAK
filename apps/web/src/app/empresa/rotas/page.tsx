@@ -108,7 +108,7 @@ export default function CompanyRoutesPage() {
         return activeRoute?.id ?? null;
       });
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar rotas.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar rotas.');
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
@@ -139,7 +139,7 @@ export default function CompanyRoutesPage() {
         }
       } catch (requestError) {
         if (!cancelled) {
-          setLiveError(requestError instanceof Error ? requestError.message : 'Nao foi possivel atualizar a rota ao vivo.');
+          setLiveError(requestError instanceof Error ? requestError.message : 'Não foi possível atualizar a rota ao vivo.');
         }
       }
     }
@@ -190,7 +190,7 @@ export default function CompanyRoutesPage() {
     <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Rotas">
       <section className="metrics-grid">
         <MetricCard icon={Radio} label="Rotas ao vivo" value={activeRoutes.length} detail="turnos em andamento" tone="green" />
-        <MetricCard icon={Route} label="Rotas finalizadas" value={finishedRoutes.length} detail="historico carregado" />
+        <MetricCard icon={Route} label="Rotas finalizadas" value={finishedRoutes.length} detail="histórico carregado" />
         <MetricCard icon={CalendarDays} label="Rotas listadas" value={routes.length} detail="ultimas 200 jornadas" tone="amber" />
         <MetricCard icon={Activity} label="Atualizacao" value={isRefreshing ? 'Sincronizando' : '5s'} detail="rota selecionada ao vivo" />
       </section>
@@ -215,7 +215,7 @@ export default function CompanyRoutesPage() {
               <EmptyState
                 icon={MapPinned}
                 title="Nenhuma rota em andamento"
-                description="Quando um funcionario iniciar turno pelo app, ele aparecera nesta area em tempo real."
+                description="Quando um funcionário iniciar turno pelo app, ele aparecera nesta area em tempo real."
               />
             ) : (
               activeRoutes.map((route) => (
@@ -226,7 +226,7 @@ export default function CompanyRoutesPage() {
                   type="button"
                 >
                   <span>
-                    <strong>{route.employee?.name ?? 'Funcionario'}</strong>
+                    <strong>{route.employee?.name ?? 'Funcionário'}</strong>
                     <small>{formatVehicleName(route.vehicle)}</small>
                   </span>
                   <StatusBadge
@@ -253,7 +253,7 @@ export default function CompanyRoutesPage() {
             {selectedLiveSummary ? (
               <div className="route-live-summary">
                 <div>
-                  <span>Funcionario</span>
+                  <span>Funcionário</span>
                   <strong>{selectedLiveSummary.employee.name}</strong>
                 </div>
                 <div>
@@ -277,8 +277,8 @@ export default function CompanyRoutesPage() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>Historico de rotas</h2>
-            <p>Jornadas registradas pelos funcionarios, com filtros por funcionario, data e veiculo.</p>
+            <h2>Histórico de rotas</h2>
+            <p>Jornadas registradas pelos funcionários, com filtros por funcionário, data e veículo.</p>
           </div>
         </div>
 
@@ -292,7 +292,7 @@ export default function CompanyRoutesPage() {
 
         <TableToolbar
           onSearchChange={setSearch}
-          placeholder="Buscar por funcionario, e-mail ou veiculo"
+          placeholder="Buscar por funcionário, e-mail ou veículo"
           search={search}
         >
           <label className="inline-filter">
@@ -306,7 +306,7 @@ export default function CompanyRoutesPage() {
             </select>
           </label>
           <label className="inline-filter">
-            Funcionario
+            Funcionário
             <select onChange={(event) => setEmployeeFilter(event.target.value)} value={employeeFilter}>
               <option value="ALL">Todos</option>
               {employees.map((employee) => (
@@ -317,7 +317,7 @@ export default function CompanyRoutesPage() {
             </select>
           </label>
           <label className="inline-filter">
-            Veiculo
+            Veículo
             <select onChange={(event) => setVehicleFilter(event.target.value)} value={vehicleFilter}>
               <option value="ALL">Todos</option>
               {vehicles.map((vehicle) => (
@@ -332,7 +332,7 @@ export default function CompanyRoutesPage() {
             <input onChange={(event) => setStartDate(event.target.value)} type="date" value={startDate} />
           </label>
           <label className="inline-filter compact-filter">
-            Ate
+            Até
             <input onChange={(event) => setEndDate(event.target.value)} type="date" value={endDate} />
           </label>
         </TableToolbar>
@@ -341,22 +341,22 @@ export default function CompanyRoutesPage() {
           <table>
             <thead>
               <tr>
-                <th>Funcionario</th>
-                <th>Veiculo</th>
-                <th>Inicio</th>
+                <th>Funcionário</th>
+                <th>Veículo</th>
+                <th>Início</th>
                 <th>Fim</th>
                 <th>Duracao</th>
                 <th>Km</th>
                 <th>Status</th>
                 <th>Pontos</th>
-                <th>Acoes</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
               {filteredRoutes.map((route) => (
                 <tr key={route.id}>
                   <td>
-                    <strong>{route.employee?.name ?? 'Funcionario'}</strong>
+                    <strong>{route.employee?.name ?? 'Funcionário'}</strong>
                     <span>{route.employee?.email ?? '-'}</span>
                   </td>
                   <td>{formatVehicleName(route.vehicle)}</td>

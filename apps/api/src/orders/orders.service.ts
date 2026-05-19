@@ -513,11 +513,11 @@ export class OrdersService {
       throw new BadRequestException('Informe o endereco da parada da OS.');
     }
 
-    let latitude = stop.latitude ?? (customer?.latitude == null ? undefined : Number(customer.latitude));
-    let longitude = stop.longitude ?? (customer?.longitude == null ? undefined : Number(customer.longitude));
+    let latitude = customer?.latitude == null ? undefined : Number(customer.latitude);
+    let longitude = customer?.longitude == null ? undefined : Number(customer.longitude);
     let geocodingStatus: GeocodingStatus =
       latitude !== undefined && longitude !== undefined
-        ? customer?.geocodingStatus ?? GeocodingStatus.MANUAL
+        ? customer?.geocodingStatus ?? GeocodingStatus.RESOLVED
         : GeocodingStatus.PENDING;
     let geocodingUpdatedAt = customer?.geocodingUpdatedAt ?? null;
 

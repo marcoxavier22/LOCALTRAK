@@ -69,7 +69,7 @@ export default function CompanyOrderDetailPage() {
       const loadedTracking = await apiFetch<ServiceOrderTracking>(`/orders/${params.id}/tracking`);
       setTracking(loadedTracking);
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar a OS.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar a OS.');
     } finally {
       setIsLoading(false);
     }
@@ -128,9 +128,9 @@ export default function CompanyOrderDetailPage() {
       });
 
       setOrder(updated);
-      setSuccess('Ordem de servico atualizada.');
+      setSuccess('Ordem de serviço atualizada.');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel atualizar a OS.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível atualizar a OS.');
     } finally {
       setIsSaving(false);
     }
@@ -141,8 +141,8 @@ export default function CompanyOrderDetailPage() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>{order?.title ?? 'Ordem de servico'}</h2>
-            <p>{order ? `${formatDateTime(order.scheduledDate)} - ${order.employee?.name ?? 'sem funcionario'}` : 'Carregando dados da ordem.'}</p>
+            <h2>{order?.title ?? 'Ordem de serviço'}</h2>
+            <p>{order ? `${formatDateTime(order.scheduledDate)} - ${order.employee?.name ?? 'sem funcionário'}` : 'Carregando dados da ordem.'}</p>
           </div>
           <div className="table-actions">
             <button className="button secondary" onClick={() => void loadOrder()} type="button">
@@ -162,8 +162,8 @@ export default function CompanyOrderDetailPage() {
         <>
           <section className="metrics-grid">
             <MetricCard icon={ClipboardList} label="Status" value={orderStatusLabels[order.status]} detail="situacao operacional" />
-            <MetricCard icon={CheckCircle2} label="Paradas" value={`${completedStops}/${order.stops.length}`} detail="enderecos concluidos" tone="green" />
-            <MetricCard icon={Gauge} label="KM odometro" value={formatKm(order.odometerDistanceKm)} detail="km final - km inicial" tone="amber" />
+            <MetricCard icon={CheckCircle2} label="Paradas" value={`${completedStops}/${order.stops.length}`} detail="endereços concluidos" tone="green" />
+            <MetricCard icon={Gauge} label="KM odômetro" value={formatKm(order.odometerDistanceKm)} detail="km final - km inicial" tone="amber" />
             <MetricCard icon={CalendarDays} label="GPS" value={formatKm(tracking?.liveDistanceKm ?? order.routeShift?.totalDistanceKm ?? 0)} detail={`${tracking?.pointsCount ?? order.routeShift?._count?.points ?? 0} pontos recebidos`} />
           </section>
 
@@ -184,7 +184,7 @@ export default function CompanyOrderDetailPage() {
                 </label>
                 <div className="field-row">
                   <label>
-                    Funcionario
+                    Funcionário
                     <select defaultValue={order.employeeId ?? ''} name="employeeId">
                       <option value="">Sem atribuicao</option>
                       {employees.map((employee) => (
@@ -195,9 +195,9 @@ export default function CompanyOrderDetailPage() {
                     </select>
                   </label>
                   <label>
-                    Veiculo
+                    Veículo
                     <select defaultValue={order.vehicleId ?? ''} name="vehicleId">
-                      <option value="">Sem veiculo</option>
+                      <option value="">Sem veículo</option>
                       {vehicles.map((vehicle) => (
                         <option key={vehicle.id} value={vehicle.id}>
                           {vehicle.plate} - {vehicle.brand} {vehicle.model}
@@ -238,8 +238,8 @@ export default function CompanyOrderDetailPage() {
             <section className="panel">
               <div className="panel-header">
                 <div>
-                  <h2>Odometro</h2>
-                  <p>Fotos registradas pelo funcionario no app mobile.</p>
+                  <h2>Odômetro</h2>
+                  <p>Fotos registradas pelo funcionário no app mobile.</p>
                 </div>
               </div>
               <div className="details-list">
@@ -252,7 +252,7 @@ export default function CompanyOrderDetailPage() {
                   <strong>{formatOdometer(order.finalOdometerKm)}</strong>
                 </div>
                 <div>
-                  <span>Inicio/Fim</span>
+                  <span>Início/Fim</span>
                   <strong>
                     {formatDateTime(order.startedAt)} - {formatDateTime(order.finishedAt)}
                   </strong>
@@ -269,7 +269,7 @@ export default function CompanyOrderDetailPage() {
             <div className="panel-header">
               <div>
                 <h2>Roteiro planejado</h2>
-                <p>{tracking?.points?.length ? 'Trajeto real recebido pelo app mobile.' : 'Enderecos da OS em ordem de visita. Pontos com coordenadas aparecem no mapa.'}</p>
+                <p>{tracking?.points?.length ? 'Trajeto real recebido pelo app mobile.' : 'Endereços da OS em ordem de visita. Pontos com coordenadas aparecem no mapa.'}</p>
               </div>
               <StatusBadge status={order.status} label={orderStatusLabels[order.status]} />
             </div>
@@ -301,7 +301,7 @@ export default function CompanyOrderDetailPage() {
           <section className="panel">
             <div className="panel-header">
               <div>
-                <h2>Enderecos e visitas</h2>
+                <h2>Endereços e visitas</h2>
                 <p>Controle de pontos de atendimento da OS.</p>
               </div>
             </div>
@@ -318,7 +318,7 @@ export default function CompanyOrderDetailPage() {
                     <span>{stop.address}</span>
                     <small>
                       <StatusBadge status={stop.status} label={orderStopStatusLabels[stop.status]} />{' '}
-                      {stop.completedAt ? `concluido em ${formatDateTime(stop.completedAt)}` : ''}
+                      {stop.completedAt ? `concluído em ${formatDateTime(stop.completedAt)}` : ''}
                     </small>
                   </div>
                 </article>

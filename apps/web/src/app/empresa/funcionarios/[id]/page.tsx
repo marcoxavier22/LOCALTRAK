@@ -43,7 +43,7 @@ export default function EditEmployeePage() {
         const selectedEmployee = employees.find((item) => item.id === params.id);
 
         if (!selectedEmployee) {
-          setError('Funcionario nao encontrado nesta empresa.');
+          setError('Funcionário não encontrado nesta empresa.');
           return;
         }
 
@@ -55,7 +55,7 @@ export default function EditEmployeePage() {
         });
       })
       .catch((requestError) =>
-        setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar o funcionario.'),
+        setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar o funcionário.'),
       )
       .finally(() => setIsLoading(false));
   }
@@ -84,9 +84,9 @@ export default function EditEmployeePage() {
         phone: updatedEmployee.phone ?? '',
         isActive: updatedEmployee.isActive ?? true,
       });
-      setSuccess('Funcionario atualizado com sucesso.');
+      setSuccess('Funcionário atualizado com sucesso.');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel salvar o funcionario.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível salvar o funcionário.');
     } finally {
       setIsSaving(false);
     }
@@ -109,28 +109,28 @@ export default function EditEmployeePage() {
 
       setEmployee(updatedEmployee);
       setForm((current) => ({ ...current, isActive: updatedEmployee.isActive ?? true }));
-      setSuccess((updatedEmployee.isActive ?? true) ? 'Funcionario ativado.' : 'Funcionario desativado.');
+      setSuccess((updatedEmployee.isActive ?? true) ? 'Funcionário ativado.' : 'Funcionário desativado.');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel atualizar o status.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível atualizar o status.');
     } finally {
       setIsSaving(false);
     }
   }
 
   return (
-    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Editar funcionario">
+    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Editar funcionário">
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>{employee?.name ?? 'Funcionario'}</h2>
+            <h2>{employee?.name ?? 'Funcionário'}</h2>
             <p>Atualize dados basicos e status de acesso ao aplicativo mobile.</p>
           </div>
-          <Link className="button secondary" href="/empresa/funcionarios">
+          <Link className="button secondary" href="/empresa/funcionários">
             Voltar
           </Link>
         </div>
 
-        {isLoading ? <div className="panel-note">Carregando funcionario...</div> : null}
+        {isLoading ? <div className="panel-note">Carregando funcionário...</div> : null}
         {error ? <div className="form-message error">{error}</div> : null}
         {success ? <div className="form-message success">{success}</div> : null}
 
@@ -138,7 +138,7 @@ export default function EditEmployeePage() {
           <form className="form-grid compact" onSubmit={handleSubmit}>
             <div className="form-section">
               <div className="section-title">
-                <h2>Dados do funcionario</h2>
+                <h2>Dados do funcionário</h2>
                 <p>
                   E-mail: {employee.email} · Status atual: <StatusBadge status={employee.isActive ?? true} />
                 </p>
@@ -176,7 +176,7 @@ export default function EditEmployeePage() {
             </div>
 
             <div className="panel-note">
-              Reset de senha ainda nao foi exposto como endpoint dedicado no backend.
+              Reset de senha ainda não foi exposto como endpoint dedicado no backend.
             </div>
 
             <div className="form-actions split">
@@ -186,11 +186,11 @@ export default function EditEmployeePage() {
                 onClick={toggleStatus}
                 type="button"
               >
-                {(employee.isActive ?? true) ? 'Desativar funcionario' : 'Ativar funcionario'}
+                {(employee.isActive ?? true) ? 'Desativar funcionário' : 'Ativar funcionário'}
               </button>
 
               <div className="table-actions">
-                <button className="button secondary" onClick={() => router.push('/empresa/funcionarios')} type="button">
+                <button className="button secondary" onClick={() => router.push('/empresa/funcionários')} type="button">
                   Cancelar
                 </button>
                 <button className="button primary" disabled={isSaving} type="submit">

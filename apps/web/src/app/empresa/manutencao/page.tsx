@@ -144,7 +144,7 @@ export default function MaintenancePage() {
       setRecords(loadedRecords);
       setSelectedVehicleId((current) => current || loadedVehicles[0]?.id || '');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar manutencao.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar manutenção.');
     } finally {
       setIsLoading(false);
     }
@@ -159,7 +159,7 @@ export default function MaintenancePage() {
       const loadedRecords = await apiFetch<VehicleMaintenanceRecord[]>(`/company/maintenance/records${query}`);
       setRecords(loadedRecords);
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar registros.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar registros.');
     } finally {
       setIsRecordsLoading(false);
     }
@@ -175,7 +175,7 @@ export default function MaintenancePage() {
       setHistory(vehicleHistory);
     } catch (requestError) {
       setError(
-        requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar historico do veiculo.',
+        requestError instanceof Error ? requestError.message : 'Não foi possível carregar histórico do veículo.',
       );
     } finally {
       setIsHistoryLoading(false);
@@ -203,10 +203,10 @@ export default function MaintenancePage() {
         body: toJsonBody(payload),
       });
       event.currentTarget.reset();
-      setSuccess('Regra de manutencao criada.');
+      setSuccess('Regra de manutenção criada.');
       await loadData();
     } catch (requestError) {
-      setRuleError(requestError instanceof Error ? requestError.message : 'Nao foi possivel criar a regra.');
+      setRuleError(requestError instanceof Error ? requestError.message : 'Não foi possível criar a regra.');
     } finally {
       setIsSubmittingRule(false);
     }
@@ -224,7 +224,7 @@ export default function MaintenancePage() {
       setSuccess(rule.isActive ? 'Regra desativada.' : 'Regra ativada.');
       await loadData();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel atualizar a regra.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível atualizar a regra.');
     }
   }
 
@@ -254,11 +254,11 @@ export default function MaintenancePage() {
       });
       event.currentTarget.reset();
       setSelectedVehicleId(vehicleId);
-      setSuccess('Manutencao registrada.');
+      setSuccess('Manutenção registrada.');
       await Promise.all([loadData(), loadHistory(vehicleId), loadRecords()]);
     } catch (requestError) {
       setRecordError(
-        requestError instanceof Error ? requestError.message : 'Nao foi possivel registrar a manutencao.',
+        requestError instanceof Error ? requestError.message : 'Não foi possível registrar a manutenção.',
       );
     } finally {
       setIsSubmittingRecord(false);
@@ -266,7 +266,7 @@ export default function MaintenancePage() {
   }
 
   return (
-    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Manutencao preventiva">
+    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Manutenção preventiva">
       {error ? <div className="form-message error">{error}</div> : null}
       {success ? <div className="form-message success">{success}</div> : null}
 
@@ -274,11 +274,11 @@ export default function MaintenancePage() {
         <MetricCard
           detail="registros filtrados"
           icon={Wrench}
-          label="Manutencoes"
+          label="Manutenções"
           value={isLoading ? '...' : records.length}
         />
         <MetricCard
-          detail="precisam de acao"
+          detail="precisam de ação"
           icon={AlertTriangle}
           label="Alertas"
           tone={alerts.length > 0 ? 'red' : 'green'}
@@ -303,7 +303,7 @@ export default function MaintenancePage() {
         <div className="panel-header">
           <div>
             <h2>Alertas</h2>
-            <p>Manutencoes vencidas por km atual ou por data prevista.</p>
+            <p>Manutenções vencidas por km atual ou por data prevista.</p>
           </div>
         </div>
 
@@ -313,7 +313,7 @@ export default function MaintenancePage() {
           <table>
             <thead>
               <tr>
-                <th>Veiculo</th>
+                <th>Veículo</th>
                 <th>Regra</th>
                 <th>Vencimento</th>
                 <th>Motivo</th>
@@ -348,7 +348,7 @@ export default function MaintenancePage() {
               ))}
               {!isLoading && alerts.length === 0 ? (
                 <tr>
-                  <td colSpan={5}>Nenhum alerta de manutencao no momento.</td>
+                  <td colSpan={5}>Nenhum alerta de manutenção no momento.</td>
                 </tr>
               ) : null}
             </tbody>
@@ -361,7 +361,7 @@ export default function MaintenancePage() {
           <div className="form-section">
             <div className="section-title">
               <h2>Criar regra</h2>
-              <p>Configure manutencoes recorrentes por km, por dias ou ambos.</p>
+              <p>Configure manutenções recorrentes por km, por dias ou ambos.</p>
             </div>
 
             <label>
@@ -405,12 +405,12 @@ export default function MaintenancePage() {
         <form className="panel form-grid" onSubmit={handleCreateRecord}>
           <div className="form-section">
             <div className="section-title">
-              <h2>Registrar manutencao</h2>
-              <p>Ao registrar, o sistema calcula a proxima manutencao com base na regra.</p>
+              <h2>Registrar manutenção</h2>
+              <p>Ao registrar, o sistema calcula a proxima manutenção com base na regra.</p>
             </div>
 
             <label>
-              Veiculo
+              Veículo
               <select name="vehicleId" required>
                 <option value="">Selecione</option>
                 {vehicles.map((vehicle) => (
@@ -436,7 +436,7 @@ export default function MaintenancePage() {
             </label>
 
             <label>
-              Tipo de manutencao
+              Tipo de manutenção
               <select name="type" required>
                 {maintenanceTypes.map((type) => (
                   <option key={type} value={type}>
@@ -458,7 +458,7 @@ export default function MaintenancePage() {
               </label>
 
               <label>
-                Km atual do veiculo
+                Km atual do veículo
                 <input min="0" name="performedKm" placeholder="50000" required type="number" />
               </label>
             </div>
@@ -486,7 +486,7 @@ export default function MaintenancePage() {
 
           <div className="form-actions">
             <button className="button primary" disabled={isSubmittingRecord || vehicles.length === 0} type="submit">
-              {isSubmittingRecord ? 'Registrando...' : 'Registrar manutencao'}
+              {isSubmittingRecord ? 'Registrando...' : 'Registrar manutenção'}
             </button>
           </div>
         </form>
@@ -495,14 +495,14 @@ export default function MaintenancePage() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>Manutencoes registradas</h2>
-            <p>Filtre por veiculo, funcionario, periodo, tipo e status.</p>
+            <h2>Manutenções registradas</h2>
+            <p>Filtre por veículo, funcionário, periodo, tipo e status.</p>
           </div>
         </div>
         <div className="table-toolbar">
           <div className="toolbar-actions">
             <label className="inline-filter">
-              Veiculo
+              Veículo
               <select
                 onChange={(event) => setRecordFilters((current) => ({ ...current, vehicleId: event.target.value }))}
                 value={recordFilters.vehicleId}
@@ -516,7 +516,7 @@ export default function MaintenancePage() {
               </select>
             </label>
             <label className="inline-filter">
-              Funcionario
+              Funcionário
               <select
                 onChange={(event) => setRecordFilters((current) => ({ ...current, employeeId: event.target.value }))}
                 value={recordFilters.employeeId}
@@ -558,7 +558,7 @@ export default function MaintenancePage() {
               </select>
             </label>
             <label className="compact-filter">
-              Inicio
+              Início
               <input
                 onChange={(event) => setRecordFilters((current) => ({ ...current, startDate: event.target.value }))}
                 type="date"
@@ -582,8 +582,8 @@ export default function MaintenancePage() {
           <table>
             <thead>
               <tr>
-                <th>Veiculo</th>
-                <th>Funcionario</th>
+                <th>Veículo</th>
+                <th>Funcionário</th>
                 <th>Tipo</th>
                 <th>Data</th>
                 <th>Km</th>
@@ -614,7 +614,7 @@ export default function MaintenancePage() {
               ))}
               {!isRecordsLoading && records.length === 0 ? (
                 <tr>
-                  <td colSpan={8}>Nenhuma manutencao encontrada para os filtros.</td>
+                  <td colSpan={8}>Nenhuma manutenção encontrada para os filtros.</td>
                 </tr>
               ) : null}
               {isRecordsLoading ? (
@@ -631,7 +631,7 @@ export default function MaintenancePage() {
         <div className="panel-header">
           <div>
             <h2>Regras cadastradas</h2>
-            <p>Ative, desative e acompanhe as regras de manutencao da empresa.</p>
+            <p>Ative, desative e acompanhe as regras de manutenção da empresa.</p>
           </div>
         </div>
 
@@ -643,7 +643,7 @@ export default function MaintenancePage() {
                 <th>Tipo</th>
                 <th>Intervalo</th>
                 <th>Status</th>
-                <th>Acoes</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -677,11 +677,11 @@ export default function MaintenancePage() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>Historico por veiculo</h2>
+            <h2>Histórico por veículo</h2>
             <p>Consulte registros anteriores e os proximos vencimentos calculados.</p>
           </div>
           <label className="inline-filter">
-            Veiculo
+            Veículo
             <select onChange={(event) => setSelectedVehicleId(event.target.value)} value={selectedVehicleId}>
               <option value="">Selecione</option>
               {vehicles.map((vehicle) => (
@@ -693,7 +693,7 @@ export default function MaintenancePage() {
           </label>
         </div>
 
-        {isHistoryLoading ? <div className="panel-note">Carregando historico...</div> : null}
+        {isHistoryLoading ? <div className="panel-note">Carregando histórico...</div> : null}
 
         <div className="table-wrap">
           <table>
@@ -729,7 +729,7 @@ export default function MaintenancePage() {
               ))}
               {!isHistoryLoading && history.length === 0 ? (
                 <tr>
-                  <td colSpan={8}>Nenhum registro para o veiculo selecionado.</td>
+                  <td colSpan={8}>Nenhum registro para o veículo selecionado.</td>
                 </tr>
               ) : null}
             </tbody>

@@ -58,7 +58,7 @@ export default function CompanyDashboardPage() {
         return preferredRoute?.id ?? null;
       });
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar o dashboard.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar o dashboard.');
     } finally {
       setIsLoading(false);
     }
@@ -121,13 +121,13 @@ export default function CompanyDashboardPage() {
         <MetricCard
           detail="cadastrados"
           icon={Users}
-          label="Funcionarios"
+          label="Funcionários"
           value={isLoading ? '...' : employees.length}
         />
         <MetricCard
           detail="aptos para uso"
           icon={MapPinned}
-          label="Funcionarios ativos"
+          label="Funcionários ativos"
           tone="green"
           value={isLoading ? '...' : activeEmployees}
         />
@@ -139,7 +139,7 @@ export default function CompanyDashboardPage() {
           value={isLoading ? '...' : activeRoutes}
         />
         <MetricCard
-          detail={`${vehicles.length} veiculos cadastrados`}
+          detail={`${vehicles.length} veículos cadastrados`}
           icon={Car}
           label="Km no mes"
           value={isLoading ? '...' : formatKm(monthKm)}
@@ -150,7 +150,7 @@ export default function CompanyDashboardPage() {
         <div className="panel-header">
           <div>
             <h2>Mapa operacional</h2>
-            <p>Rotas em andamento atualizam a cada 5 segundos; rotas finalizadas exibem o historico gravado.</p>
+            <p>Rotas em andamento atualizam a cada 5 segundos; rotas finalizadas exibem o histórico gravado.</p>
           </div>
           <Link className="button secondary" href="/empresa/rotas">
             Ver rotas
@@ -167,7 +167,7 @@ export default function CompanyDashboardPage() {
                 type="button"
               >
                 <span>
-                  <strong>{route.employee?.name ?? 'Funcionario'}</strong>
+                  <strong>{route.employee?.name ?? 'Funcionário'}</strong>
                   <small>{formatVehicleName(route.vehicle)} - {formatDateTime(route.startedAt)}</small>
                 </span>
                 <StatusBadge
@@ -228,10 +228,10 @@ export default function CompanyDashboardPage() {
         <div className="panel-header">
           <div>
             <h2>Equipe recente</h2>
-            <p>Funcionarios cadastrados para uso do aplicativo mobile.</p>
+            <p>Funcionários cadastrados para uso do aplicativo mobile.</p>
           </div>
-          <Link className="button secondary" href="/empresa/funcionarios">
-            Ver funcionarios
+          <Link className="button secondary" href="/empresa/funcionários">
+            Ver funcionários
           </Link>
         </div>
 
@@ -246,7 +246,7 @@ export default function CompanyDashboardPage() {
           <table>
             <thead>
               <tr>
-                <th>Funcionario</th>
+                <th>Funcionário</th>
                 <th>Telefone</th>
                 <th>Status</th>
               </tr>
@@ -271,13 +271,13 @@ export default function CompanyDashboardPage() {
         {!isLoading && employees.length === 0 ? (
           <EmptyState
             action={
-              <Link className="button primary" href="/empresa/funcionarios/novo">
+              <Link className="button primary" href="/empresa/funcionários/novo">
                 <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
-                Novo funcionario
+                Novo funcionário
               </Link>
             }
             icon={Users}
-            title="Nenhum funcionario cadastrado"
+            title="Nenhum funcionário cadastrado"
             description="Cadastre a equipe externa para liberar login no app mobile e registro de rotas."
           />
         ) : null}

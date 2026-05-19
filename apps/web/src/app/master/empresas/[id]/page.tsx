@@ -60,7 +60,7 @@ export default function CompanyDetailPage() {
         });
       })
       .catch((requestError) =>
-        setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar a empresa.'),
+        setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar a empresa.'),
       )
       .finally(() => setIsLoading(false));
   }
@@ -83,7 +83,7 @@ export default function CompanyDetailPage() {
       }));
       setSuccess('Empresa atualizada com sucesso.');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel salvar a empresa.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível salvar a empresa.');
     } finally {
       setIsSaving(false);
     }
@@ -101,7 +101,7 @@ export default function CompanyDetailPage() {
       setSuccess(action === 'activate' ? 'Empresa ativada com sucesso.' : 'Empresa bloqueada com sucesso.');
       loadCompany();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel atualizar o status.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível atualizar o status.');
     } finally {
       setIsSaving(false);
     }
@@ -184,7 +184,7 @@ export default function CompanyDetailPage() {
 
               <div className="field-row">
                 <label>
-                  Limite de funcionarios
+                  Limite de funcionários
                   <input
                     min={1}
                     onChange={(event) =>
@@ -196,7 +196,7 @@ export default function CompanyDetailPage() {
                   />
                 </label>
                 <label>
-                  Limite de veiculos
+                  Limite de veículos
                   <input
                     min={1}
                     onChange={(event) =>
@@ -241,8 +241,8 @@ export default function CompanyDetailPage() {
         <section className="panel">
           <div className="panel-header">
             <div>
-              <h2>Usuarios vinculados</h2>
-              <p>Usuarios retornados pelo detalhe da empresa.</p>
+              <h2>Usuários vinculados</h2>
+              <p>Usuários retornados pelo detalhe da empresa.</p>
             </div>
           </div>
 
@@ -271,7 +271,7 @@ export default function CompanyDetailPage() {
                 ))}
                 {company.users.length === 0 ? (
                   <tr>
-                    <td colSpan={4}>Nenhum usuario vinculado.</td>
+                    <td colSpan={4}>Nenhum usuário vinculado.</td>
                   </tr>
                 ) : null}
               </tbody>

@@ -39,7 +39,7 @@ export class CompanySettingsController {
     @Body() dto: UpdateCompanySettingsDto,
   ) {
     const companyId = this.tenantScope.requireCompanyId(user);
-    return this.prisma.company.update({
+    const updated = await this.prisma.company.update({
       where: { id: companyId },
       data: dto,
       select: {
@@ -51,5 +51,22 @@ export class CompanySettingsController {
         requireOdometerFinishKm: true,
       },
     });
+
+    try {
+      await this.prisma.auditLog.create({
+        data: {
+          userId: user.sub,
+          companyId: companyId,
+          action: 'UPDATE_COMPANY_SETTINGS',
+          entity: 'Company',
+          entityId: companyId,
+          metadata: dto as Record<string, any>,
+        },
+      });
+    } catch {
+      // Falha de auditoria nao deve bloquear a resposta de sucesso
+    }
+
+    return updated;
   }
 }

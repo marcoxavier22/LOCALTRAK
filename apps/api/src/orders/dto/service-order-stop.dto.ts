@@ -73,15 +73,6 @@ export class ServiceOrderStopDto {
   @IsString()
   addressReference?: string;
 
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  latitude?: number;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  longitude?: number;
 
   @Type(() => Number)
   @IsNumber()

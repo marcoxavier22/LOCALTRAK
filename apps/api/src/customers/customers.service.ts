@@ -49,7 +49,7 @@ export class CustomersService {
     const address = this.buildAddress(dto);
     this.assertCustomerAddress(address);
 
-    const location = await this.resolveLocation(address, dto.latitude, dto.longitude);
+    const location = await this.resolveLocation(address);
 
     return this.prisma.customer.create({
       data: {
@@ -112,11 +112,8 @@ export class CustomersService {
       dto.state !== undefined ||
       dto.country !== undefined;
 
-    const location =
-      dto.latitude !== undefined ||
-      dto.longitude !== undefined ||
-      addressChanged
-        ? await this.resolveLocation(address, dto.latitude, dto.longitude)
+    const location = addressChanged
+        ? await this.resolveLocation(address)
         : {
             latitude: existing.latitude,
             longitude: existing.longitude,
@@ -261,16 +258,7 @@ export class CustomersService {
     return [line, area, country].filter(Boolean).join(', ');
   }
 
-  private async resolveLocation(address: string, latitude?: number | null, longitude?: number | null) {
-    if (latitude !== undefined && longitude !== undefined && latitude !== null && longitude !== null) {
-      return {
-        latitude,
-        longitude,
-        status: GeocodingStatus.MANUAL,
-        updatedAt: new Date(),
-      };
-    }
-
+  private async resolveLocation(address: string) {
     const resolved = await this.geocodingService.geocode(address);
     if (resolved) {
       return {

@@ -166,7 +166,7 @@ export default function ReimbursementsPage() {
       setEmployees(loadedEmployees);
       setVehicles(loadedVehicles);
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar reembolsos.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar reembolsos.');
     } finally {
       setIsLoading(false);
     }
@@ -197,7 +197,7 @@ export default function ReimbursementsPage() {
       setSuccess('Reembolso registrado com sucesso.');
       await loadData();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel registrar reembolso.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível registrar reembolso.');
     } finally {
       setIsSaving(false);
     }
@@ -210,27 +210,27 @@ export default function ReimbursementsPage() {
 
       <section className="metrics-grid">
         <MetricCard
-          detail="veiculos particulares"
+          detail="Veículos particulares"
           icon={BadgeDollarSign}
-          label="Reembolso estimado"
+          label="Reembolso Estimado"
           value={isLoading ? '...' : formatCurrency(report.totals.totalReimbursement)}
         />
         <MetricCard
-          detail={`pendente: ${formatCurrency(pendingTotal)}`}
+          detail={`Pendente: ${formatCurrency(pendingTotal)}`}
           icon={CheckCircle2}
-          label="Total pago"
+          label="Total Pago"
           tone="green"
           value={isLoading ? '...' : formatCurrency(paidTotal)}
         />
         <MetricCard
-          detail="veiculos particulares"
+          detail="Veículos particulares"
           icon={Gauge}
-          label="Km reembolsavel"
+          label="Km Reembolsável"
           tone="amber"
           value={isLoading ? '...' : formatKm(report.totals.employeeVehicleDistanceKm)}
         />
         <MetricCard
-          detail="rotas finalizadas"
+          detail="Rotas finalizadas"
           icon={ReceiptText}
           label="Rotas"
           value={isLoading ? '...' : report.totals.routesCount}
@@ -241,13 +241,13 @@ export default function ReimbursementsPage() {
         <div className="panel">
           <div className="panel-header">
             <div>
-              <h2>Registrar pagamento</h2>
-              <p>Lance reembolsos pagos a funcionarios com veiculo particular.</p>
+              <h2>Registrar Pagamento</h2>
+              <p>Registre reembolsos pagos a funcionários com veículo particular.</p>
             </div>
           </div>
           <form className="form-grid compact" onSubmit={handleCreatePayment}>
             <label>
-              Funcionario
+              Funcionário
               <select
                 onChange={(event) => setForm((current) => ({ ...current, employeeId: event.target.value }))}
                 required
@@ -262,7 +262,7 @@ export default function ReimbursementsPage() {
               </select>
             </label>
             <label>
-              Veiculo
+              Veículo
               <select
                 onChange={(event) => setForm((current) => ({ ...current, vehicleId: event.target.value }))}
                 required
@@ -278,7 +278,7 @@ export default function ReimbursementsPage() {
             </label>
             <div className="field-row">
               <label>
-                Km reembolsado
+                Km Reembolsado
                 <input
                   min="0"
                   onChange={(event) => setForm((current) => ({ ...current, distanceKm: event.target.value }))}
@@ -289,7 +289,7 @@ export default function ReimbursementsPage() {
                 />
               </label>
               <label>
-                Custo combustivel
+                Custo de Combustível
                 <input
                   min="0"
                   onChange={(event) => setForm((current) => ({ ...current, fuelCost: event.target.value }))}
@@ -338,7 +338,7 @@ export default function ReimbursementsPage() {
               </select>
             </label>
             <label>
-              Descricao
+              Descrição
               <input
                 onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
                 placeholder="Ex.: Reembolso de maio"
@@ -348,7 +348,7 @@ export default function ReimbursementsPage() {
             </label>
             <div className="form-actions">
               <button className="button primary" disabled={isSaving} type="submit">
-                {isSaving ? 'Salvando...' : 'Registrar reembolso'}
+                {isSaving ? 'Salvando...' : 'Registrar Reembolso'}
               </button>
             </div>
           </form>
@@ -358,12 +358,12 @@ export default function ReimbursementsPage() {
           <div className="panel-header">
             <div>
               <h2>Filtros</h2>
-              <p>Analise estimativas, pagamentos e historico por periodo.</p>
+              <p>Analise estimativas, pagamentos e histórico por período.</p>
             </div>
           </div>
           <div className="form-grid compact">
             <label>
-              Funcionario
+              Funcionário
               <select onChange={(event) => setSelectedEmployeeId(event.target.value)} value={selectedEmployeeId}>
                 <option value="">Todos</option>
                 {employees.map((employee) => (
@@ -374,7 +374,7 @@ export default function ReimbursementsPage() {
               </select>
             </label>
             <label>
-              Veiculo
+              Veículo
               <select onChange={(event) => setSelectedVehicleId(event.target.value)} value={selectedVehicleId}>
                 <option value="">Todos</option>
                 {vehicles.map((vehicle) => (
@@ -386,7 +386,7 @@ export default function ReimbursementsPage() {
             </label>
             <div className="field-row">
               <label>
-                Inicio
+                Início
                 <input onChange={(event) => setStartDate(event.target.value)} type="date" value={startDate} />
               </label>
               <label>
@@ -395,7 +395,7 @@ export default function ReimbursementsPage() {
               </label>
             </div>
             <label>
-              Status do pagamento
+              Status do Pagamento
               <select onChange={(event) => setPaymentStatus(event.target.value)} value={paymentStatus}>
                 <option value="">Todos</option>
                 {paymentStatusOptions.map((status) => (
@@ -407,7 +407,7 @@ export default function ReimbursementsPage() {
             </label>
             <div className="form-actions">
               <button className="button secondary" onClick={() => void loadData()} type="button">
-                Aplicar filtros
+                Aplicar Filtros
               </button>
             </div>
           </div>
@@ -417,29 +417,29 @@ export default function ReimbursementsPage() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>Pagamentos registrados</h2>
-            <p>Historico operacional de valores pagos aos funcionarios.</p>
+            <h2>Pagamentos Registrados</h2>
+            <p>Histórico operacional de valores pagos aos funcionários.</p>
           </div>
         </div>
         <div className="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Funcionario</th>
-                <th>Veiculo</th>
+                <th>Funcionário</th>
+                <th>Veículo</th>
                 <th>Data</th>
                 <th>Km</th>
-                <th>Custo combustivel</th>
+                <th>Custo Combustível</th>
                 <th>Valor</th>
                 <th>Status</th>
-                <th>Descricao</th>
+                <th>Descrição</th>
               </tr>
             </thead>
             <tbody>
               {payments.map((payment) => (
                 <tr key={payment.id}>
                   <td>
-                    <strong>{payment.employee?.name ?? 'Funcionario'}</strong>
+                    <strong>{payment.employee?.name ?? 'Funcionário'}</strong>
                     <span>{payment.employee?.email ?? '-'}</span>
                   </td>
                   <td>
@@ -460,7 +460,7 @@ export default function ReimbursementsPage() {
               ))}
               {!isLoading && payments.length === 0 ? (
                 <tr>
-                  <td colSpan={8}>Nenhum pagamento registrado no periodo.</td>
+                  <td colSpan={8}>Nenhum pagamento registrado no período.</td>
                 </tr>
               ) : null}
             </tbody>
@@ -471,7 +471,7 @@ export default function ReimbursementsPage() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>Ranking por funcionario</h2>
+            <h2>Ranking por Funcionário</h2>
             <p>Ordenado pelo maior valor de reembolso estimado.</p>
           </div>
         </div>
@@ -480,10 +480,10 @@ export default function ReimbursementsPage() {
           <table>
             <thead>
               <tr>
-                <th>Funcionario</th>
+                <th>Funcionário</th>
                 <th>Rotas</th>
                 <th>Km</th>
-                <th>Custo combustivel</th>
+                <th>Custo Combustível</th>
                 <th>Reembolso</th>
               </tr>
             </thead>
@@ -502,7 +502,7 @@ export default function ReimbursementsPage() {
               ))}
               {!isLoading && report.byEmployee.length === 0 ? (
                 <tr>
-                  <td colSpan={5}>Nenhuma rota finalizada no periodo.</td>
+                  <td colSpan={5}>Nenhuma rota finalizada no período.</td>
                 </tr>
               ) : null}
             </tbody>
@@ -513,8 +513,8 @@ export default function ReimbursementsPage() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>Rotas consideradas</h2>
-            <p>Base usada para os totais do periodo.</p>
+            <h2>Rotas Consideradas</h2>
+            <p>Base usada para os totais do período.</p>
           </div>
         </div>
 
@@ -522,11 +522,11 @@ export default function ReimbursementsPage() {
           <table>
             <thead>
               <tr>
-                <th>Funcionario</th>
-                <th>Veiculo</th>
+                <th>Funcionário</th>
+                <th>Veículo</th>
                 <th>Fim</th>
                 <th>Km</th>
-                <th>Custo combustivel</th>
+                <th>Custo Combustível</th>
                 <th>Reembolso</th>
               </tr>
             </thead>
@@ -558,7 +558,7 @@ export default function ReimbursementsPage() {
               ))}
               {!isLoading && report.routes.length === 0 ? (
                 <tr>
-                  <td colSpan={6}>Nenhuma rota finalizada no periodo.</td>
+                  <td colSpan={6}>Nenhuma rota finalizada no período.</td>
                 </tr>
               ) : null}
               {isLoading ? (

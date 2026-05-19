@@ -36,7 +36,7 @@ export default function VehiclesPage() {
     apiFetch<Vehicle[]>('/company/vehicles')
       .then(setVehicles)
       .catch((requestError) =>
-        setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar veiculos.'),
+        setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar veículos.'),
       )
       .finally(() => setIsLoading(false));
   }
@@ -58,16 +58,16 @@ export default function VehiclesPage() {
   }, [vehicles, search, statusFilter]);
 
   return (
-    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Veiculos">
+    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Veículos">
       <section className="panel">
         <div className="panel-header">
           <div>
             <h2>Frota da empresa</h2>
-            <p>Veiculos proprios ou particulares usados por funcionarios em campo.</p>
+            <p>Veículos próprios ou particulares usados por funcionários em campo.</p>
           </div>
-          <Link className="button primary" href="/empresa/veiculos/novo">
+          <Link className="button primary" href="/empresa/veículos/novo">
             <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
-            Novo veiculo
+            Novo veículo
           </Link>
         </div>
 
@@ -75,13 +75,13 @@ export default function VehiclesPage() {
         {isLoading ? (
           <div className="loading-row">
             <span className="loading-dot" />
-            Carregando veiculos...
+            Carregando veículos...
           </div>
         ) : null}
 
         <TableToolbar
           onSearchChange={setSearch}
-          placeholder="Buscar por placa, marca, modelo ou funcionario"
+          placeholder="Buscar por placa, marca, modelo ou funcionário"
           search={search}
         >
           <label className="inline-filter">
@@ -89,7 +89,7 @@ export default function VehiclesPage() {
             <select onChange={(event) => setStatusFilter(event.target.value)} value={statusFilter}>
               <option value="ALL">Todos</option>
               <option value="ACTIVE">Ativos</option>
-              <option value="MAINTENANCE">Em manutencao</option>
+              <option value="MAINTENANCE">Em manutenção</option>
               <option value="INACTIVE">Inativos</option>
             </select>
           </label>
@@ -105,12 +105,12 @@ export default function VehiclesPage() {
                 <th>Ano</th>
                 <th>Tipo</th>
                 <th>Proprietario</th>
-                <th>Funcionario</th>
+                <th>Funcionário</th>
                 <th>Km atual</th>
-                <th>Combustivel</th>
+                <th>Combustível</th>
                 <th>Consumo medio</th>
                 <th>Status</th>
-                <th>Acoes</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -132,7 +132,7 @@ export default function VehiclesPage() {
                     <StatusBadge status={vehicleStatusLabels[vehicle.status]} />
                   </td>
                   <td>
-                    <Link className="button secondary small" href={`/empresa/veiculos/${vehicle.id}`}>
+                    <Link className="button secondary small" href={`/empresa/veículos/${vehicle.id}`}>
                       Editar
                     </Link>
                   </td>
@@ -146,18 +146,18 @@ export default function VehiclesPage() {
           <EmptyState
             action={
               vehicles.length === 0 ? (
-                <Link className="button primary" href="/empresa/veiculos/novo">
+                <Link className="button primary" href="/empresa/veículos/novo">
                   <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
-                  Novo veiculo
+                  Novo veículo
                 </Link>
               ) : undefined
             }
             icon={Car}
-            title={vehicles.length === 0 ? 'Nenhum veiculo cadastrado' : 'Nenhum veiculo encontrado'}
+            title={vehicles.length === 0 ? 'Nenhum veículo cadastrado' : 'Nenhum veículo encontrado'}
             description={
               vehicles.length === 0
-                ? 'Cadastre veiculos da empresa ou particulares para vincular rotas, km e manutencoes.'
-                : 'Ajuste a busca ou o filtro de status para visualizar outros veiculos.'
+                ? 'Cadastre veículos da empresa ou particulares para vincular rotas, km e manutenções.'
+                : 'Ajuste a busca ou o filtro de status para visualizar outros veículos.'
             }
           />
         ) : null}

@@ -27,7 +27,7 @@ export function GoogleMapPreview({ latitude, longitude, address, title = 'Mapa' 
     return (
       <div className="google-map-fallback">
         <strong>{title}</strong>
-        <span>Endereco ou coordenada indisponivel.</span>
+        <span>Endereço ou coordenada indisponivel.</span>
       </div>
     );
   }

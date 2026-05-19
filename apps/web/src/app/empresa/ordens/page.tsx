@@ -120,7 +120,7 @@ export default function CompanyOrdersPage() {
       setVehicles(loadedVehicles);
       setCustomers(loadedCustomers);
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar ordens de servico.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar ordens de serviço.');
     } finally {
       setIsLoading(false);
     }
@@ -200,10 +200,10 @@ export default function CompanyOrdersPage() {
       });
       event.currentTarget.reset();
       setStops([emptyStop()]);
-      setSuccess('Ordem de servico criada.');
+      setSuccess('Ordem de serviço criada.');
       await loadData();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel criar a OS.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível criar a OS.');
     } finally {
       setIsSubmitting(false);
     }
@@ -214,15 +214,15 @@ export default function CompanyOrdersPage() {
   }
 
   return (
-    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Ordens de Servico">
+    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Ordens de Serviço">
       {error ? <div className="form-message error">{error}</div> : null}
       {success ? <div className="form-message success">{success}</div> : null}
 
       <section className="metrics-grid">
         <MetricCard icon={ClipboardList} label="OS do filtro" value={isLoading ? '...' : orders.length} detail="agenda operacional" />
-        <MetricCard icon={CalendarDays} label="Pendentes" value={isLoading ? '...' : totals.pending} detail="aguardando inicio" tone="amber" />
+        <MetricCard icon={CalendarDays} label="Pendentes" value={isLoading ? '...' : totals.pending} detail="aguardando início" tone="amber" />
         <MetricCard icon={PlayCircle} label="Em andamento" value={isLoading ? '...' : totals.inProgress} detail="em campo agora" tone="green" />
-        <MetricCard icon={CheckCircle2} label="Finalizadas" value={isLoading ? '...' : totals.finished} detail="com odometro final" />
+        <MetricCard icon={CheckCircle2} label="Finalizadas" value={isLoading ? '...' : totals.finished} detail="com odômetro final" />
       </section>
 
       <section className="detail-grid">
@@ -230,7 +230,7 @@ export default function CompanyOrdersPage() {
           <div className="form-section">
             <div className="section-title">
               <h2>Criar nova OS</h2>
-              <p>Atribua funcionario, veiculo e enderecos da rota do dia.</p>
+              <p>Atribua funcionário, veículo e endereços da rota do dia.</p>
             </div>
 
             <label>
@@ -245,7 +245,7 @@ export default function CompanyOrdersPage() {
 
             <div className="field-row">
               <label>
-                Funcionario
+                Funcionário
                 <select name="employeeId">
                   <option value="">Sem atribuicao</option>
                   {employees.map((employee) => (
@@ -256,9 +256,9 @@ export default function CompanyOrdersPage() {
                 </select>
               </label>
               <label>
-                Veiculo
+                Veículo
                 <select name="vehicleId">
-                  <option value="">Sem veiculo</option>
+                  <option value="">Sem veículo</option>
                   {vehicles.map((vehicle) => (
                     <option key={vehicle.id} value={vehicle.id}>
                       {vehicle.plate} - {vehicle.brand} {vehicle.model}
@@ -400,7 +400,7 @@ export default function CompanyOrdersPage() {
                     <input value={stop.street} onChange={(event) => updateStop(index, 'street', event.target.value)} />
                   </label>
                   <label>
-                    Numero
+                    Número
                     <input value={stop.number} onChange={(event) => updateStop(index, 'number', event.target.value)} />
                   </label>
                 </div>
@@ -421,7 +421,7 @@ export default function CompanyOrdersPage() {
                 </div>
 
                 <label style={{ marginTop: '8px', display: 'block' }}>
-                  Referencia / observacoes do endereco
+                  Referencia / observacoes do endereço
                   <input
                     value={stop.addressReference}
                     onChange={(event) => updateStop(index, 'addressReference', event.target.value)}
@@ -472,12 +472,12 @@ export default function CompanyOrdersPage() {
           <div className="panel-header">
             <div>
               <h2>Filtros</h2>
-              <p>Controle a agenda por funcionario, status, veiculo e data.</p>
+              <p>Controle a agenda por funcionário, status, veículo e data.</p>
             </div>
           </div>
           <div className="form-grid compact">
             <label>
-              Funcionario
+              Funcionário
               <select onChange={(event) => setFilters((current) => ({ ...current, employeeId: event.target.value }))} value={filters.employeeId}>
                 <option value="">Todos</option>
                 {employees.map((employee) => (
@@ -488,7 +488,7 @@ export default function CompanyOrdersPage() {
               </select>
             </label>
             <label>
-              Veiculo
+              Veículo
               <select onChange={(event) => setFilters((current) => ({ ...current, vehicleId: event.target.value }))} value={filters.vehicleId}>
                 <option value="">Todos</option>
                 {vehicles.map((vehicle) => (
@@ -511,7 +511,7 @@ export default function CompanyOrdersPage() {
             </label>
             <div className="field-row">
               <label>
-                Inicio
+                Início
                 <input onChange={(event) => setFilters((current) => ({ ...current, startDate: event.target.value }))} type="date" value={filters.startDate} />
               </label>
               <label>
@@ -530,7 +530,7 @@ export default function CompanyOrdersPage() {
         <div className="panel-header">
           <div>
             <h2>Agenda de OS</h2>
-            <p>Historico e acompanhamento das ordens atribuidas aos funcionarios.</p>
+            <p>Histórico e acompanhamento das ordens atribuidas aos funcionários.</p>
           </div>
         </div>
         <div className="table-wrap">
@@ -538,13 +538,13 @@ export default function CompanyOrdersPage() {
             <thead>
               <tr>
                 <th>OS</th>
-                <th>Funcionario</th>
-                <th>Veiculo</th>
+                <th>Funcionário</th>
+                <th>Veículo</th>
                 <th>Data</th>
                 <th>Status</th>
                 <th>KM</th>
                 <th>Paradas</th>
-                <th>Acoes</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -578,7 +578,7 @@ export default function CompanyOrdersPage() {
           </table>
         </div>
         {!isLoading && orders.length === 0 ? (
-          <EmptyState icon={ClipboardList} title="Nenhuma OS encontrada" description="Crie uma ordem de servico para iniciar a agenda de campo." />
+          <EmptyState icon={ClipboardList} title="Nenhuma OS encontrada" description="Crie uma ordem de serviço para iniciar a agenda de campo." />
         ) : null}
       </section>
     </AppShell>

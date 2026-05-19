@@ -19,7 +19,7 @@ export default function MasterDashboardPage() {
     apiFetch<Company[]>('/master/companies')
       .then(setCompanies)
       .catch((requestError) =>
-        setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar o dashboard.'),
+        setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar o dashboard.'),
       )
       .finally(() => setIsLoading(false));
   }, []);
@@ -91,7 +91,7 @@ export default function MasterDashboardPage() {
               <tr>
                 <th>Empresa</th>
                 <th>Status</th>
-                <th>Usuarios</th>
+                <th>Usuários</th>
                 <th>Rotas</th>
               </tr>
             </thead>

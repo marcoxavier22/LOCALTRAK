@@ -320,14 +320,15 @@ textarea {
 .button {
   align-items: center;
   border: 1px solid transparent;
-  border-radius: 6px;
+  border-radius: 8px; /* Increased for modern look */
   cursor: pointer;
   display: inline-flex;
-  gap: 7px;
+  gap: 8px;
   font-weight: 800;
   justify-content: center;
-  min-height: 40px;
-  padding: 9px 14px;
+  min-height: 44px; /* Better touch target */
+  padding: 10px 18px; /* Increased padding */
+  text-align: center; /* Ensure text centering */
   transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 
@@ -388,8 +389,8 @@ textarea {
 }
 
 .button.small {
-  min-height: 34px;
-  padding: 7px 10px;
+  min-height: 36px;
+  padding: 8px 14px;
 }
 
 .form-message {
@@ -625,9 +626,9 @@ textarea {
 .metric-card {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  min-height: 124px;
-  padding: 18px;
+  gap: 8px;
+  min-height: 132px;
+  padding: 20px;
   position: relative;
   transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }

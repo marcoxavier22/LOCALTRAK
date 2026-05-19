@@ -37,7 +37,7 @@ export default function EditVehiclePage() {
         setEmployees(companyEmployees);
       })
       .catch((requestError) =>
-        setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar o veiculo.'),
+        setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar o veículo.'),
       )
       .finally(() => setIsLoading(false));
   }
@@ -54,9 +54,9 @@ export default function EditVehiclePage() {
       });
 
       setVehicle(updatedVehicle);
-      setSuccess('Veiculo atualizado com sucesso.');
+      setSuccess('Veículo atualizado com sucesso.');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel salvar o veiculo.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível salvar o veículo.');
     } finally {
       setIsSaving(false);
     }
@@ -76,25 +76,25 @@ export default function EditVehiclePage() {
       setVehicle(updatedVehicle);
       setSuccess(`Status alterado para ${vehicleStatusLabels[status]}.`);
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel atualizar o status.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível atualizar o status.');
     } finally {
       setIsSaving(false);
     }
   }
 
   return (
-    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Editar veiculo">
+    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Editar veículo">
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>{vehicle?.plate ?? 'Veiculo'}</h2>
+            <h2>{vehicle?.plate ?? 'Veículo'}</h2>
             <p>
               {vehicle
                 ? `${vehicle.brand} ${vehicle.model} - ${formatKm(vehicle.currentKm)}`
                 : 'Atualize dados de cadastro, uso e status.'}
             </p>
           </div>
-          <Link className="button secondary" href="/empresa/veiculos">
+          <Link className="button secondary" href="/empresa/veículos">
             Voltar
           </Link>
         </div>
@@ -106,7 +106,7 @@ export default function EditVehiclePage() {
         ) : null}
       </section>
 
-      {isLoading ? <div className="panel-note">Carregando veiculo...</div> : null}
+      {isLoading ? <div className="panel-note">Carregando veículo...</div> : null}
       {error ? <div className="form-message error">{error}</div> : null}
       {success ? <div className="form-message success">{success}</div> : null}
 
@@ -116,7 +116,7 @@ export default function EditVehiclePage() {
             <div className="panel-header">
               <div>
                 <h2>Status operacional</h2>
-                <p>Altere rapidamente a disponibilidade do veiculo.</p>
+                <p>Altere rapidamente a disponibilidade do veículo.</p>
               </div>
               <div className="table-actions">
                 <button
@@ -133,7 +133,7 @@ export default function EditVehiclePage() {
                   onClick={() => updateStatus('MAINTENANCE')}
                   type="button"
                 >
-                  Manutencao
+                  Manutenção
                 </button>
                 <button
                   className="button danger small"
@@ -153,7 +153,7 @@ export default function EditVehiclePage() {
             initialVehicle={vehicle}
             isSubmitting={isSaving}
             key={`${vehicle.id}-${vehicle.updatedAt}-${vehicle.status}`}
-            onCancel={() => router.push('/empresa/veiculos')}
+            onCancel={() => router.push('/empresa/veículos')}
             onSubmit={handleSubmit}
             submitLabel="Salvar alteracoes"
           />

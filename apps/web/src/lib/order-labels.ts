@@ -9,7 +9,7 @@ export const orderStatusLabels: Record<ServiceOrderStatus, string> = {
 
 export const orderStopStatusLabels: Record<ServiceOrderStopStatus, string> = {
   PENDING: 'Pendente',
-  COMPLETED: 'Concluido',
+  COMPLETED: 'Concluído',
 };
 
 export function formatOdometer(value?: number | string | null) {

@@ -339,7 +339,7 @@ export default function App() {
     async function startForegroundTracking() {
       const permission = await Location.getForegroundPermissionsAsync();
       if (permission.status !== Location.PermissionStatus.GRANTED) {
-        setError('Permissao de localizacao nao concedida.');
+        setError('Permissao de localizacao não concedida.');
         return;
       }
 
@@ -536,8 +536,8 @@ export default function App() {
         setScreen(existingRoute.serviceOrderId ? 'orders' : 'home');
         setError(
           existingRoute.serviceOrderId
-            ? 'Voce ja tem uma rota de OS em andamento. Abra a aba OS para finalizar a jornada corretamente.'
-            : 'Voce ja tem uma rota em andamento. Recuperamos o turno ativo neste aparelho.',
+            ? 'Você já tem uma rota de OS em andamento. Abra a aba OS para finalizar a jornada corretamente.'
+            : 'Você já tem uma rota em andamento. Recuperamos o turno ativo neste aparelho.',
         );
         return;
       }
@@ -576,7 +576,7 @@ export default function App() {
       setScreen('home');
 
       if (backgroundStatus === 'background_denied') {
-        setError('Rota iniciada. Para rastrear em segundo plano, libere a permissao "Sempre" nas configuracoes do aparelho.');
+        setError('Rota iniciada. Para rastrear em segundo plano, libere a permissao "Sempre" nas configurações do aparelho.');
       }
     } catch (startError) {
       if (startError instanceof ApiError && startError.status === 409) {
@@ -585,8 +585,8 @@ export default function App() {
           setScreen(existingRoute.serviceOrderId ? 'orders' : 'home');
           setError(
             existingRoute.serviceOrderId
-              ? 'Ja existe uma rota de OS em andamento. Abra a aba OS para finalizar a jornada.'
-              : 'Ja existia uma rota em andamento no servidor. Recuperamos esse turno ativo.',
+              ? 'Já existe uma rota de OS em andamento. Abra a aba OS para finalizar a jornada.'
+              : 'Já existia uma rota em andamento no servidor. Recuperamos esse turno ativo.',
           );
           return;
         }
@@ -604,7 +604,7 @@ export default function App() {
 
     if (activeRoute.serviceOrderId) {
       setScreen('orders');
-      setError('Esta rota pertence a uma OS. Finalize pela aba OS para enviar foto final do odometro e KM final.');
+      setError('Esta rota pertence a uma OS. Finalize pela aba OS para enviar foto final do odômetro e KM final.');
       return;
     }
 
@@ -682,7 +682,7 @@ export default function App() {
   async function captureOdometerPhoto() {
     const permission = await ImagePicker.requestCameraPermissionsAsync();
     if (!permission.granted) {
-      throw new Error('Permissao de camera negada. A foto do odometro e obrigatoria.');
+      throw new Error('Permissao de camera negada. A foto do odômetro e obrigatória.');
     }
 
     const result = await ImagePicker.launchCameraAsync({
@@ -692,7 +692,7 @@ export default function App() {
     });
 
     if (result.canceled || !result.assets[0]?.base64) {
-      throw new Error('Foto do odometro nao capturada.');
+      throw new Error('Foto do odômetro não capturada.');
     }
 
     const asset = result.assets[0];
@@ -718,7 +718,7 @@ export default function App() {
     }
 
     if (companySettings.requireOdometerStartPhoto && !order.initialOdometerPhotoPath) {
-      setError('Envie a foto do odometro inicial antes de iniciar a OS.');
+      setError('Envie a foto do odômetro inicial antes de iniciar a OS.');
       return;
     }
 
@@ -731,8 +731,8 @@ export default function App() {
         setScreen(existingRoute.serviceOrderId ? 'orders' : 'home');
         setError(
           existingRoute.serviceOrderId
-            ? 'Ja existe uma OS em andamento. Finalize a jornada atual antes de iniciar outra.'
-            : 'Ja existe um turno em andamento. Finalize o turno atual antes de iniciar uma OS.',
+            ? 'Já existe uma OS em andamento. Finalize a jornada atual antes de iniciar outra.'
+            : 'Já existe um turno em andamento. Finalize o turno atual antes de iniciar uma OS.',
         );
         return;
       }
@@ -777,8 +777,8 @@ export default function App() {
           setScreen(existingRoute.serviceOrderId ? 'orders' : 'home');
           setError(
             existingRoute.serviceOrderId
-              ? 'Ja existe uma OS em andamento. Recuperamos a rota ativa no app.'
-              : 'Ja existe um turno em andamento. Recuperamos a rota ativa no app.',
+              ? 'Já existe uma OS em andamento. Recuperamos a rota ativa no app.'
+              : 'Já existe um turno em andamento. Recuperamos a rota ativa no app.',
           );
           return;
         }
@@ -805,7 +805,7 @@ export default function App() {
     }
 
     if (companySettings.requireOdometerFinishPhoto && !order.finalOdometerPhotoPath) {
-      setError('Envie a foto do odometro final antes de finalizar a OS.');
+      setError('Envie a foto do odômetro final antes de finalizar a OS.');
       return;
     }
 
@@ -934,7 +934,7 @@ export default function App() {
               <Text style={[styles.kicker, { color: colors.accent }]}>TrakFlow</Text>
             <Text style={styles.title}>Olá, {session.user.name}</Text>
               <Text style={[styles.subtitle, { color: colors.muted }]}>
-                Empresa: {session.user.companyId ?? 'Nao vinculada'}
+                Empresa: {session.user.companyId ?? 'Não vinculada'}
               </Text>
             </View>
           </View>
@@ -988,7 +988,7 @@ export default function App() {
             style={[styles.tabButton, screen === 'home' && styles.tabButtonActive]}
             onPress={() => setScreen('home')}
           >
-            <Text style={[styles.tabText, screen === 'home' && styles.tabTextActive]}>Inicio</Text>
+            <Text style={[styles.tabText, screen === 'home' && styles.tabTextActive]}>Início</Text>
           </Pressable>
           <Pressable
             style={[styles.tabButton, screen === 'history' && styles.tabButtonActive]}
@@ -997,7 +997,7 @@ export default function App() {
               void loadHistory();
             }}
           >
-            <Text style={[styles.tabText, screen === 'history' && styles.tabTextActive]}>Historico</Text>
+            <Text style={[styles.tabText, screen === 'history' && styles.tabTextActive]}>Histórico</Text>
           </Pressable>
           <Pressable
             style={[styles.tabButton, screen === 'orders' && styles.tabButtonActive]}
@@ -1033,7 +1033,7 @@ export default function App() {
           <View style={[styles.infoBox, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Text style={[styles.infoTitle, { color: colors.text }]}>Rastreamento transparente</Text>
             <Text style={[styles.infoText, { color: colors.muted }]}>
-              A localizacao so e enviada depois que voce inicia o turno e para quando a rota e finalizada.
+              A localizacao so e enviada depois que você inicia o turno e para quando a rota e finalizada.
             </Text>
           </View>
         )}
@@ -1095,7 +1095,7 @@ function LoginScreen({
           </Pressable>
         </View>
         <Text style={[styles.brand, { color: colors.accent }]}>TrakFlow</Text>
-        <Text style={[styles.loginTitle, { color: colors.text }]}>Acesso do funcionario</Text>
+        <Text style={[styles.loginTitle, { color: colors.text }]}>Acesso do funcionário</Text>
         <Text style={[styles.loginSubtitle, { color: colors.muted }]}>
           Inicie e finalize sua rota de trabalho pelo app.
         </Text>
@@ -1106,7 +1106,7 @@ function LoginScreen({
           autoComplete="email"
           keyboardType="email-address"
           onChangeText={setEmail}
-          placeholder="funcionario@empresa.com"
+          placeholder="funcionário@empresa.com"
           placeholderTextColor={colors.muted}
           style={[styles.input, { backgroundColor: colors.input, borderColor: colors.border, color: colors.text }]}
           value={email}
@@ -1188,7 +1188,7 @@ function SummaryCard({ summary }: { summary: RouteSummary }) {
         <Metric label="Km" value={formatKm(summary.totalDistanceKm)} />
         <Metric label="Tempo" value={`${summary.totalDurationMinutes ?? 0} min`} />
       </View>
-      <Text style={styles.subtitle}>Inicio: {formatDate(summary.startedAt)}</Text>
+      <Text style={styles.subtitle}>Início: {formatDate(summary.startedAt)}</Text>
       <Text style={styles.subtitle}>Fim: {formatDate(summary.endedAt)}</Text>
       <Text style={styles.subtitle}>Status: {statusLabels[summary.status] ?? summary.status}</Text>
     </View>
@@ -1217,7 +1217,7 @@ function HistoryList({
     return (
       <View style={styles.infoBox}>
         <ActivityIndicator color="#1f6feb" />
-        <Text style={styles.infoText}>Carregando historico...</Text>
+        <Text style={styles.infoText}>Carregando histórico...</Text>
       </View>
     );
   }
@@ -1226,7 +1226,7 @@ function HistoryList({
     return (
       <View style={styles.infoBox}>
         <Text style={styles.infoTitle}>Nenhuma rota registrada</Text>
-        <Text style={styles.infoText}>Quando voce finalizar um turno, ele aparecera aqui.</Text>
+        <Text style={styles.infoText}>Quando você finalizar um turno, ele aparecera aqui.</Text>
         <Pressable style={styles.secondaryButton} onPress={() => void onRefresh()}>
           <Text style={styles.secondaryButtonText}>Atualizar</Text>
         </Pressable>
@@ -1251,7 +1251,7 @@ function HistoryList({
           </Text>
           {item.vehicle ? (
             <Text style={styles.subtitle}>
-              Veiculo: {item.vehicle.plate} - {item.vehicle.brand} {item.vehicle.model}
+              Veículo: {item.vehicle.plate} - {item.vehicle.brand} {item.vehicle.model}
             </Text>
           ) : null}
         </View>
@@ -1295,7 +1295,7 @@ function OrdersList({
     return (
       <View style={[styles.infoBox, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <ActivityIndicator color={colors.accent} />
-        <Text style={[styles.infoText, { color: colors.muted }]}>Carregando ordens de servico...</Text>
+        <Text style={[styles.infoText, { color: colors.muted }]}>Carregando ordens de serviço...</Text>
       </View>
     );
   }
@@ -1304,7 +1304,7 @@ function OrdersList({
     return (
       <View style={[styles.infoBox, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <Text style={[styles.infoTitle, { color: colors.text }]}>Nenhuma OS para hoje</Text>
-        <Text style={[styles.infoText, { color: colors.muted }]}>Quando a empresa atribuir ordens de servico para voce, elas aparecerao aqui.</Text>
+        <Text style={[styles.infoText, { color: colors.muted }]}>Quando a empresa atribuir ordens de serviço para você, elas aparecerao aqui.</Text>
         <Pressable style={styles.secondaryButton} onPress={() => void onRefresh()}>
           <Text style={styles.secondaryButtonText}>Atualizar</Text>
         </Pressable>
@@ -1330,12 +1330,12 @@ function OrdersList({
 
             {order.description ? <Text style={[styles.infoText, { color: colors.muted }]}>{order.description}</Text> : null}
             <Text style={[styles.subtitle, { color: colors.muted }]}>
-              Veiculo: {order.vehicle ? `${order.vehicle.plate} - ${order.vehicle.brand} ${order.vehicle.model}` : 'Sem veiculo'}
+              Veículo: {order.vehicle ? `${order.vehicle.plate} - ${order.vehicle.brand} ${order.vehicle.model}` : 'Sem veículo'}
             </Text>
             <Text style={[styles.subtitle, { color: colors.muted }]}>
               Paradas: {completedStops}/{order.stops.length} concluidas
             </Text>
-            <Text style={[styles.subtitle, { color: colors.muted }]}>KM odometro: {formatKm(order.odometerDistanceKm)}</Text>
+            <Text style={[styles.subtitle, { color: colors.muted }]}>KM odômetro: {formatKm(order.odometerDistanceKm)}</Text>
 
             <OrderMapPreview
               colors={colors}
@@ -1351,7 +1351,7 @@ function OrdersList({
                       {stop.visitOrder}. {stop.customerName ?? 'Cliente'}
                     </Text>
                     <Text style={[styles.subtitle, { color: colors.muted }]}>{stop.address}</Text>
-                    <Text style={[styles.subtitle, { color: colors.muted }]}>{stop.status === 'COMPLETED' ? 'Concluido' : 'Pendente'}</Text>
+                    <Text style={[styles.subtitle, { color: colors.muted }]}>{stop.status === 'COMPLETED' ? 'Concluído' : 'Pendente'}</Text>
                   </View>
                   {order.status === 'IN_PROGRESS' && stop.status !== 'COMPLETED' ? (
                     <Pressable
@@ -1369,7 +1369,7 @@ function OrdersList({
             {order.status === 'PENDING' ? (
               <View style={styles.orderActionArea}>
                 <Text style={[styles.inputLabel, { color: colors.text }]}>
-                  KM inicial {companySettings.requireOdometerStartKm ? '(obrigatorio)' : '(opcional)'}
+                  KM inicial {companySettings.requireOdometerStartKm ? '(obrigatório)' : '(opcional)'}
                 </Text>
                 <TextInput
                   keyboardType="numeric"
@@ -1387,7 +1387,7 @@ function OrdersList({
                   <Text style={styles.secondaryButtonText}>
                     {order.initialOdometerPhotoPath
                       ? 'Foto inicial enviada'
-                      : `Enviar foto inicial ${companySettings.requireOdometerStartPhoto ? '(obrigatoria)' : '(opcional)'}`}
+                      : `Enviar foto inicial ${companySettings.requireOdometerStartPhoto ? '(obrigatória)' : '(opcional)'}`}
                   </Text>
                 </Pressable>
                 <Pressable
@@ -1407,7 +1407,7 @@ function OrdersList({
             {order.status === 'IN_PROGRESS' ? (
               <View style={styles.orderActionArea}>
                 <Text style={[styles.inputLabel, { color: colors.text }]}>
-                  KM final {companySettings.requireOdometerFinishKm ? '(obrigatorio)' : '(opcional)'}
+                  KM final {companySettings.requireOdometerFinishKm ? '(obrigatório)' : '(opcional)'}
                 </Text>
                 <TextInput
                   keyboardType="numeric"
@@ -1425,7 +1425,7 @@ function OrdersList({
                   <Text style={styles.secondaryButtonText}>
                     {order.finalOdometerPhotoPath
                       ? 'Foto final enviada'
-                      : `Enviar foto final ${companySettings.requireOdometerFinishPhoto ? '(obrigatoria)' : '(opcional)'}`}
+                      : `Enviar foto final ${companySettings.requireOdometerFinishPhoto ? '(obrigatória)' : '(opcional)'}`}
                   </Text>
                 </Pressable>
                 <Pressable
@@ -1492,7 +1492,7 @@ function OrderMapPreview({
     return (
       <View style={[styles.mobileMapFallback, { backgroundColor: colors.input, borderColor: colors.border }]}>
         <Text style={[styles.infoTitle, { color: colors.text }]}>Mapa da OS</Text>
-        <Text style={[styles.infoText, { color: colors.muted }]}>Esta OS ainda nao possui coordenadas nos enderecos.</Text>
+        <Text style={[styles.infoText, { color: colors.muted }]}>Esta OS ainda não possui coordenadas nos endereços.</Text>
       </View>
     );
   }
@@ -1503,7 +1503,7 @@ function OrderMapPreview({
       <View style={[styles.mobileMapFallback, { backgroundColor: colors.input, borderColor: colors.border }]}>
         <Text style={[styles.infoTitle, { color: colors.text }]}>Mapa da OS</Text>
         <Text style={[styles.infoText, { color: colors.muted }]}>
-          Proximo endereco: {nextStop?.stop.address ?? 'coordenada selecionada'}
+          Proximo endereço: {nextStop?.stop.address ?? 'coordenada selecionada'}
         </Text>
         <Pressable style={styles.secondaryButton} onPress={() => void Linking.openURL(url)}>
           <Text style={styles.secondaryButtonText}>Abrir no Google Maps</Text>
@@ -1684,12 +1684,12 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     alignItems: 'center',
-    backgroundColor: '#1f6feb',
+    backgroundColor: '#6D28D9',
     borderRadius: 8,
     justifyContent: 'center',
     marginTop: 20,
-    minHeight: 52,
-    paddingHorizontal: 18,
+    minHeight: 56,
+    paddingHorizontal: 20,
   },
   primaryButtonText: {
     color: '#ffffff',
@@ -1698,25 +1698,25 @@ const styles = StyleSheet.create({
   },
   dangerButton: {
     alignItems: 'center',
-    backgroundColor: '#d12f2f',
+    backgroundColor: '#DC2626',
     borderRadius: 8,
     justifyContent: 'center',
     marginTop: 20,
-    minHeight: 52,
-    paddingHorizontal: 18,
+    minHeight: 56,
+    paddingHorizontal: 20,
   },
   secondaryButton: {
     alignItems: 'center',
-    borderColor: '#1f6feb',
+    borderColor: '#6D28D9',
     borderRadius: 8,
     borderWidth: 1,
     justifyContent: 'center',
     marginTop: 14,
-    minHeight: 44,
+    minHeight: 48,
     paddingHorizontal: 16,
   },
   secondaryButtonText: {
-    color: '#1f6feb',
+    color: '#6D28D9',
     fontSize: 15,
     fontWeight: '800',
   },

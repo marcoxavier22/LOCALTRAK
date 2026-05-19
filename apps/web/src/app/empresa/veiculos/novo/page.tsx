@@ -18,7 +18,7 @@ export default function NewVehiclePage() {
     apiFetch<Employee[]>('/company/employees')
       .then(setEmployees)
       .catch((requestError) =>
-        setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar funcionarios.'),
+        setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar funcionários.'),
       )
       .finally(() => setIsLoadingEmployees(false));
   }, []);
@@ -32,24 +32,24 @@ export default function NewVehiclePage() {
         method: 'POST',
         body: toJsonBody(payload),
       });
-      router.push('/empresa/veiculos');
+      router.push('/empresa/veículos');
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel criar o veiculo.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível criar o veículo.');
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Novo veiculo">
-      {isLoadingEmployees ? <div className="panel-note">Carregando funcionarios...</div> : null}
+    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Novo veículo">
+      {isLoadingEmployees ? <div className="panel-note">Carregando funcionários...</div> : null}
       <VehicleForm
         employees={employees}
         error={error}
         isSubmitting={isSubmitting}
-        onCancel={() => router.push('/empresa/veiculos')}
+        onCancel={() => router.push('/empresa/veículos')}
         onSubmit={handleSubmit}
-        submitLabel="Criar veiculo"
+        submitLabel="Criar veículo"
       />
     </AppShell>
   );

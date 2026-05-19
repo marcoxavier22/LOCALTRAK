@@ -97,7 +97,7 @@ export default function FuelPage() {
       setEmployees(loadedEmployees);
       setVehicles(loadedVehicles);
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel carregar combustivel.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível carregar combustível.');
     } finally {
       setIsLoading(false);
     }
@@ -113,7 +113,6 @@ export default function FuelPage() {
     const payload = {
       fuelType: String(formData.get('fuelType') ?? 'GASOLINE') as VehicleFuelType,
       pricePerLiter: optionalNumber(formData, 'pricePerLiter'),
-      defaultCostPerKm: optionalNumber(formData, 'defaultCostPerKm'),
     };
 
     try {
@@ -122,23 +121,23 @@ export default function FuelPage() {
         body: toJsonBody(payload),
       });
       event.currentTarget.reset();
-      setSuccess('Configuracao de combustivel criada.');
+      setSuccess('Configuração de combustível criada com sucesso.');
       await loadData();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'Nao foi possivel criar configuracao.');
+      setError(requestError instanceof Error ? requestError.message : 'Não foi possível criar a configuração.');
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Combustivel">
+    <AppShell allowedRoles={['COMPANY_ADMIN']} eyebrow="Empresa" title="Combustível">
       {error ? <div className="form-message error">{error}</div> : null}
       {success ? <div className="form-message success">{success}</div> : null}
 
       <section className="metrics-grid">
         <MetricCard
-          detail="veiculos da empresa"
+          detail="veículos da empresa"
           icon={Fuel}
           label="Custo estimado"
           value={isLoading ? '...' : formatCurrency(report.totals.totalFuelCost)}
@@ -156,7 +155,7 @@ export default function FuelPage() {
           value={isLoading ? '...' : report.totals.routesCount}
         />
         <MetricCard
-          detail="veiculos particulares"
+          detail="veículos particulares"
           icon={BarChart3}
           label="Reembolsos"
           value={isLoading ? '...' : formatCurrency(report.totals.totalReimbursement)}
@@ -167,11 +166,11 @@ export default function FuelPage() {
         <div className="panel-header">
           <div>
             <h2>Periodo de analise</h2>
-            <p>Use o periodo para recalcular custo estimado por veiculo.</p>
+            <p>Use o periodo para recalcular custo estimado por veículo.</p>
           </div>
           <div className="table-actions">
             <label className="inline-filter">
-              Funcionario
+              Funcionário
               <select onChange={(event) => setSelectedEmployeeId(event.target.value)} value={selectedEmployeeId}>
                 <option value="">Todos</option>
                 {employees.map((employee) => (
@@ -182,7 +181,7 @@ export default function FuelPage() {
               </select>
             </label>
             <label className="inline-filter">
-              Veiculo
+              Veículo
               <select onChange={(event) => setSelectedVehicleId(event.target.value)} value={selectedVehicleId}>
                 <option value="">Todos</option>
                 {vehicles.map((vehicle) => (
@@ -193,7 +192,7 @@ export default function FuelPage() {
               </select>
             </label>
             <label className="inline-filter">
-              Inicio
+              Início
               <input onChange={(event) => setStartDate(event.target.value)} type="date" value={startDate} />
             </label>
             <label className="inline-filter">
@@ -211,12 +210,12 @@ export default function FuelPage() {
         <form className="panel form-grid" onSubmit={handleCreateSetting}>
           <div className="form-section">
             <div className="section-title">
-              <h2>Nova configuracao</h2>
-              <p>Cadastre valor por litro, valor por km ou ambos para cada combustivel.</p>
+              <h2>Nova Configuração</h2>
+              <p>Cadastre o preço por litro para cada tipo de combustível.</p>
             </div>
 
             <label>
-              Combustivel
+              Combustível
               <select name="fuelType">
                 {fuelTypes.map((fuelType) => (
                   <option key={fuelType} value={fuelType}>
@@ -228,19 +227,15 @@ export default function FuelPage() {
 
             <div className="field-row">
               <label>
-                Valor por litro
-                <input min="0" name="pricePerLiter" placeholder="5.89" step="0.001" type="number" />
-              </label>
-              <label>
-                Valor padrao por km
-                <input min="0" name="defaultCostPerKm" placeholder="1.20" step="0.001" type="number" />
+                Preço por litro (R$)
+                <input min="0" name="pricePerLiter" placeholder="5.89" step="0.001" type="number" required />
               </label>
             </div>
           </div>
 
           <div className="form-actions">
             <button className="button primary" disabled={isSubmitting} type="submit">
-              {isSubmitting ? 'Salvando...' : 'Criar configuracao'}
+              {isSubmitting ? 'Salvando...' : 'Criar Configuração'}
             </button>
           </div>
         </form>
@@ -248,8 +243,8 @@ export default function FuelPage() {
         <section className="panel">
           <div className="panel-header">
             <div>
-              <h2>Configuracoes</h2>
-              <p>Atualize valores usados nos calculos de rotas finalizadas.</p>
+              <h2>Preço por Litro</h2>
+              <p>Valores por combustível aplicados automaticamente conforme tipo do veículo.</p>
             </div>
           </div>
 
@@ -257,10 +252,9 @@ export default function FuelPage() {
             <table>
               <thead>
                 <tr>
-                  <th>Combustivel</th>
-                  <th>Valor litro</th>
-                  <th>Valor km</th>
-                  <th>Acoes</th>
+                  <th>Combustível</th>
+                  <th>Preço por Litro</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -269,7 +263,7 @@ export default function FuelPage() {
                 ))}
                 {!isLoading && settings.length === 0 ? (
                   <tr>
-                    <td colSpan={4}>Nenhuma configuracao cadastrada.</td>
+                    <td colSpan={3}>Nenhuma configuração cadastrada.</td>
                   </tr>
                 ) : null}
               </tbody>
@@ -281,8 +275,8 @@ export default function FuelPage() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>Custo estimado por veiculo</h2>
-            <p>Veiculos da empresa geram custo de combustivel; particulares geram reembolso.</p>
+            <h2>Custo estimado por veículo</h2>
+            <p>Veículos da empresa geram custo de combustível; particulares geram reembolso.</p>
           </div>
         </div>
 
@@ -293,7 +287,7 @@ export default function FuelPage() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>Custo por funcionario</h2>
+            <h2>Custo por funcionário</h2>
             <p>Resumo de km, custo e reembolso por colaborador no periodo.</p>
           </div>
         </div>
@@ -305,7 +299,6 @@ export default function FuelPage() {
 
 function FuelSettingRow({ setting, onSaved }: { setting: FuelSetting; onSaved: () => Promise<void> }) {
   const [pricePerLiter, setPricePerLiter] = useState(String(setting.pricePerLiter ?? ''));
-  const [defaultCostPerKm, setDefaultCostPerKm] = useState(String(setting.defaultCostPerKm ?? ''));
   const [isSaving, setIsSaving] = useState(false);
 
   async function handleSave() {
@@ -316,7 +309,6 @@ function FuelSettingRow({ setting, onSaved }: { setting: FuelSetting; onSaved: (
         method: 'PATCH',
         body: toJsonBody({
           pricePerLiter: pricePerLiter.trim() === '' ? undefined : Number(pricePerLiter),
-          defaultCostPerKm: defaultCostPerKm.trim() === '' ? undefined : Number(defaultCostPerKm),
         }),
       });
       await onSaved();
@@ -335,15 +327,6 @@ function FuelSettingRow({ setting, onSaved }: { setting: FuelSetting; onSaved: (
           step="0.001"
           type="number"
           value={pricePerLiter}
-        />
-      </td>
-      <td>
-        <input
-          min="0"
-          onChange={(event) => setDefaultCostPerKm(event.target.value)}
-          step="0.001"
-          type="number"
-          value={defaultCostPerKm}
         />
       </td>
       <td>
@@ -367,9 +350,9 @@ function VehicleCostTable({
       <table>
         <thead>
           <tr>
-            <th>Veiculo</th>
+            <th>Veículo</th>
             <th>Proprietario</th>
-            <th>Combustivel</th>
+            <th>Combustível</th>
             <th>Rotas</th>
             <th>Km</th>
             <th>Custo estimado</th>
@@ -459,10 +442,10 @@ function EmployeeCostTable({
       <table>
         <thead>
           <tr>
-            <th>Funcionario</th>
+            <th>Funcionário</th>
             <th>Rotas</th>
             <th>Km</th>
-            <th>Custo combustivel</th>
+            <th>Custo combustível</th>
             <th>Reembolso</th>
           </tr>
         </thead>
@@ -486,7 +469,7 @@ function EmployeeCostTable({
           ) : null}
           {isLoading ? (
             <tr>
-              <td colSpan={5}>Carregando custos por funcionario...</td>
+              <td colSpan={5}>Carregando custos por funcionário...</td>
             </tr>
           ) : null}
         </tbody>

@@ -48,7 +48,7 @@ export function formatRouteDistance(value?: number | string | null) {
 
 export function formatVehicleName(vehicle?: RouteVehicle | null) {
   if (!vehicle) {
-    return 'Sem veiculo';
+    return 'Sem veículo';
   }
 
   return `${vehicle.plate} - ${vehicle.brand} ${vehicle.model}`;

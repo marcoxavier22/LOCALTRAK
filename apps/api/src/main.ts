@@ -14,6 +14,8 @@ async function bootstrap() {
   const productionOrigins = [
     'https://localtrak-web.vercel.app',
     'https://localtrak-mobile.vercel.app',
+    'https://trakflow-web.vercel.app',
+    'https://trakflow.vercel.app',
   ];
   const devOrigins = [
     'http://localhost:3000',
