@@ -32,7 +32,7 @@ export default function NewVehiclePage() {
         method: 'POST',
         body: toJsonBody(payload),
       });
-      router.push('/empresa/veículos');
+      router.push('/empresa/veiculos');
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : 'Não foi possível criar o veículo.');
     } finally {
@@ -47,7 +47,7 @@ export default function NewVehiclePage() {
         employees={employees}
         error={error}
         isSubmitting={isSubmitting}
-        onCancel={() => router.push('/empresa/veículos')}
+        onCancel={() => router.push('/empresa/veiculos')}
         onSubmit={handleSubmit}
         submitLabel="Criar veículo"
       />

@@ -94,7 +94,7 @@ export default function EditVehiclePage() {
                 : 'Atualize dados de cadastro, uso e status.'}
             </p>
           </div>
-          <Link className="button secondary" href="/empresa/veículos">
+          <Link className="button secondary" href="/empresa/veiculos">
             Voltar
           </Link>
         </div>
@@ -153,7 +153,7 @@ export default function EditVehiclePage() {
             initialVehicle={vehicle}
             isSubmitting={isSaving}
             key={`${vehicle.id}-${vehicle.updatedAt}-${vehicle.status}`}
-            onCancel={() => router.push('/empresa/veículos')}
+            onCancel={() => router.push('/empresa/veiculos')}
             onSubmit={handleSubmit}
             submitLabel="Salvar alteracoes"
           />

@@ -125,7 +125,7 @@ export default function EditEmployeePage() {
             <h2>{employee?.name ?? 'Funcionário'}</h2>
             <p>Atualize dados basicos e status de acesso ao aplicativo mobile.</p>
           </div>
-          <Link className="button secondary" href="/empresa/funcionários">
+          <Link className="button secondary" href="/empresa/funcionarios">
             Voltar
           </Link>
         </div>
@@ -190,7 +190,7 @@ export default function EditEmployeePage() {
               </button>
 
               <div className="table-actions">
-                <button className="button secondary" onClick={() => router.push('/empresa/funcionários')} type="button">
+                <button className="button secondary" onClick={() => router.push('/empresa/funcionarios')} type="button">
                   Cancelar
                 </button>
                 <button className="button primary" disabled={isSaving} type="submit">

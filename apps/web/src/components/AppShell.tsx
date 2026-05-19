@@ -38,15 +38,15 @@ const masterLinks = [
 
 const companyLinks = [
   { href: '/empresa/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/empresa/funcionários', label: 'Funcionários', icon: Users },
+  { href: '/empresa/funcionarios', label: 'Funcionários', icon: Users },
   { href: '/empresa/clientes', label: 'Clientes', icon: Building2 },
-  { href: '/empresa/veículos', label: 'Veículos', icon: Car },
+  { href: '/empresa/veiculos', label: 'Veículos', icon: Car },
   { href: '/empresa/rotas', label: 'Rotas', icon: Route },
   { href: '/empresa/ordens', label: 'Ordens de Serviço', icon: ClipboardList },
-  { href: '/empresa/manutenção', label: 'Manutenção', icon: Wrench },
-  { href: '/empresa/combustível', label: 'Combustível', icon: Fuel },
+  { href: '/empresa/manutencao', label: 'Manutenção', icon: Wrench },
+  { href: '/empresa/combustivel', label: 'Combustível', icon: Fuel },
   { href: '/empresa/reembolsos', label: 'Reembolsos', icon: Receipt },
-  { href: '/empresa/configurações', label: 'Configurações', icon: Settings },
+  { href: '/empresa/configuracoes', label: 'Configurações', icon: Settings },
 ];
 
 export function AppShell({ allowedRoles, children, title, eyebrow }: AppShellProps) {

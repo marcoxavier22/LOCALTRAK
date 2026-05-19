@@ -77,7 +77,7 @@ export default function EmployeesPage() {
             <h2>Equipe externa</h2>
             <p>Usuários que acessam o aplicativo mobile para registrar turnos e rotas.</p>
           </div>
-          <Link className="button primary" href="/empresa/funcionários/novo">
+          <Link className="button primary" href="/empresa/funcionarios/novo">
             <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
             Novo funcionário
           </Link>
@@ -130,7 +130,7 @@ export default function EmployeesPage() {
                   </td>
                   <td>
                     <div className="table-actions">
-                      <Link className="button secondary small" href={`/empresa/funcionários/${employee.id}`}>
+                      <Link className="button secondary small" href={`/empresa/funcionarios/${employee.id}`}>
                         Editar
                       </Link>
                       <button
@@ -153,7 +153,7 @@ export default function EmployeesPage() {
           <EmptyState
             action={
               employees.length === 0 ? (
-                <Link className="button primary" href="/empresa/funcionários/novo">
+                <Link className="button primary" href="/empresa/funcionarios/novo">
                   <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
                   Novo funcionário
                 </Link>

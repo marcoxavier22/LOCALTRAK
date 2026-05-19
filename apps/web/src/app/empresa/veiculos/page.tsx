@@ -65,7 +65,7 @@ export default function VehiclesPage() {
             <h2>Frota da empresa</h2>
             <p>Veículos próprios ou particulares usados por funcionários em campo.</p>
           </div>
-          <Link className="button primary" href="/empresa/veículos/novo">
+          <Link className="button primary" href="/empresa/veiculos/novo">
             <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
             Novo veículo
           </Link>
@@ -132,7 +132,7 @@ export default function VehiclesPage() {
                     <StatusBadge status={vehicleStatusLabels[vehicle.status]} />
                   </td>
                   <td>
-                    <Link className="button secondary small" href={`/empresa/veículos/${vehicle.id}`}>
+                    <Link className="button secondary small" href={`/empresa/veiculos/${vehicle.id}`}>
                       Editar
                     </Link>
                   </td>
@@ -146,7 +146,7 @@ export default function VehiclesPage() {
           <EmptyState
             action={
               vehicles.length === 0 ? (
-                <Link className="button primary" href="/empresa/veículos/novo">
+                <Link className="button primary" href="/empresa/veiculos/novo">
                   <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
                   Novo veículo
                 </Link>

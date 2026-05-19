@@ -230,7 +230,7 @@ export default function CompanyDashboardPage() {
             <h2>Equipe recente</h2>
             <p>Funcionários cadastrados para uso do aplicativo mobile.</p>
           </div>
-          <Link className="button secondary" href="/empresa/funcionários">
+          <Link className="button secondary" href="/empresa/funcionarios">
             Ver funcionários
           </Link>
         </div>
@@ -271,7 +271,7 @@ export default function CompanyDashboardPage() {
         {!isLoading && employees.length === 0 ? (
           <EmptyState
             action={
-              <Link className="button primary" href="/empresa/funcionários/novo">
+              <Link className="button primary" href="/empresa/funcionarios/novo">
                 <Plus size={17} strokeWidth={2.4} aria-hidden="true" />
                 Novo funcionário
               </Link>

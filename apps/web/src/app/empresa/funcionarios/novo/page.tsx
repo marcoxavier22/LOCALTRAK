@@ -30,7 +30,7 @@ export default function NewEmployeePage() {
         method: 'POST',
         body: toJsonBody(payload),
       });
-      router.push('/empresa/funcionários');
+      router.push('/empresa/funcionarios');
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : 'Não foi possível criar o funcionário.');
     } finally {
@@ -71,7 +71,7 @@ export default function NewEmployeePage() {
         {error ? <div className="form-message error">{error}</div> : null}
 
         <div className="form-actions">
-          <button className="button secondary" onClick={() => router.push('/empresa/funcionários')} type="button">
+          <button className="button secondary" onClick={() => router.push('/empresa/funcionarios')} type="button">
             Cancelar
           </button>
           <button className="button primary" disabled={isSubmitting} type="submit">
